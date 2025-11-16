@@ -1,7 +1,9 @@
 #pragma once
 #include "imgui/imgui.h"
 #include <string>
-
+#include "VK_Keymap.h"
+#include <Windows.h>
+#include <map>
 namespace ImGuiStd {
 
     static bool InputTextStd(const char* label, std::string& str, ImGuiInputTextFlags flags = 0)
@@ -55,6 +57,88 @@ namespace ImGuiStd {
 
         ImGui::SetCursorPos(pos);
         ImGui::TextColored(color, text);  // 正常文字
+    }
+    struct keybind_element
+    {
+        ImGuiID id;
+        bool binding = false;
+    };
+    static ImGuiID current_id = 0;
+
+
+    static void Keybind(const char* text, int &key)
+    {
+        static std::map<const char*, keybind_element> keybind_elements;
+        if (keybind_elements.find(text) == keybind_elements.end())
+        {
+                keybind_element element;
+                element.id = current_id++;
+                keybind_elements[text] = element;
+        }
+        keybind_element& element = keybind_elements[text];
+
+
+        std::string hotkeyStr = keys[key];
+
+        ImGui::Text(text);
+
+        ImGui::SameLine();
+
+        if (ImGui::Button((hotkeyStr + "##" + std::to_string(element.id)).c_str(), ImVec2(100, 0)))
+        {
+            element.binding = true;
+        }
+        if (element.binding)
+        {
+            ImGui::OpenPopup(text);
+            //监听键盘事件
+            for (int i = 0; i < IM_ARRAYSIZE(keys); i++)
+            {
+                std::string keyStr = keys[i];
+                if (keyStr[0] == '-' || keyStr.compare("Mouse 1") == 0 || keyStr.compare("Mouse 2") == 0)
+                {
+                    continue;
+                }
+                if (GetAsyncKeyState(i) & 0x8000)
+                {
+                    key = i;
+                    hotkeyStr = keyStr;
+                    element.binding = false;
+                    ImGui::CloseCurrentPopup();
+                    break;
+                }
+            }
+
+        }
+        if (ImGui::BeginPopup(text))
+        {
+            ImGui::Text(u8"绑定快捷键");
+            ImGui::Separator();
+            for (int i = 0; i < IM_ARRAYSIZE(keys); i++)
+            {
+                std::string keyStr = keys[i];
+                if (keyStr[0] == '-')
+                {
+                    continue;
+                }
+                if (ImGui::Selectable(keyStr.c_str()))
+                {
+                    key = i;
+                    hotkeyStr = keyStr;
+                    element.binding = false;
+                    ImGui::CloseCurrentPopup();
+                }
+
+                if (ImGui::IsMouseClicked(1))
+                {
+                    element.binding = false;
+                    ImGui::CloseCurrentPopup();
+                    break;
+                }
+
+            }
+            ImGui::EndPopup();
+        }
     }
 
 }

@@ -3,6 +3,7 @@
 #include "FpsItem.h"
 #include "BilibiliFansItem.h"
 #include "FileCountItem.h"
+#include "CounterItem.h"
 #include "DanmakuItem.h"
 #include "TextItem.h"
 #include "GlobalConfig.h"
@@ -14,28 +15,8 @@ InfoManager::InfoManager()
 {
 }
 
-//// ---------------------------------------------
-//// 添加信息项：注册 Scheduler 任务
-//// ---------------------------------------------
-//void InfoManager::AddItem(std::shared_ptr<InfoItem> item)
-//{
-//    // 注册自动刷新任务（基于 weak_ptr，无崩溃）
-//    scheduler->AddTask<InfoItem>(
-//        item,
-//        [](std::shared_ptr<InfoItem> p) { p->Update(); },
-//        item->refreshIntervalMs
-//    );
-//
-//    items.push_back(std::move(item));
-//}
-
-// -----------------------------------------------------------
-// 新的添加方式：不再注册 Scheduler 自动执行 Update()
-// 因为 Update() 里面已经是异步任务
-// -----------------------------------------------------------
 void InfoManager::AddItem(std::shared_ptr<InfoItem> item)
 {
-
     items.push_back(std::move(item));
 }
 
@@ -103,6 +84,9 @@ void InfoManager::Load(const nlohmann::json& j)
         }
         else if (type == "file_count") {
             item = std::make_unique<FileCountItem>();
+        }
+        else if (type == "counter") {
+            item = std::make_unique<CounterItem>();
         }
         else if (type == "danmaku") {
             item = std::make_unique<DanmakuItem>();

@@ -146,281 +146,10 @@ void MainUI::Render(GlobalConfig* globalConfig, bool* p_open)
             style.ChildRounding = globalConfig->roundCornerRadius;
             style.PopupRounding = globalConfig->roundCornerRadius;
         }
-        // 设置主UI快捷键
 
-        static const char* keys[] = {
-    "None",
-    "Mouse 1",
-    "Mouse 2",
-    "CN",
-    "Mouse 3",
-    "Mouse 4",
-    "Mouse 5",
-    "-##1",
-    "Back",
-    "Tab",
-    "-##2",
-    "-##3",
-    "CLR",
-    "Enter",
-    "-##4",
-    "-##5",
-    "Shift",
-    "Ctrl",
-    "Menu",
-    "Pause",
-    "Caps Lock",
-    "KAN",
-    "-##6",
-    "JUN",
-    "FIN",
-    "HAN",
-    "-##7",
-    "Escape",
-    "CON",
-    "NCO",
-    "ACC",
-    "MAD",
-    "Space",
-    "PGU",
-    "PGD",
-    "End",
-    "Home",
-    "Left",
-    "Up",
-    "Right",
-    "Down",
-    "SEL",
-    "PRI",
-    "EXE",
-    "SNAPSHOT",
-    "INS",
-    "Delete",
-    "HEL",
-    "0",
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-    "6",
-    "7",
-    "8",
-    "9",
-    "-##8",
-    "-##9",
-    "-##10",
-    "-##11",
-    "-##12",
-    "-##13",
-    "-##14",
-    "A",
-    "B",
-    "C",
-    "D",
-    "E",
-    "F",
-    "G",
-    "H",
-    "I",
-    "J",
-    "K",
-    "L",
-    "M",
-    "N",
-    "O",
-    "P",
-    "Q",
-    "R",
-    "S",
-    "T",
-    "U",
-    "V",
-    "W",
-    "X",
-    "Y",
-    "Z",
-    "LWIN",
-    "RWIN",
-    "APP",
-    "-##15",
-    "SLE",
-    "Numpad 0",
-    "Numpad 1",
-    "Numpad 2",
-    "Numpad 3",
-    "Numpad 4",
-    "Numpad 5",
-    "Numpad 6",
-    "Numpad 7",
-    "Numpad 8",
-    "Numpad 9",
-    "MUL",
-    "ADD",
-    "SEP",
-    "MIN",
-    "DECIMAL",
-    "DIV",
-    "F1",
-    "F2",
-    "F3",
-    "F4",
-    "F5",
-    "F6",
-    "F7",
-    "F8",
-    "F9",
-    "F10",
-    "F11",
-    "F12",
-    "F13",
-    "F14",
-    "F15",
-    "F16",
-    "F17",
-    "F18",
-    "F19",
-    "F20",
-    "F21",
-    "F22",
-    "F23",
-    "F24",
-    "-##16",
-    "-##17",
-    "-##18",
-    "-##19",
-    "-##20",
-    "-##21",
-    "-##22",
-    "-##23",
-    "NUM",
-    "SCR",
-    "EQU",
-    "MAS",
-    "TOY",
-    "LOYA",
-    "ROYA",
-    "-##24",
-    "-##25",
-    "-##26",
-    "-##27",
-    "-##28",
-    "-##29",
-    "-##30",
-    "-##31",
-    "-##32",
-    "LShift",
-    "RShift",
-    "LCtrl",
-    "RCtrl",
-    "LAlt",
-    "RAlt",
-    "-##33",
-    "-##34",
-    "-##35",
-    "-##36",
-    "-##37",
-    "-##38",
-    "-##39",
-    "-##40",
-    "-##41",
-    "-##42",
-    "-##43",
-    "-##44",
-    "-##45",
-    "-##46",
-    "-##47",
-    "-##48",
-    "-##49",
-    "-##50",
-    "-##51",
-    "-##52",
-    ";",
-    "=",
-    ",",
-    "-",
-    ".",
-    "/",
-    "`",
-    "-##53",
-    "-##54",
-    "-##55",
-    "-##56",
-    "-##57",
-    "-##58",
-    "-##59",
-    "-##60",
-    "-##61",
-    "-##62",
-    "-##63",
-    "-##64",
-    "-##65",
-    "-##66",
-    "-##67",
-    "-##68",
-    "-##69",
-    "-##70",
-    "-##71",
-    "-##72",
-    "-##73",
-    "-##74",
-    "-##75",
-    "-##76",
-    "-##77",
-    "-##78",
-    "[",
-    "\\",
-    "]",
-    "'"
-        };
+        //设置主UI快捷键
 
-
-        //对照VK_CODE枚举值，找到对应的键名
-        static std::string menuKeyStr = keys[globalConfig->menuKey];
-        static bool binding = false;
-
-        ImGui::Text(u8"UI快捷键：");
-
-        ImGui::SameLine();
-
-        if (ImGui::Button(menuKeyStr.c_str(), ImVec2(100, 0)))
-        {
-            binding = true;
-        }
-        if (binding)
-        {
-            ImGui::OpenPopup("KeyBinding");
-
-        }
-        if (ImGui::BeginPopup("KeyBinding"))
-        {
-            ImGui::Text(u8"绑定快捷键");
-            ImGui::Separator();
-            for (int i = 0; i < IM_ARRAYSIZE(keys); i++)
-            {
-                std::string keyStr = keys[i];
-                if (keyStr[0] == '-')
-                {
-                    continue;
-                }
-                if (ImGui::Selectable(keyStr.c_str()))
-                {
-                    globalConfig->menuKey = i;
-                    menuKeyStr = keyStr;
-                    binding = false;
-                    ImGui::CloseCurrentPopup();
-                }
-
-                if (ImGui::IsMouseClicked(1))
-                {
-                    binding = false;
-                    ImGui::CloseCurrentPopup();
-                    break;
-                }
-                    
-            }
-            ImGui::EndPopup();
-        }
+        ImGuiStd::Keybind(u8"UI快捷键：", globalConfig->menuKey);
 
         ShowFontSelection(globalConfig);
 
@@ -447,15 +176,16 @@ void MainUI::Render(GlobalConfig* globalConfig, bool* p_open)
     }
 
     if (ImGui::Button(u8"添加 B站粉丝数 BilibiliFansItem")) {
-        auto p = std::make_unique<BilibiliFansItem>();
-        p->uid = 399194206; // 默认设置为你的 UID
-        manager->AddItem(std::move(p));
+        manager->AddItem(std::make_unique<BilibiliFansItem>());
+    }
+
+    if (ImGui::Button(u8"添加 计数器 CounterItem"))
+    {
+        manager->AddItem(std::make_unique<CounterItem>());
     }
 
     if (ImGui::Button(u8"添加 B站弹幕显示 BilibiliDanmakuItem")) {
-        auto p = std::make_unique<DanmakuItem>();
-        //p->logPath = ConfigManager::GetRunPath() + "\\lastrun.txt";
-        manager->AddItem(std::move(p));
+        manager->AddItem(std::make_unique<DanmakuItem>());
     }
 
 
@@ -530,6 +260,9 @@ void MainUI::DrawItemEditor(InfoItem* item)
     else if (auto b = dynamic_cast<BilibiliFansItem*>(item)) {
         Draw_BilibiliItemSettings(b);
     }
+    else if (auto c = dynamic_cast<CounterItem*>(item)) {
+        Draw_CounterItemSettings(c);
+    }
     else if (auto d = dynamic_cast<DanmakuItem*>(item)) {
         Draw_DanmakuItemSettings(d);
     }
@@ -602,6 +335,15 @@ void MainUI::Draw_BilibiliItemSettings(BilibiliFansItem* item)
         else
             item->uid = std::stoll(uidStr);
     }
+}
+
+void MainUI::Draw_CounterItemSettings(CounterItem* item)
+{
+    ImGui::InputInt(u8"计数值", &item->count);
+    //设置增加快捷键
+    ImGuiStd::Keybind(u8"增加快捷键：", item->hotkeyAdd);
+//设置减少快捷键
+    ImGuiStd::Keybind(u8"减少快捷键：", item->hotkeySub);
 }
 
 void MainUI::Draw_DanmakuItemSettings(DanmakuItem* item)

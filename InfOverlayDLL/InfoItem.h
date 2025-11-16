@@ -9,13 +9,13 @@
 #include "WindowSnapper.h"
 #include <chrono>
 
-
 static const float SNAP_DISTANCE = 15.0f;
 static bool isSnapping = false;
 
 class InfoItem {
 public:
-    virtual ~InfoItem() {}
+    virtual ~InfoItem() {
+    }
 
     // ---------------------------
     //   必须被子类实现的接口
@@ -73,6 +73,46 @@ public:
         return windowTitle + "##" + std::to_string((uintptr_t)this);
     }
 
+    void HandleDrag(HWND g_hwnd)
+    {
+        if (GetAsyncKeyState(VK_SHIFT) & 0x8000)
+            isSnapping = true;
+        else
+            isSnapping = false;
+
+        // 当前窗口位置大小
+        ImVec2 pos = ImGui::GetWindowPos();
+        ImVec2 sz = ImGui::GetWindowSize();
+
+        // 获取 screenW,screenH（DLL 中已经有 g_hwnd）
+        RECT rc;
+        GetClientRect(g_hwnd, &rc);
+        float sw = (float)rc.right;
+        float sh = (float)rc.bottom;
+
+        SnapResult snap;
+        if (isSnapping)
+        {
+            // 计算吸附
+            snap = WindowSnapper::ComputeSnap(pos, sz, sw, sh, SNAP_DISTANCE);
+            // 画吸附线
+            WindowSnapper::DrawGuides(snap, sw, sh);
+        }
+        else
+            snap = WindowSnapper::ComputeSnap(pos, sz, sw, sh, 0.0f);
+
+        // 设置吸附后的位置
+        ImGui::SetWindowPos(snap.snappedPos, ImGuiCond_Always);
+
+        // 保存到 InfoItem
+        x = snap.snappedPos.x;
+        y = snap.snappedPos.y;
+
+        //保存窗口大小
+        width = ImGui::GetWindowSize().x;
+        height = ImGui::GetWindowSize().y;
+    }
+
     virtual void RenderWindow(GlobalConfig* globalConfig, HWND g_hwnd)
     {
         if (!isEnabled) return;
@@ -116,52 +156,11 @@ public:
         // 判断拖动/修改大小事件
         if (isMoving)
         {
-            if (GetAsyncKeyState(VK_SHIFT) & 0x8000)
-                isSnapping = true;
-            else
-				isSnapping = false;
-
-            // 当前窗口位置大小
-            ImVec2 pos = ImGui::GetWindowPos();
-            ImVec2 sz = ImGui::GetWindowSize();
-
-            // 获取 screenW,screenH（DLL 中已经有 g_hwnd）
-            RECT rc;
-            GetClientRect(g_hwnd, &rc);
-            float sw = (float)rc.right;
-            float sh = (float)rc.bottom;
-
-            SnapResult snap;
-            if (isSnapping)
-            {
-                // 计算吸附
-                snap = WindowSnapper::ComputeSnap(pos, sz, sw, sh, SNAP_DISTANCE);
-                // 画吸附线
-                WindowSnapper::DrawGuides(snap, sw, sh);
-            }
-            else
-                snap = WindowSnapper::ComputeSnap(pos, sz, sw, sh, 0.0f);
-
-            // 设置吸附后的位置
-            ImGui::SetWindowPos(snap.snappedPos, ImGuiCond_Always);
-
-            // 保存到 InfoItem
-            x = snap.snappedPos.x;
-            y = snap.snappedPos.y;
-
-            //保存窗口大小
-            width = ImGui::GetWindowSize().x;
-            height = ImGui::GetWindowSize().y;
-
+            HandleDrag(g_hwnd);
         }
 
         ImGui::End();
         if (!showBorder) ImGui::PopStyleColor(); // 边框透明
-    }
-
-    // 设置更新时间间隔
-    void SetUpdateInterval(int interval) {
-        refreshIntervalMs = interval;
     }
 
     // 检查是否到了更新的时间
@@ -207,4 +206,5 @@ public:
 
     int refreshIntervalMs = 1000;    // 默认 1 秒
     std::chrono::steady_clock::time_point lastUpdateTime;  // 记录最后更新时间
+
 };

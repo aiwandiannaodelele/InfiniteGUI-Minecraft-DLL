@@ -140,6 +140,7 @@
   <ItemGroup>
     <ClInclude Include="BilibiliFansItem.h" />
     <ClInclude Include="ConfigManager.h" />
+    <ClInclude Include="CounterItem.h" />
     <ClInclude Include="DanmakuItem.h" />
     <ClInclude Include="FileCountItem.h" />
     <ClInclude Include="fonts\Uranus_Pixel_11Px.h" />
@@ -166,11 +167,13 @@
     <ClInclude Include="TextItem.h" />
     <ClInclude Include="TimeItem.h" />
     <ClInclude Include="StringConverter.h" />
+    <ClInclude Include="VK_Keymap.h" />
     <ClInclude Include="WindowSnapper.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BilibiliFansItem.cpp" />
     <ClCompile Include="ConfigManager.cpp" />
+    <ClCompile Include="CounterItem.cpp" />
     <ClCompile Include="DanmakuItem.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="FileCountItem.cpp" />

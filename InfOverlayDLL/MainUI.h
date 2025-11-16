@@ -4,6 +4,7 @@
 #include "TimeItem.h"
 #include "FileCountItem.h"
 #include "BilibiliFansItem.h"
+#include "CounterItem.h"
 #include "DanmakuItem.h"
 #include "FpsItem.h"
 
@@ -24,6 +25,7 @@ private:
     void Draw_TimeItemSettings(TimeItem* item);
     void Draw_FpsItemSettings(FpsItem* item);
     void Draw_FileCountItemSettings(FileCountItem* item);
+    void Draw_CounterItemSettings(CounterItem* item);
     void Draw_BilibiliItemSettings(BilibiliFansItem* item);
     void Draw_DanmakuItemSettings(DanmakuItem* item);
 };

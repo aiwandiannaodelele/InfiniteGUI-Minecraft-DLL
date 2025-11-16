@@ -129,6 +129,12 @@
     <ClInclude Include="fonts\Uranus_Pixel_11Px.h">
       <Filter>源文件\fonts</Filter>
     </ClInclude>
+    <ClInclude Include="CounterItem.h">
+      <Filter>源文件\core\items</Filter>
+    </ClInclude>
+    <ClInclude Include="VK_Keymap.h">
+      <Filter>源文件\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -198,6 +204,9 @@
       <Filter>源文件\core\items</Filter>
     </ClCompile>
     <ClCompile Include="FpsItem.cpp">
+      <Filter>源文件\core\items</Filter>
+    </ClCompile>
+    <ClCompile Include="CounterItem.cpp">
       <Filter>源文件\core\items</Filter>
     </ClCompile>
   </ItemGroup>
