@@ -9,6 +9,7 @@ public:
     FpsItem() {
         type = Hud; // 信息项类型
         multiType = Singlton;    // 信息项是否可以多开
+        isEnabled = false;
         name = u8"帧率显示";
         description = u8"显示当前帧率";
         refreshIntervalMs = 1000;

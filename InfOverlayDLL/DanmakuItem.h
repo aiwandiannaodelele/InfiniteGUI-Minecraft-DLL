@@ -35,10 +35,12 @@ public:
     {
         type = Hud; // 信息项类型
         multiType = Singlton;    // 信息项是否可以多开
+        isEnabled = false;
         name = u8"B站弹幕显示";
         description = u8"显示B站直播间的弹幕(需配合B站弹幕姬)";
         refreshIntervalMs = 50;
         lastUpdateTime = std::chrono::steady_clock::now();
+        isCustomSize = true;
     }
 
     virtual ~DanmakuItem();

@@ -23,6 +23,6 @@ public:
         j["prefix"] = prefix;
         j["suffix"] = suffix;
     }
-	std::string prefix;
-	std::string suffix;
+	std::string prefix = "[";
+	std::string suffix = "]";
 };
