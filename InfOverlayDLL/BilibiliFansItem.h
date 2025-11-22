@@ -22,6 +22,8 @@ public:
         soundVolume = 0.5f;    // ÉùÒôÒôÁ¿£¨0.0~1.0£©
         refreshIntervalMs = 3000;
         lastUpdateTime = std::chrono::steady_clock::now();
+        prefix = u8"[·ÛË¿Êı:";
+        suffix = "]";
     }
 
     void Update() override;

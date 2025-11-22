@@ -7,6 +7,7 @@
 #include "FileUtils.h"
 #include "StringConverter.h"
 
+
 struct FontInfo {
     std::string name;
     std::wstring path;
@@ -82,7 +83,6 @@ Menu::Menu()
 
 void Menu::Render()
 {
-
     if(!open)
         return;
     // 首次渲染时，记录圆角状态
@@ -280,6 +280,7 @@ void Menu::Render()
             ShellExecute(NULL, NULL, L"https://github.com/QCMaxcer/InfOverlay-DLL", NULL, NULL, SW_SHOWNORMAL);
         }
     }
+
     ImGui::End();
 }
 

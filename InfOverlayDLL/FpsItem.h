@@ -14,6 +14,8 @@ public:
         description = u8"显示当前帧率";
         refreshIntervalMs = 1000;
         lastUpdateTime = std::chrono::steady_clock::now();
+        prefix = "[";
+        suffix = "FPS]";
     }
     void Update() override;
     void DrawContent() override;

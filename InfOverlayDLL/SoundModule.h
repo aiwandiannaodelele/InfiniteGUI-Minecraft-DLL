@@ -10,7 +10,7 @@ public:
     void DrawSoundSettings()
     {
         ImGui::Checkbox(u8"提示音", &isPlaySound);
-        ImGui::SliderFloat(u8"音量", &soundVolume, 0.0f, 1.0f);   
+        ImGui::SliderFloat(u8"音量", &soundVolume, 0.0f, 1.0f, "%.2f");
     }
 
     void LoadSound(const nlohmann::json& j)

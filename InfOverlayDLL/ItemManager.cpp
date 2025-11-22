@@ -56,20 +56,14 @@ void ItemManager::UpdateAll()
     }
 }
 
-void ItemManager::ProcessKeyEvents(WPARAM wParam)
+void ItemManager::ProcessKeyEvents(UINT key, WPARAM wParam, LPARAM lParam) //key：按键，wParam：按下或释放标志，lParam：是否是重复按键
 {
     for (auto& item : items)
     {
         if (!item->isEnabled) continue; // 跳过禁用的模块
         if (auto kbd = dynamic_cast<KeybindModule*>(item.get()))
         {
-            for (auto& keybind : kbd->keybinds)
-            {
-                if (wParam == keybind.second)
-                {
-                    kbd->OnKeyEvent(keybind.second);
-                }
-            }
+            kbd->OnKeyEvent(key, wParam, lParam);
         }
     }
 }

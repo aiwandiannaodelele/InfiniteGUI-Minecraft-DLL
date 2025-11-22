@@ -6,15 +6,23 @@
 #include <string>
 #include <windows.h>
 
-void CounterItem::OnKeyEvent(int key)
+void CounterItem::OnKeyEvent(UINT state, WPARAM key, LPARAM lParam)
 {
-    if (key == keybinds.at(u8"增加快捷键："))
+    bool isRepeat = (lParam & (1 << 30)) != 0;
+    if(state == WM_KEYDOWN)
     {
-        count++;
-    }
-    else if (key == keybinds.at(u8"减少快捷键："))
-    {
-        count--;
+        if (key == keybinds.at(u8"增加快捷键："))
+        {
+            count++;
+        }
+        else if (key == keybinds.at(u8"减少快捷键："))
+        {
+            count--;
+        }
+        else if (key == keybinds.at(u8"清空快捷键："))
+        {
+            count = 0;
+        }
     }
 }
 
@@ -65,6 +73,7 @@ void CounterItem::Load(const nlohmann::json& j)
     LoadAffix(j);
     LoadWindow(j);
     LoadSound(j);
+    LoadKeybind(j);
     if (j.contains("count")) count = j["count"];
     lastCount = count;
 
@@ -76,5 +85,6 @@ void CounterItem::Save(nlohmann::json& j) const
     SaveAffix(j);
     SaveWindow(j);
     SaveSound(j);
+    SaveKeybind(j);
     j["count"] = count;
 }

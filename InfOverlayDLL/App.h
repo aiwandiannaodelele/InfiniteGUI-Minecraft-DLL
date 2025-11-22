@@ -14,7 +14,7 @@ class App
 {
 public:
 	std::string appName = "InfOverlay";
-	version appVersion = { 0, 0, 1 };
+	version appVersion = { 0, 0, 2 };
 	std::string appAuthor = "QC_Max";
 	std::string appDescription = "InfOverlay is a library that allows you to create overlays for in-game information.";
 	std::string announcement = "这里没有公告捏...";

@@ -61,13 +61,13 @@
     <Filter Include="源文件\imGuiHelper\fonts">
       <UniqueIdentifier>{2427612b-6221-4142-a134-56f4547b109d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="源文件\ui\menu">
+      <UniqueIdentifier>{55dec776-c4ff-4705-8cc8-2cf65b555978}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="minHook\MinHook.h">
       <Filter>minHook</Filter>
-    </ClInclude>
-    <ClInclude Include="framework.h">
-      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>头文件</Filter>
@@ -110,9 +110,6 @@
     </ClInclude>
     <ClInclude Include="GlobalConfig.h">
       <Filter>源文件\config</Filter>
-    </ClInclude>
-    <ClInclude Include="Menu.h">
-      <Filter>源文件\ui</Filter>
     </ClInclude>
     <ClInclude Include="HttpClient.h">
       <Filter>源文件\utils</Filter>
@@ -183,6 +180,15 @@
     <ClInclude Include="KeybindModule.h">
       <Filter>源文件\core\items\virtual\Modules</Filter>
     </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>源文件\ui\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="ImguiSty.h">
+      <Filter>源文件\imGuiHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="Run.h">
+      <Filter>源文件\ui</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -224,9 +230,6 @@
     <ClCompile Include="GlobalConfig.cpp">
       <Filter>源文件\config</Filter>
     </ClCompile>
-    <ClCompile Include="Menu.cpp">
-      <Filter>源文件\ui</Filter>
-    </ClCompile>
     <ClCompile Include="HttpClient.cpp">
       <Filter>源文件\utils</Filter>
     </ClCompile>
@@ -262,6 +265,15 @@
     </ClCompile>
     <ClCompile Include="StringConverter.cpp">
       <Filter>源文件\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="mian.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>源文件\ui\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Run.cpp">
+      <Filter>源文件\ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

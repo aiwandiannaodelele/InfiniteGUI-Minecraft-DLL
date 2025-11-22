@@ -9,7 +9,7 @@
 class KeybindModule
 {
 public:
-	virtual void OnKeyEvent(int key) = 0;
+	virtual void OnKeyEvent(UINT state, WPARAM key, LPARAM lParam) = 0;
     void DrawKeybindSettings()
     {
         for (auto& [name, key] : keybinds)

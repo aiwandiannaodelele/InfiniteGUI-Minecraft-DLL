@@ -21,7 +21,7 @@ public:
 
     void RenderAll(HWND hwnd);
 
-    void ProcessKeyEvents(WPARAM wParam);
+    void ProcessKeyEvents(UINT key, WPARAM wParam, LPARAM lParam);
 
     void Load(const nlohmann::json& j);
     void Save(nlohmann::json& j) const;

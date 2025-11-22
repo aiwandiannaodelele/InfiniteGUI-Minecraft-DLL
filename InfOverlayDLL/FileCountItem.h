@@ -22,6 +22,9 @@ public:
         refreshIntervalMs = 1000;
         lastUpdateTime = std::chrono::steady_clock::now();
 
+        prefix = "[";
+        suffix = u8"¸öÎÄ¼þ]";
+
     }
 
     void Update() override;

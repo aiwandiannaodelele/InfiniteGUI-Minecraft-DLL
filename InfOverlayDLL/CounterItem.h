@@ -23,10 +23,14 @@ public:
 
         keybinds.insert(std::make_pair(u8"增加快捷键：", VK_F6));
         keybinds.insert(std::make_pair(u8"减少快捷键：", VK_F5));
+        keybinds.insert(std::make_pair(u8"清空快捷键：", NULL));
+
+        prefix = u8"[计数:";
+        suffix = "]";
     }
     ~CounterItem() {}
 
-    void OnKeyEvent(int key) override;
+    void OnKeyEvent(UINT state, WPARAM key, LPARAM lParam) override;
     void DrawContent() override;
     void DrawSettings() override;
     void Load(const nlohmann::json& j) override;
