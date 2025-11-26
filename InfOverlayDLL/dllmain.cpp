@@ -5,6 +5,7 @@
 // DllMain：在 DLL 注入后创建线程初始化 Hook，卸载时清理
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 {
+    g_hModule = hModule;
     switch (ul_reason_for_call)
     {
     case DLL_PROCESS_ATTACH:
@@ -14,8 +15,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
         break;
 
     case DLL_PROCESS_DETACH:
-        Uninit();
-        FreeLibraryAndExitThread(hModule, 0);
+        Uninit(hModule);
         break;
     }
     return TRUE;

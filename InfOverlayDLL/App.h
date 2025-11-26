@@ -28,6 +28,7 @@ public:
 		static App instance;
 		return instance;
 	}
+
 	void GetAnnouncement();
 
 	bool CheckUpdate();

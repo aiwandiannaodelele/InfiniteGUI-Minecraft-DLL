@@ -24,7 +24,7 @@ public:
     }
     Menu();
 
-    void Render();
+    void Render(bool* done);
 
     void Toggle(bool open);
 

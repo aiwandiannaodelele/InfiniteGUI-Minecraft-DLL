@@ -14,6 +14,9 @@
 #include "GameStateDetector.h"
 typedef BOOL(WINAPI* OldSwapBuffers)(HDC);
 OldSwapBuffers fpSwapBuffers = NULL;
+static bool done = false;
+
+static std::atomic<bool> g_running{ true };
 // 仅当 uiActive=true 时，让 ImGui 处理 Win32 消息
 LRESULT CALLBACK HookedWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -81,7 +84,7 @@ end:
 // 线程函数：更新所有 item 状态
 void UpdateThread() {
     App::Instance().GetAnnouncement();
-    while (true) {
+    while (g_running.load()) {
         ItemManager::Instance().UpdateAll();  // 调用UpdateAll()来更新所有item
         std::this_thread::sleep_for(std::chrono::milliseconds(1));  // 休眠100ms，可以根据实际需求调整
     }
@@ -177,6 +180,16 @@ void InitImGuiForContext()
 // Hooked SwapBuffers - 每次换帧都会被调用
 BOOL WINAPI MySwapBuffers(HDC hdc)
 {
+    if (done)
+    {
+        static bool once = true;
+        if (once) {
+            g_running.store(false);
+            CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Uninit, g_hModule, 0, NULL);
+            once = false;
+        }
+        return fpSwapBuffers(hdc);
+    }
     // 获取与当前 HDC 关联的顶层窗口（只在首次时用于初始化）
     if (!App::Instance().clientHwnd)
     {
@@ -212,7 +225,7 @@ BOOL WINAPI MySwapBuffers(HDC hdc)
 
     {
         ItemManager::Instance().RenderAll();
-        Menu::Instance().Render();
+        Menu::Instance().Render(&done);
     }
 
     // 渲染 ImGui
@@ -273,8 +286,11 @@ DWORD WINAPI InitThread(LPVOID)
     return 0;
 }
 
-void Uninit()
+void Uninit(HMODULE hModule)
 {
+    // 先停止后台循环
+    g_running.store(false);
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
     // 卸载 ImGui
     if (g_isInit)
     {
@@ -301,5 +317,10 @@ void Uninit()
         MH_Uninitialize();
         g_mhInitialized = false;
         g_hookInitialized = false;
+    }
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    if (hModule) {
+        // 注意： FreeLibraryAndExitThread 会立即结束当前线程。确保调用点是合适的。
+        FreeLibraryAndExitThread(hModule, 0);
     }
 }

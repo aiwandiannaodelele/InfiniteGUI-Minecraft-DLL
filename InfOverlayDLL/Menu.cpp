@@ -55,7 +55,7 @@ Menu::Menu()
 {
 }
 
-void Menu::Render()
+void Menu::Render(bool* done)
 {
     if(!open)
         return;
@@ -91,6 +91,7 @@ void Menu::Render()
     if (ImGui::Button("  X  "))
     {
         Toggle();
+        //*done = true;
     }
 
     ImGui::SameLine();
@@ -240,6 +241,11 @@ void Menu::Render()
         {
             ShellExecute(NULL, NULL, L"https://github.com/QCMaxcer/InfOverlay-DLL", NULL, NULL, SW_SHOWNORMAL);
         }
+    }
+
+    if (ImGui::Button(u8"вт╩ы"))
+    {
+        *done = true;
     }
 
     ImGui::End();
