@@ -15,6 +15,8 @@
 - 计数器  
 - 游戏 FPS  
 - B 站直播弹幕
+- 按键显示
+- CPS显示
   
 适用于 **主播、视频作者、服务器玩家、工具开发者** 等希望在游戏中加入 HUD 信息显示的人群。
 
@@ -56,7 +58,7 @@ Useful for streamers, content creators, server players, and developers who want 
 ### 1. 下载成品
 你可以克隆代码并自行构建  
 
-你也可以在 **爱发电** 以 6 元获得：  
+你也可以在 **爱发电** 以 9 元获得：  
 - 编译好的成品  
 - 自动更新  
 - 技术支持  
