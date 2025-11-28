@@ -20,6 +20,8 @@ public:
     void RenderAll();
     void ProcessKeyEvents(bool state, bool isRepeat, WPARAM key);
 
+
+    void Shutdown();
     void Load(const nlohmann::json& j);
     void Save(nlohmann::json& j) const;
 

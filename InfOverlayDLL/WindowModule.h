@@ -69,13 +69,13 @@ public:
 
         ImGui::Begin(GetActualWindowName().c_str(), nullptr, flags);
 
-        ImGui::SetWindowFontScale(fontSize / 20.0f);
-
         isMoving = ImGui::IsMouseDragging(0, 1.0f) && ImGui::IsWindowFocused();
 
         isHovered = ImGui::IsWindowHovered();
 
+        ImGui::PushFont(NULL, fontSize);
         DrawContent();
+        ImGui::PopFont();
 
         // 判断拖动/修改大小事件
         if (isMoving)

@@ -50,8 +50,6 @@ void KeystrokesItem::DrawContent()
         //ÉèÖÃchildµÄ±³¾°ÑÕÉ«
         ImGui::PushStyleColor(ImGuiCol_ChildBg, key_box.color.backgroundColor);
         ImGui::BeginChild(key_box.label.c_str(), ImVec2(key_box.width, key_box.height), true, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse);
-        isMoving = ImGui::IsMouseDragging(0, 1.0f);
-        ImGui::SetWindowFontScale(fontSize / 20.0f);
         ImVec2 text_size = ImGui::CalcTextSize(key_box.label.c_str());
         ImVec2 text_pos = ImVec2(
             (key_box.width - text_size.x) * 0.5f,

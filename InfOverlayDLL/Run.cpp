@@ -98,6 +98,9 @@ void StartUpdateThread() {
     std::thread updateThread(UpdateThread);
     updateThread.detach();  // 将线程设为后台线程
 }
+
+
+
 // 在找到有效 HDC/窗口后初始化 ImGui（只初始化一次）
 void InitImGuiForContext()
 {
@@ -108,12 +111,6 @@ void InitImGuiForContext()
     if (g_isInit) return;
     if (!App::Instance().clientHwnd) return;
 
-
-    // ...
-
-    // 构造参数第一个为 缓冲帧大小(一般与图像窗口大小相同)
-    // 第二个为可选参数: std::function<void(const std::string&)> (如果需要自定义日志输出)
-    // 替换窗口过程以便我们可以在 UI 激活时处理消息
     g_oldWndProc = (WNDPROC)SetWindowLongPtr(App::Instance().clientHwnd, GWLP_WNDPROC, (LONG_PTR)HookedWndProc);
 
     IMGUI_CHECKVERSION();
@@ -127,8 +124,11 @@ void InitImGuiForContext()
     io.MouseDrawCursor = false;
     io.ConfigFlags |= ImGuiConfigFlags_NoMouse; // 禁止 ImGui 捕获鼠标输入（我们在切换时会调整）
     io.IniFilename = nullptr; // 禁止生成 imgui.ini
-    ImGui::StyleColorsDark();
-    setStyle(GlobalConfig::Instance().roundCornerRadius);
+    //ImGui::StyleColorsDark();
+    SetStyleGray(GlobalConfig::Instance().roundCornerRadius);
+    //SetStylePurple();
+    //SetStyleViolet();
+    //SetStyleVioletBlue();
 
     // 初始化平台/渲染绑定。GLSL 版本根据 MC 的 GL context 版本可调整
     ImGui_ImplWin32_Init(App::Instance().clientHwnd);
@@ -182,8 +182,6 @@ void InitImGuiForContext()
 
     io.FontDefault = font;
 
-
-
     g_isInit = true;
 
     App::Instance().logoTexture.id = LoadTextureFromMemory(logo, logoSize, &App::Instance().logoTexture.width, &App::Instance().logoTexture.height);
@@ -194,6 +192,52 @@ void InitImGuiForContext()
     AudioManager::Instance().Init();
     StartUpdateThread();  // 启动更新线程
 }
+
+
+//struct GLStateBackup {
+//    GLint last_program, last_active_texture, last_texture;
+//    GLint last_array_buffer, last_vertex_array;
+//    GLint last_blend_src_rgb, last_blend_dst_rgb, last_blend_src_alpha, last_blend_dst_alpha;
+//    GLboolean last_enable_blend, last_enable_scissor, last_enable_cull, last_enable_depth_test;
+//    GLint last_viewport[4];
+//    GLint last_scissor_box[4];
+//};
+//
+//static void BackupGLState(GLStateBackup& s) {
+//    glGetIntegerv(GL_CURRENT_PROGRAM, &s.last_program);
+//    glGetIntegerv(GL_ACTIVE_TEXTURE, &s.last_active_texture);
+//    glActiveTexture(GL_TEXTURE0);
+//    glGetIntegerv(GL_TEXTURE_BINDING_2D, &s.last_texture);
+//    glGetIntegerv(GL_ARRAY_BUFFER_BINDING, &s.last_array_buffer);
+//    // VAO may not be supported in very old GL; guard if needed.
+//    glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &s.last_vertex_array);
+//    glGetIntegerv(GL_VIEWPORT, s.last_viewport);
+//    glGetIntegerv(GL_SCISSOR_BOX, s.last_scissor_box);
+//    s.last_enable_blend = glIsEnabled(GL_BLEND);
+//    s.last_enable_scissor = glIsEnabled(GL_SCISSOR_TEST);
+//    s.last_enable_cull = glIsEnabled(GL_CULL_FACE);
+//    s.last_enable_depth_test = glIsEnabled(GL_DEPTH_TEST);
+//    glGetIntegerv(GL_BLEND_SRC_RGB, &s.last_blend_src_rgb);
+//    glGetIntegerv(GL_BLEND_DST_RGB, &s.last_blend_dst_rgb);
+//    glGetIntegerv(GL_BLEND_SRC_ALPHA, &s.last_blend_src_alpha);
+//    glGetIntegerv(GL_BLEND_DST_ALPHA, &s.last_blend_dst_alpha);
+//}
+//
+//static void RestoreGLState(const GLStateBackup& s) {
+//    glUseProgram(s.last_program);
+//    glActiveTexture(s.last_active_texture);
+//    glBindTexture(GL_TEXTURE_2D, s.last_texture);
+//    glBindBuffer(GL_ARRAY_BUFFER, s.last_array_buffer);
+//    glBindVertexArray(s.last_vertex_array);
+//    if (s.last_enable_blend) glEnable(GL_BLEND); else glDisable(GL_BLEND);
+//    if (s.last_enable_scissor) glEnable(GL_SCISSOR_TEST); else glDisable(GL_SCISSOR_TEST);
+//    if (s.last_enable_cull) glEnable(GL_CULL_FACE); else glDisable(GL_CULL_FACE);
+//    if (s.last_enable_depth_test) glEnable(GL_DEPTH_TEST); else glDisable(GL_DEPTH_TEST);
+//    glBlendFuncSeparate(s.last_blend_src_rgb, s.last_blend_dst_rgb, s.last_blend_src_alpha, s.last_blend_dst_alpha);
+//    glViewport(s.last_viewport[0], s.last_viewport[1], s.last_viewport[2], s.last_viewport[3]);
+//    glScissor(s.last_scissor_box[0], s.last_scissor_box[1], s.last_scissor_box[2], s.last_scissor_box[3]);
+//}
+
 // Hooked SwapBuffers - 每次换帧都会被调用
 BOOL WINAPI MySwapBuffers(HDC hdc)
 {
@@ -201,7 +245,6 @@ BOOL WINAPI MySwapBuffers(HDC hdc)
     {
         static bool once = true;
         if (once) {
-            g_running.store(false);
             CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)Uninit, g_hModule, 0, NULL);
             once = false;
         }
@@ -248,8 +291,12 @@ BOOL WINAPI MySwapBuffers(HDC hdc)
     // 渲染 ImGui
     ImGui::Render();
 
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
+    //GLStateBackup backup;
+    //BackupGLState(backup);
+
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    //RestoreGLState(backup);
     // 如果多视口 (通常注入到 MC 时不使用多视口) -- 跳过
 
     // 调用原始 SwapBuffers
@@ -325,7 +372,7 @@ void Uninit(HMODULE hModule)
     }
 
     AudioManager::Instance().Shutdown();// 卸载音频管理器
-
+    ItemManager::Instance().Shutdown(); // 卸载 ItemManager
     // 卸载 MinHook
     if (g_mhInitialized)
     {
@@ -338,6 +385,6 @@ void Uninit(HMODULE hModule)
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     if (hModule) {
         // 注意： FreeLibraryAndExitThread 会立即结束当前线程。确保调用点是合适的。
-        FreeLibraryAndExitThread(hModule, 0);
+        FreeLibrary(hModule);
     }
 }

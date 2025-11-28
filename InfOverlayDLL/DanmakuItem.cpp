@@ -239,7 +239,7 @@ void DanmakuItem::Update()
 
 void DanmakuItem::DrawContent()
 {
-
+    ImGui::PopFont(); // 把之前的字体弹出栈
     std::deque<Danmaku> copy_danmakuList;
     std::string copy_bottomMessage;
 
@@ -308,13 +308,15 @@ void DanmakuItem::DrawContent()
         ImGui::Separator();
         textHeight += ImGui::GetItemRectSize().y + ImGui::GetStyle().ItemSpacing.y;
         ImGui::SetCursorPosX(10);
-        ImGui::SetWindowFontScale(fontSize / 20.0f * 0.8f);
+        ImGui::PushFont(NULL, fontSize * 0.8f);
         ImGuiStd::TextColoredShadow(ImVec4(0.7f, 0.7f, 0.7f, 1.0f), (danmaku.username + " : ").c_str());
         textHeight += ImGui::GetItemRectSize().y + ImGui::GetStyle().ItemSpacing.y;
-        ImGui::SetWindowFontScale(fontSize / 20.0f);
+        ImGui::PopFont();
+        ImGui::PushFont(NULL, fontSize);
         ImGui::SetCursorPosX(10 + fontSize);
         ImGuiStd::TextColoredShadow(it_anim->second.color, danmaku.message.c_str());
-        textHeight += ImGui::GetItemRectSize().y + ImGui::GetStyle().ItemSpacing.y - 1.0f;
+        textHeight += ImGui::GetItemRectSize().y + ImGui::GetStyle().ItemSpacing.y - 1.5f;
+        ImGui::PopFont();
         it_anim->second.tarHeight = textHeight;
         if (it_anim->second.curHeight < it_anim->second.tarHeight)
             it_anim->second.curHeight = ImLerp(it_anim->second.curHeight, it_anim->second.tarHeight, scrollSpeed) + 1.0f; // 弹幕高度动画
@@ -329,7 +331,7 @@ void DanmakuItem::DrawContent()
     // 绘制底部信息
 
     ImGui::SetCursorPosX(10);
-
+    ImGui::PushFont(NULL, fontSize);
     switch (bottomMessageType) {
     case BTM_GIFT:
         ImGuiStd::TextColoredShadow(ImVec4(1.0f, 84.31f, 0.0f, 1.0f), bottomMessage.c_str()); //金色

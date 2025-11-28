@@ -185,3 +185,10 @@ void ItemManager::Save(nlohmann::json& j) const
         j["MultiInstanceItems"].push_back(node);
     }
 }
+
+void ItemManager::Shutdown()
+{
+    allItems.clear();
+    singletonItems.clear();
+    multiItems.clear();
+}
