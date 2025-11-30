@@ -21,11 +21,11 @@ struct texture
 class App
 {
 public:
-	std::string appName = "InfOverlay";
-	version appVersion = { 0, 0, 2 };
+	std::string appName = u8"无限GUI";
+	version appVersion = { 0, 9, 0 };
 	std::string appAuthor = "QC_Max";
-	std::string appDescription = "InfOverlay is a library that allows you to create overlays for in-game information.";
-	std::string announcement = "这里没有公告捏...";
+	std::string appDescription = "Infinite GUI is a library that allows you to create overlays for in-game information.";
+	std::string announcement = u8"这里没有公告捏...";
 	version cloudVersion = { 0, 0, 0 };
 	std::wstring versionUrl = L"https://gitee.com/qc_max/inf-overlay/raw/master/version.json";
 	std::wstring announcementUrl = L"https://gitee.com/qc_max/inf-overlay/raw/master/announcement.txt";

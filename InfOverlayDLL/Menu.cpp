@@ -254,7 +254,8 @@ void Menu::ShowSidePanels()
         ImGui::SetNextWindowBgAlpha(0.3f); // 半透明
         ImGui::BeginChild("UpdateLogChild", ImVec2(0, 0), true, ImGuiWindowFlags_NoInputs);
         //ImGui::PushFont(io.FontDefault);
-        ImGui::TextWrapped(u8"这里是更新日志内容……");
+        ImGuiStd::TextShadow(u8"   -25.11.30-    |    -B0.9.0-");
+        ImGui::BulletText(u8"发布第一支测试版本");
         ImGui::EndChild();
         ImGui::End();
 
@@ -445,7 +446,7 @@ void Menu::ShowSettings(bool* done)
         //显示关于
         if (ImGui::CollapsingHeader(u8"关于", ImGuiTreeNodeFlags_DefaultOpen | ImGuiTreeNodeFlags_FramePadding))
         {
-            ImGuiStd::TextShadow(u8"无限小窗InfOverlay");
+            ImGuiStd::TextShadow(App::Instance().appName.c_str());
             ImGui::SameLine();
             std::string appVersion = std::to_string(App::Instance().appVersion.major) + "." + std::to_string(App::Instance().appVersion.minor) + "." + std::to_string(App::Instance().appVersion.build);
             ImGuiStd::TextShadow(("v" + appVersion).c_str());

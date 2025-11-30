@@ -89,7 +89,7 @@ public:
             ImVec2 pos = ImGui::GetWindowPos();
             ImVec2 sz = ImGui::GetWindowSize();
 
-            WindowSnapper::KeepSnapped(pos, sz, opengl_hook::screen_size.x, opengl_hook::screen_size.y, snapState);
+            WindowSnapper::KeepSnapped(pos, sz, (float)opengl_hook::screen_size.x, (float)opengl_hook::screen_size.y, snapState);
             // 设置吸附后的位置
             ImGui::SetWindowPos(pos, ImGuiCond_Always);
 
@@ -121,12 +121,12 @@ private:
             if (isSnapping)
             {
                 // 计算吸附
-                snap = WindowSnapper::ComputeSnap(pos, sz, opengl_hook::screen_size.x, opengl_hook::screen_size.y, SNAP_DISTANCE);
+                snap = WindowSnapper::ComputeSnap(pos, sz, (float)opengl_hook::screen_size.x, (float)opengl_hook::screen_size.y, SNAP_DISTANCE);
                 // 画吸附线
-                WindowSnapper::DrawGuides(snap, opengl_hook::screen_size.x, opengl_hook::screen_size.y);
+                WindowSnapper::DrawGuides(snap, (float)opengl_hook::screen_size.x, (float)opengl_hook::screen_size.y);
             }
             else
-                snap = WindowSnapper::ComputeSnap(pos, sz, opengl_hook::screen_size.x, opengl_hook::screen_size.y, 0.0f);
+                snap = WindowSnapper::ComputeSnap(pos, sz, (float)opengl_hook::screen_size.x, (float)opengl_hook::screen_size.y, 0.0f);
 
             // 设置吸附后的位置
             ImGui::SetWindowPos(snap.snappedPos, ImGuiCond_Always);
