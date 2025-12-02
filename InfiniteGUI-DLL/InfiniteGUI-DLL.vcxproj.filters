@@ -1,0 +1,405 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="ext">
+      <UniqueIdentifier>{d983a65c-a3d2-4a50-9023-9a0c6e9b279f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{66a0fd21-e14d-49d1-ba87-7175808a092e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ext\detours">
+      <UniqueIdentifier>{bcd3ec15-40d7-44b8-b8b6-0deb3528cff3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ext\detours\include">
+      <UniqueIdentifier>{d72b4de8-a97b-4392-bfb9-07be563ef27d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ext\gl">
+      <UniqueIdentifier>{d38d5f7c-6d03-4e5f-99de-fdda6534a28d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ext\gl\rel">
+      <UniqueIdentifier>{7019b494-84ab-4976-bea9-493d25888a72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ext\imgui">
+      <UniqueIdentifier>{a737d97e-6d36-48dc-8ffc-f72d1b113893}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ext\miniaudio">
+      <UniqueIdentifier>{c372aca1-fd82-441a-bc2d-34e673f0c24e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\audioEngine">
+      <UniqueIdentifier>{d238b137-6587-4638-9dae-3c6f62264d48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\config">
+      <UniqueIdentifier>{82c8142f-34de-478d-8cca-2af5c678faea}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\app">
+      <UniqueIdentifier>{172f4c46-8664-40a8-b3bf-1249e8fc350c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\core">
+      <UniqueIdentifier>{8ff7fc70-17a5-44ff-ae0e-c65b8c34468e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\core\items">
+      <UniqueIdentifier>{df0f6132-c025-4fa0-a463-baa51a3eb290}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\core\items\hidden">
+      <UniqueIdentifier>{1f1ef288-c665-4b7a-ba6a-7465df058e31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\core\items\huds">
+      <UniqueIdentifier>{076e895a-c5c9-40bf-95af-3d25042156d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\core\items\utils">
+      <UniqueIdentifier>{e1d1df55-56ba-4134-8a37-1ec6b4a62361}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\core\items\virtual">
+      <UniqueIdentifier>{12a26c7f-666e-447c-bc2e-b234410f6384}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\core\items\virtual\modules">
+      <UniqueIdentifier>{63be0c0d-6b8c-430d-b76e-789482a52503}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ui">
+      <UniqueIdentifier>{019afd2a-1ccb-4710-8d5c-51617a082f32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ui\menu">
+      <UniqueIdentifier>{7d75ccb6-7ce5-4aba-9c36-9e5bc5d234c6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ui\hooks">
+      <UniqueIdentifier>{f3be7ae2-9701-4c99-889d-49957a2b67ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ui\hooks\gui">
+      <UniqueIdentifier>{be7d5851-378a-4984-ba2b-80a47e1d6f72}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ui\hooks\gui\resources">
+      <UniqueIdentifier>{18c2f253-0d59-430b-a545-7a93cdcfb6e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ui\hooks\gui\resources\fonts">
+      <UniqueIdentifier>{6f4ca627-0cfa-43df-a212-602ca49f517f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ui\hooks\gui\resources\images">
+      <UniqueIdentifier>{070abcda-87b8-4cb4-a289-b903fe097da7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\utils">
+      <UniqueIdentifier>{3883c108-a5de-4017-acf8-0b34bcedcf1f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\utils\http">
+      <UniqueIdentifier>{d89dcdaf-bb05-47f1-aa0d-50c5d6a9d0fc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ui\imGuiHelper">
+      <UniqueIdentifier>{a0dee063-a8f0-4d9a-bb87-fcd8aa3195b0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Init.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="detours\include\detours.h">
+      <Filter>ext\detours\include</Filter>
+    </ClInclude>
+    <ClInclude Include="detours\include\detver.h">
+      <Filter>ext\detours\include</Filter>
+    </ClInclude>
+    <ClInclude Include="detours\include\syelog.h">
+      <Filter>ext\detours\include</Filter>
+    </ClInclude>
+    <ClInclude Include="detours\lazy_importer.hpp">
+      <Filter>ext\detours</Filter>
+    </ClInclude>
+    <ClInclude Include="detours\titan_hook.h">
+      <Filter>ext\detours</Filter>
+    </ClInclude>
+    <ClInclude Include="gl\glew.h">
+      <Filter>ext\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="gl\glxew.h">
+      <Filter>ext\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="gl\wglew.h">
+      <Filter>ext\gl</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui.h">
+      <Filter>ext\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_opengl2.h">
+      <Filter>ext\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_opengl3.h">
+      <Filter>ext\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_opengl3_loader.h">
+      <Filter>ext\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_impl_win32.h">
+      <Filter>ext\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imgui_internal.h">
+      <Filter>ext\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_rectpack.h">
+      <Filter>ext\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_textedit.h">
+      <Filter>ext\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imstb_truetype.h">
+      <Filter>ext\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui\imconfig.h">
+      <Filter>ext\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="miniaudio\miniaudio.h">
+      <Filter>ext\miniaudio</Filter>
+    </ClInclude>
+    <ClInclude Include="App.h">
+      <Filter>src\app</Filter>
+    </ClInclude>
+    <ClInclude Include="AudioManager.h">
+      <Filter>src\audioEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="ConfigManager.h">
+      <Filter>src\config</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalConfig.h">
+      <Filter>src\config</Filter>
+    </ClInclude>
+    <ClInclude Include="CPSDetector.h">
+      <Filter>src\core\items\hidden</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStateDetector.h">
+      <Filter>src\core\items\hidden</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalWindowStyle.h">
+      <Filter>src\core\items\hidden</Filter>
+    </ClInclude>
+    <ClInclude Include="BilibiliFansItem.h">
+      <Filter>src\core\items\huds</Filter>
+    </ClInclude>
+    <ClInclude Include="CounterItem.h">
+      <Filter>src\core\items\huds</Filter>
+    </ClInclude>
+    <ClInclude Include="CPSItem.h">
+      <Filter>src\core\items\huds</Filter>
+    </ClInclude>
+    <ClInclude Include="DanmakuItem.h">
+      <Filter>src\core\items\huds</Filter>
+    </ClInclude>
+    <ClInclude Include="FileCountItem.h">
+      <Filter>src\core\items\huds</Filter>
+    </ClInclude>
+    <ClInclude Include="FpsItem.h">
+      <Filter>src\core\items\huds</Filter>
+    </ClInclude>
+    <ClInclude Include="KeystrokesItem.h">
+      <Filter>src\core\items\huds</Filter>
+    </ClInclude>
+    <ClInclude Include="TextItem.h">
+      <Filter>src\core\items\huds</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeItem.h">
+      <Filter>src\core\items\huds</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprint.h">
+      <Filter>src\core\items\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="AffixModule.h">
+      <Filter>src\core\items\virtual\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="HttpModule.h">
+      <Filter>src\core\items\virtual\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="KeybindModule.h">
+      <Filter>src\core\items\virtual\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundModule.h">
+      <Filter>src\core\items\virtual\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="UpdateModule.h">
+      <Filter>src\core\items\virtual\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowModule.h">
+      <Filter>src\core\items\virtual\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowStyleModule.h">
+      <Filter>src\core\items\virtual\modules</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>src\core\items\virtual</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemManager.h">
+      <Filter>src\core</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>src\ui\menu</Filter>
+    </ClInclude>
+    <ClInclude Include="fonts\harmony_sc_regular.h">
+      <Filter>src\ui\hooks\gui\resources\fonts</Filter>
+    </ClInclude>
+    <ClInclude Include="fonts\IconFont.h">
+      <Filter>src\ui\hooks\gui\resources\fonts</Filter>
+    </ClInclude>
+    <ClInclude Include="fonts\Uranus_Pixel_11Px.h">
+      <Filter>src\ui\hooks\gui\resources\fonts</Filter>
+    </ClInclude>
+    <ClInclude Include="pics\MCInjector-small.h">
+      <Filter>src\ui\hooks\gui\resources\images</Filter>
+    </ClInclude>
+    <ClInclude Include="fonts.h">
+      <Filter>src\ui\hooks\gui\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="Images.h">
+      <Filter>src\ui\hooks\gui\resources</Filter>
+    </ClInclude>
+    <ClInclude Include="gui.h">
+      <Filter>src\ui\hooks\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="opengl_hook.h">
+      <Filter>src\ui\hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="FileUtils.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="HttpClient.h">
+      <Filter>src\utils\http</Filter>
+    </ClInclude>
+    <ClInclude Include="HttpUpdateWorker.h">
+      <Filter>src\utils\http</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyState.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="StringConverter.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="WindowSnapper.h">
+      <Filter>src\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiSty.h">
+      <Filter>src\ui\imGuiHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="ImGuiStd.h">
+      <Filter>src\ui\imGuiHelper</Filter>
+    </ClInclude>
+    <ClInclude Include="VK_Keymap.h">
+      <Filter>src\ui\imGuiHelper</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui.cpp">
+      <Filter>ext\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_demo.cpp">
+      <Filter>ext\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_draw.cpp">
+      <Filter>ext\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_opengl2.cpp">
+      <Filter>ext\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_opengl3.cpp">
+      <Filter>ext\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_impl_win32.cpp">
+      <Filter>ext\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_tables.cpp">
+      <Filter>ext\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui\imgui_widgets.cpp">
+      <Filter>ext\imgui</Filter>
+    </ClCompile>
+    <ClCompile Include="App.cpp">
+      <Filter>src\app</Filter>
+    </ClCompile>
+    <ClCompile Include="AudioManager.cpp">
+      <Filter>src\audioEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="ConfigManager.cpp">
+      <Filter>src\config</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalConfig.cpp">
+      <Filter>src\config</Filter>
+    </ClCompile>
+    <ClCompile Include="CPSDetector.cpp">
+      <Filter>src\core\items\hidden</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStateDetector.cpp">
+      <Filter>src\core\items\hidden</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalWindowStyle.cpp">
+      <Filter>src\core\items\hidden</Filter>
+    </ClCompile>
+    <ClCompile Include="BilibiliFansItem.cpp">
+      <Filter>src\core\items\huds</Filter>
+    </ClCompile>
+    <ClCompile Include="CounterItem.cpp">
+      <Filter>src\core\items\huds</Filter>
+    </ClCompile>
+    <ClCompile Include="CPSItem.cpp">
+      <Filter>src\core\items\huds</Filter>
+    </ClCompile>
+    <ClCompile Include="DanmakuItem.cpp">
+      <Filter>src\core\items\huds</Filter>
+    </ClCompile>
+    <ClCompile Include="FileCountItem.cpp">
+      <Filter>src\core\items\huds</Filter>
+    </ClCompile>
+    <ClCompile Include="FpsItem.cpp">
+      <Filter>src\core\items\huds</Filter>
+    </ClCompile>
+    <ClCompile Include="KeystrokesItem.cpp">
+      <Filter>src\core\items\huds</Filter>
+    </ClCompile>
+    <ClCompile Include="TextItem.cpp">
+      <Filter>src\core\items\huds</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeItem.cpp">
+      <Filter>src\core\items\huds</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprint.cpp">
+      <Filter>src\core\items\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemManager.cpp">
+      <Filter>src\core</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>src\ui\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="fonts.cpp">
+      <Filter>src\ui\hooks\gui\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="Images.cpp">
+      <Filter>src\ui\hooks\gui\resources</Filter>
+    </ClCompile>
+    <ClCompile Include="gui.cpp">
+      <Filter>src\ui\hooks\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="opengl_hook.cpp">
+      <Filter>src\ui\hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="HttpClient.cpp">
+      <Filter>src\utils\http</Filter>
+    </ClCompile>
+    <ClCompile Include="HttpUpdateWorker.cpp">
+      <Filter>src\utils\http</Filter>
+    </ClCompile>
+    <ClCompile Include="KeyState.cpp">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="StringConverter.cpp">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="WindowSnapper.cpp">
+      <Filter>src\utils</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="detours\detours.lib">
+      <Filter>ext\detours</Filter>
+    </Library>
+  </ItemGroup>
+</Project>
