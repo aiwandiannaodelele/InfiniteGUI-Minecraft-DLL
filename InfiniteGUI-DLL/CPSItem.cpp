@@ -6,14 +6,18 @@ void CPSItem::Toggle()
 }
 void CPSItem::DrawContent()
 {
-    
-
+    ImVec4 targetTextColor = ImGui::GetStyleColorVec4(ImGuiCol_Text);
+    //获取io
+    ImGuiIO& io = ImGui::GetIO();
+    //计算速度
+    float speed = 3.0f * io.DeltaTime;
+    color.color = ImLerp(color.color, targetTextColor, speed);
     bool needMiddleFix = showLeft && showRight;
     std::string middleFix = needMiddleFix ? " | " : "";
     std::string left = showLeft ? std::to_string(CPSDetector::Instance().GetLeftCPS()) : "";
     std::string right = showRight ? std::to_string(CPSDetector::Instance().GetRightCPS()) : "";
     std::string text = left + middleFix + right;
-    ImGuiStd::TextShadow((prefix + text + suffix).c_str());
+    ImGuiStd::TextColoredShadow(color.color, (prefix + text + suffix).c_str());
 }
 
 void CPSItem::DrawSettings()

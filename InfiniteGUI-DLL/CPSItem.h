@@ -7,6 +7,10 @@
 #include <string>
 #include <chrono>
 
+struct cps_element {
+    ImVec4 color;
+
+};
 class CPSItem : public Item, public WindowModule, public AffixModule
 {
 public:
@@ -35,5 +39,6 @@ private:
 
     bool showLeft = true;
     bool showRight = true;
+    cps_element color;
 
 };

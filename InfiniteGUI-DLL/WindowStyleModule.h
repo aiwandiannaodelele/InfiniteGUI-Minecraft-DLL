@@ -9,6 +9,7 @@ struct ItemStyle {
     ImVec4 fontColor;
     ImVec4 bgColor;
     ImVec4 borderColor;
+    bool rainbowFont;
 };
 
 class WindowStyleModule {
@@ -25,6 +26,8 @@ public:
         //ÑÕÉ«ÉèÖÃ
         ImVec4* colors = ImGui::GetStyle().Colors;
         ImGuiStd::EditColor(u8"×ÖÌåÑÕÉ«", itemStyle.fontColor, colors[ImGuiCol_Text]);
+        ImGui::SameLine();
+        ImGui::Checkbox(u8"²Êºç", &itemStyle.rainbowFont);
         ImGuiStd::EditColor(u8"±³¾°ÑÕÉ«", itemStyle.bgColor, colors[ImGuiCol_WindowBg]);
         ImGuiStd::EditColor(u8"±ß¿òÑÕÉ«", itemStyle.borderColor, colors[ImGuiCol_Border]);
     }
@@ -34,6 +37,7 @@ protected:
     {
         if (j.contains("windowRounding")) itemStyle.windowRounding = j["windowRounding"];
         if (j.contains("fontSize")) itemStyle.fontSize = j["fontSize"];
+        if (j.contains("rainbowFont")) itemStyle.rainbowFont = j["rainbowFont"];
         ImGuiStd::LoadImVec4(j, "fontColor", itemStyle.fontColor);
         ImGuiStd::LoadImVec4(j, "bgColor", itemStyle.bgColor);
         ImGuiStd::LoadImVec4(j, "borderColor", itemStyle.borderColor);
@@ -44,6 +48,7 @@ protected:
     {
         j["windowRounding"] = itemStyle.windowRounding;
         j["fontSize"] = itemStyle.fontSize;
+        j["rainbowFont"] = itemStyle.rainbowFont;
         ImGuiStd::SaveImVec4(j, "fontColor", itemStyle.fontColor);
         ImGuiStd::SaveImVec4(j, "bgColor", itemStyle.bgColor);
         ImGuiStd::SaveImVec4(j, "borderColor", itemStyle.borderColor);
@@ -58,6 +63,12 @@ protected:
         itemStyle.bgColor = defaultStyle.Colors[ImGuiCol_WindowBg];
         itemStyle.borderColor = defaultStyle.Colors[ImGuiCol_Border];
     }
+    void processRainbowFont()
+    {
+        ImVec4 col = ImColor::HSV((float)fmod(ImGui::GetTime() * 0.2f, 1.0f), 1, 1);
+        ImGui::PushStyleColor(ImGuiCol_Text, col);
+    }
     ItemStyle itemStyle;
+    //ImVec4 rainbowFontColor = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 };
 

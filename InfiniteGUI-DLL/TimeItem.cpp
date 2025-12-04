@@ -29,7 +29,13 @@ void TimeItem::Update()
 
 void TimeItem::DrawContent()
 {
-    ImGuiStd::TextShadow((prefix + currentTimeStr + suffix).c_str());
+    ImVec4 targetTextColor = ImGui::GetStyleColorVec4(ImGuiCol_Text);
+    //获取io
+    ImGuiIO& io = ImGui::GetIO();
+    //计算速度
+    float speed = 3.0f * io.DeltaTime;
+    color.color = ImLerp(color.color, targetTextColor, speed);
+    ImGuiStd::TextColoredShadow(color.color, (prefix + currentTimeStr + suffix).c_str());
 }
 
 void TimeItem::DrawSettings()

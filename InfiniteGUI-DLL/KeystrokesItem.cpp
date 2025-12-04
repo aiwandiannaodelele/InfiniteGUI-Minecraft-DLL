@@ -10,8 +10,8 @@ void KeystrokesItem::Toggle()
 }
 void KeystrokesItem::Update()
 {
-    //if(App::Instance().clientHwnd != opengl_hook::handle_window)
-    //    return;
+    if(opengl_hook::handle_window != GetForegroundWindow())
+        return;
     for (auto& key_box : key_boxes)
     {
         if(GetAsyncKeyState(key_box.key) & 0x8000)
@@ -31,13 +31,13 @@ void KeystrokesItem::DrawContent()
     cursorPos.y = window_padding.y;
     ImGui::PushStyleColor(ImGuiCol_Border, *itemStylePtr.borderColor);
     ImGui::PushStyleVar(ImGuiStyleVar_ChildRounding, *itemStylePtr.windowRounding);
-    //ImGui::PushStyleColor(ImGuiCol_ChildBg, itemStylePtr->bgColor);
+    ImGui::PushStyleColor(ImGuiCol_ChildBg, *itemStylePtr.bgColor);
     for (auto& key_box : key_boxes)
     {
         if(key_box.type == space && !showSpace) continue;
         if(key_box.type == mouse && !showMouse) continue;
-        ImVec4 targetTextColor = key_box.state ? ImVec4(0.0f, 0.0f, 0.0f, 1.0f) : *itemStylePtr.fontColor;
-        ImVec4 targetBgColor = key_box.state ? ImVec4(1.0f, 1.0f, 1.0f, 1.0f) : *itemStylePtr.bgColor;
+        ImVec4 targetTextColor = key_box.state ? ImVec4(0.0f, 0.0f, 0.0f, 1.0f) : ImGui::GetStyleColorVec4(ImGuiCol_Text);
+        ImVec4 targetBgColor = key_box.state ? ImVec4(1.0f, 1.0f, 1.0f, 1.0f) : ImGui::GetStyleColorVec4(ImGuiCol_ChildBg);
 
         //计算速度
         float speed_off = 15.0f * io.DeltaTime;
@@ -68,7 +68,7 @@ void KeystrokesItem::DrawContent()
             cursorPos.x += key_box.width + padding;
     }
     ImGui::PopStyleVar(); //窗口圆角
-    ImGui::PopStyleColor(); //是否显示边框
+    ImGui::PopStyleColor(2); //是否显示边框
 }
 
 void KeystrokesItem::DrawSettings()

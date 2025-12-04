@@ -278,6 +278,7 @@ namespace ImGuiStd {
             }
             ImGui::EndPopup();
         }
+        return changed;
     }
 
     static void SaveImVec4(nlohmann::json& j, const char* key, const ImVec4& v)

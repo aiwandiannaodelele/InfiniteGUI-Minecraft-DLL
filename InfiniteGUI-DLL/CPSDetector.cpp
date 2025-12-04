@@ -3,17 +3,17 @@
 #include "KeyState.h"
 #include "opengl_hook.h"
 
-// 检查是否到了更新的时间
-bool CPSDetector::ShouldCpsUpdate() {
-    auto now = std::chrono::steady_clock::now();
-    auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastCpsTime).count();
-    return elapsedTime >= cpsIntervalMs;
-}
-
-// 更新操作
-void CPSDetector::MarkUpCPSdated() {
-    lastCpsTime = std::chrono::steady_clock::now();
-}
+//// 检查是否到了更新的时间
+//bool CPSDetector::ShouldCpsUpdate() {
+//    auto now = std::chrono::steady_clock::now();
+//    auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastCpsTime).count();
+//    return elapsedTime >= cpsIntervalMs;
+//}
+//
+//// 更新操作
+//void CPSDetector::MarkUpCPSdated() {
+//    lastCpsTime = std::chrono::steady_clock::now();
+//}
 
 void CPSDetector::Toggle()
 {
@@ -21,20 +21,16 @@ void CPSDetector::Toggle()
 
 void CPSDetector::Update()
 {
-    if (ShouldCpsUpdate())
-    {
-        cps.processClick();
-        MarkUpCPSdated();
-    }
-    //if (App::Instance().clientHwnd != opengl_hook::handle_window)
-    //    return;
+    cps.processClick();
+    if (opengl_hook::handle_window != GetForegroundWindow())
+        return;
     if (GetKeyClick(VK_LBUTTON))
     {
-        cps.AddLeftClick(20);
+        cps.AddLeftClick();
     }
     if (GetKeyClick(VK_RBUTTON))
     {
-        cps.AddRightClick(20);
+        cps.AddRightClick();
     }
 }
 

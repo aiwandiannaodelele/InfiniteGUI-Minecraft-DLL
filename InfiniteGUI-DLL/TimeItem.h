@@ -9,6 +9,10 @@
 #include <chrono>
 #include <ctime>
 
+struct time_element {
+    ImVec4 color;
+};
+
 class TimeItem : public Item, public AffixModule , public UpdateModule, public WindowModule {
 public:
     TimeItem() {
@@ -36,4 +40,5 @@ public:
 
 private:
     std::string currentTimeStr;
+    time_element color;
 };

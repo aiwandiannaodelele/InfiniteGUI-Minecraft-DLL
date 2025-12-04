@@ -3,6 +3,10 @@
 #include "UpdateModule.h"
 #include "WindowModule.h"
 
+struct fps_element {
+    ImVec4 color;
+};
+
 class FpsItem : public Item, public AffixModule, public UpdateModule, public WindowModule
 {
 public:
@@ -34,4 +38,5 @@ private:
     // Ö¡ÂÊ¼ÆÊýÆ÷
     int frameCount = 0;
     float FPS = 0.0f;
+    fps_element color;
 };

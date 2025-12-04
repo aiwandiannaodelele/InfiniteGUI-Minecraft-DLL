@@ -5,34 +5,80 @@
 #include <string>
 #include <chrono>
 
-struct click_container {
-    std::vector<int> leftContainer;
-    std::vector<int> rightContainer;
+//struct click_container {
+//    std::vector<int> leftContainer;
+//    std::vector<int> rightContainer;
+//
+//    void AddLeftClick(int times)
+//    {
+//        leftContainer.push_back(times);
+//    }
+//
+//    void AddRightClick(int times)
+//    {
+//        rightContainer.push_back(times);
+//    }
+//
+//    void processClick()
+//    {
+//        for (int i = 0; i < leftContainer.size(); i++)
+//        {
+//            leftContainer[i] -= 1;
+//            if (leftContainer[i] == 0)
+//            {
+//                leftContainer.erase(leftContainer.begin() + i);
+//            }
+//        }
+//        for (int i = 0; i < rightContainer.size(); i++)
+//        {
+//            rightContainer[i] -= 1;
+//            if (rightContainer[i] == 0)
+//            {
+//                rightContainer.erase(rightContainer.begin() + i);
+//            }
+//        }
+//    }
+//
+//    int GetLeftCPS()
+//    {
+//        int left = (int)leftContainer.size();
+//        return left;
+//    }
+//    int GetRightCPS()
+//    {
+//        int right = (int)rightContainer.size();
+//        return right;
+//    }
+//};
 
-    void AddLeftClick(int times)
+typedef std::chrono::steady_clock::time_point click;
+
+struct click_container {
+    std::vector<click> leftContainer;
+    std::vector<click> rightContainer;
+
+    void AddLeftClick()
     {
-        leftContainer.push_back(times);
+        leftContainer.push_back(std::chrono::steady_clock::now());
     }
 
-    void AddRightClick(int times)
+    void AddRightClick()
     {
-        rightContainer.push_back(times);
+        rightContainer.push_back(std::chrono::steady_clock::now());
     }
 
     void processClick()
     {
         for (int i = 0; i < leftContainer.size(); i++)
         {
-            leftContainer[i] -= 1;
-            if (leftContainer[i] == 0)
+            if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - leftContainer[i]).count() > 1000)
             {
                 leftContainer.erase(leftContainer.begin() + i);
             }
         }
         for (int i = 0; i < rightContainer.size(); i++)
         {
-            rightContainer[i] -= 1;
-            if (rightContainer[i] == 0)
+            if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - rightContainer[i]).count() > 1000)
             {
                 rightContainer.erase(rightContainer.begin() + i);
             }
@@ -51,6 +97,7 @@ struct click_container {
     }
 };
 
+
 class CPSDetector : public Item, public UpdateModule
 {
 public:
@@ -62,8 +109,8 @@ public:
         isEnabled = true;
         updateIntervalMs = 2;
         lastUpdateTime = std::chrono::steady_clock::now();
-        lastCpsTime = std::chrono::steady_clock::now();
-    }
+        //lastCpsTime = std::chrono::steady_clock::now();
+    } 
     ~CPSDetector() {}
 
     static CPSDetector& Instance() {
@@ -82,11 +129,11 @@ public:
 private:
 
     click_container cps;
-    // 检查是否到了更新的时间
-    bool ShouldCpsUpdate();
+    //// 检查是否到了更新的时间
+    //bool ShouldCpsUpdate();
 
-    // 更新操作
-    void MarkUpCPSdated();
-    int cpsIntervalMs = 50;
-    std::chrono::steady_clock::time_point lastCpsTime;  // 记录最后更新时间
+    //// 更新操作
+    //void MarkUpCPSdated();
+    //int cpsIntervalMs = 50;
+    //std::chrono::steady_clock::time_point lastCpsTime;  // 记录最后更新时间
 };

@@ -4,6 +4,11 @@
 #include "nlohmann/json.hpp"
 #include <string>
 
+struct text_element {
+    ImVec4 color;
+};
+
+
 class TextItem : public Item, public AffixModule, public WindowModule
 {
 public:
@@ -22,4 +27,5 @@ public:
     void Save(nlohmann::json& j) const override;
 private:
     std::string text;
+    text_element color;
 };

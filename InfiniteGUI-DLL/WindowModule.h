@@ -30,6 +30,7 @@ struct ItemStylePtr
     ImVec4* fontColor;
     ImVec4* bgColor;
     ImVec4* borderColor;
+    bool* rainbowFont;
 };
 
 
@@ -55,9 +56,15 @@ private:
         else
             itemStylePtr.fontSize = &GlobalWindowStyle::Instance().GetGlobeStyle().fontSize;
         if (custom.fontColor)
+        {
             itemStylePtr.fontColor = &itemStyle.fontColor;
+            itemStylePtr.rainbowFont = &itemStyle.rainbowFont;
+        }
         else
+        {
             itemStylePtr.fontColor = &GlobalWindowStyle::Instance().GetGlobeStyle().fontColor;
+            itemStylePtr.rainbowFont = &GlobalWindowStyle::Instance().GetGlobeStyle().rainbowFont;
+        }
         if (custom.bgColor)
             itemStylePtr.bgColor = &itemStyle.bgColor;
         else
@@ -152,6 +159,15 @@ public:
         }
         ImVec4* colors = ImGui::GetStyle().Colors;
         itemStylePtr.fontColor = EditWindowColor(u8"×ÖÌåÑÕÉ«", &itemStyle.fontColor, &GlobalWindowStyle::Instance().GetGlobeStyle().fontColor, custom.fontColor);
+        ImGui::SameLine();
+        if (ImGui::Checkbox(u8"²Êºç", &itemStyle.rainbowFont))
+        {
+            custom.fontColor = true;
+            itemStylePtr.fontColor = &itemStyle.fontColor;
+            itemStylePtr.rainbowFont = &itemStyle.rainbowFont;
+        }
+        if(!custom.fontColor)
+            itemStylePtr.rainbowFont = &GlobalWindowStyle::Instance().GetGlobeStyle().rainbowFont;
         itemStylePtr.bgColor = EditWindowColor(u8"±³¾°ÑÕÉ«", &itemStyle.bgColor, &GlobalWindowStyle::Instance().GetGlobeStyle().bgColor, custom.bgColor);
         itemStylePtr.borderColor = EditWindowColor(u8"±ß¿òÑÕÉ«", &itemStyle.borderColor, &GlobalWindowStyle::Instance().GetGlobeStyle().borderColor, custom.borderColor);
     }
@@ -172,7 +188,7 @@ public:
             if (isCustomSize)
                 ImGui::SetNextWindowSize(ImVec2(width, height), ImGuiCond_Always);
         }
-        HWND g_hwnd = App::Instance().clientHwnd;
+        HWND g_hwnd = opengl_hook::handle_window;
 
         if (isTransparentBg)
         {
@@ -185,7 +201,10 @@ public:
             ImGui::PushStyleColor(ImGuiCol_Border, *itemStylePtr.borderColor); // ±ß¿òÍ¸Ã÷
         }
         ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, *itemStylePtr.windowRounding);
-        ImGui::PushStyleColor(ImGuiCol_Text, *itemStylePtr.fontColor); // ×ÖÌåÑÕÉ«
+        if (*itemStylePtr.rainbowFont)
+            processRainbowFont();
+        else
+            ImGui::PushStyleColor(ImGuiCol_Text, *itemStylePtr.fontColor); // ×ÖÌåÑÕÉ«
         ImGuiWindowFlags flags = 0;
         //if (!allowResize) flags |= ImGuiWindowFlags_NoResize;
         //if (!allowMove)   flags |= ImGuiWindowFlags_NoMove;
@@ -333,6 +352,7 @@ protected:
 
     bool isMoving = false;
     bool isHovered = true;
+    bool isAnimating = false;
 
     bool isTransparentBg = false;
 

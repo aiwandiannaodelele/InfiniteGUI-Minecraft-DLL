@@ -7,8 +7,13 @@ void TextItem::Toggle()
 
 void TextItem::DrawContent()
 {
-    ImGuiStd::TextShadow((prefix + text + suffix).c_str());
-    //ImGui::Text((prefix + text + suffix).c_str());
+    ImVec4 targetTextColor = ImGui::GetStyleColorVec4(ImGuiCol_Text);
+    //获取io
+    ImGuiIO& io = ImGui::GetIO();
+    //计算速度
+    float speed = 3.0f * io.DeltaTime;
+    color.color = ImLerp(color.color, targetTextColor, speed);
+    ImGuiStd::TextColoredShadow(color.color, (prefix + text + suffix).c_str());
 }
 
 void TextItem::DrawSettings()

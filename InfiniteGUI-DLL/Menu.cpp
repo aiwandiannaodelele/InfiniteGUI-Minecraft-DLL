@@ -260,6 +260,7 @@ void Menu::ShowSidePanels()
         ImGuiStd::TextShadow(u8"   -25.11.30-    |    -B0.9.1-");
         ImGui::BulletText(u8"优化资源位置");
         ImGui::BulletText(u8"添加窗口样式自定义");
+        ImGui::BulletText(u8"添加窗口彩虹字");
         ImGui::Separator();
         ImGui::EndChild();
         ImGui::End();
@@ -621,7 +622,7 @@ void Menu::Toggle()
     {
         RECT rect;
         // 获取窗口的矩形位置和大小
-        if (GetWindowRect(App::Instance().clientHwnd, &rect)) {
+        if (GetWindowRect(opengl_hook::handle_window, &rect)) {
             // 计算窗口中心的位置
             int centerX = (rect.left + rect.right) / 2;
             int centerY = (rect.top + rect.bottom) / 2;
