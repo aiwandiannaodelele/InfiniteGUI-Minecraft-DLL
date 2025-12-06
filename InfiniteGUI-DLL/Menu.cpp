@@ -14,6 +14,8 @@
 #include "opengl_hook.h"
 #include <thread>
 
+#include "ChangeLog.h"
+
 void ShowFontSelection(GlobalConfig* globalConfig) {
     static std::vector<FileUtils::FontInfo> fontFiles;
 
@@ -281,15 +283,16 @@ void Menu::ShowSidePanels()
         ImGui::SetNextWindowBgAlpha(0.3f); // 半透明
         ImGui::BeginChild("UpdateLogChild", ImVec2(0, 0), true, ImGuiWindowFlags_NoInputs);
         //ImGui::PushFont(io.FontDefault);
-        ImGuiStd::TextShadow(u8"   -25.12.05-    |    -B0.9.1-");
-        ImGui::BulletText(u8"优化资源文件夹位置");
-        ImGui::BulletText(u8"添加窗口样式自定义");
-        ImGui::BulletText(u8"添加窗口彩虹字");
-        ImGui::BulletText(u8"添加动态模糊");
-        ImGui::Separator();
-        ImGuiStd::TextShadow(u8"   -25.11.30-    |    -B0.9.0-");
-        ImGui::BulletText(u8"发布第一支测试版本");
-        ImGui::Separator();
+        //ImGuiStd::TextShadow(u8"   -25.12.05-    |    -B0.9.1-");
+        //ImGui::BulletText(u8"优化资源文件夹位置");
+        //ImGui::BulletText(u8"添加窗口样式自定义");
+        //ImGui::BulletText(u8"添加窗口彩虹字");
+        //ImGui::BulletText(u8"添加动态模糊");
+        //ImGui::Separator();
+        //ImGuiStd::TextShadow(u8"   -25.11.30-    |    -B0.9.0-");
+        //ImGui::BulletText(u8"发布第一支测试版本");
+        //ImGui::Separator();
+        ChangeLog::Instance().Draw();
         ImGui::EndChild();
         ImGui::End();
 

@@ -3,6 +3,8 @@
 #include "Item.h"
 #include "UpdateModule.h"
 #include <string>
+#include <vector>
+#include <deque>
 #include <chrono>
 
 //struct click_container {
@@ -54,8 +56,8 @@
 typedef std::chrono::steady_clock::time_point click;
 
 struct click_container {
-    std::vector<click> leftContainer;
-    std::vector<click> rightContainer;
+    std::deque<click> leftContainer;
+    std::deque<click> rightContainer;
 
     void AddLeftClick()
     {
@@ -69,20 +71,24 @@ struct click_container {
 
     void processClick()
     {
-        for (int i = 0; i < leftContainer.size(); i++)
+        if (leftContainer.size() > 0)
         {
-            if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - leftContainer[i]).count() > 1000)
+            auto now = std::chrono::steady_clock::now();
+            auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(now - leftContainer.front()).count();
+            if (diff > 1000)
             {
-                leftContainer.erase(leftContainer.begin() + i);
+                leftContainer.pop_front();
             }
         }
-        for (int i = 0; i < rightContainer.size(); i++)
+        if (rightContainer.size() > 0)
         {
-            if (std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::steady_clock::now() - rightContainer[i]).count() > 1000)
+            auto now = std::chrono::steady_clock::now();
+            auto diff = std::chrono::duration_cast<std::chrono::milliseconds>(now - rightContainer.front()).count();
+            if (diff > 1000)
             {
-                rightContainer.erase(rightContainer.begin() + i);
+                rightContainer.pop_front();
             }
-        }
+        }   
     }
 
     int GetLeftCPS()

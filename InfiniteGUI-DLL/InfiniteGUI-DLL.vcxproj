@@ -185,6 +185,7 @@
     <ClInclude Include="StringConverter.h" />
     <ClInclude Include="TextItem.h" />
     <ClInclude Include="TimeItem.h" />
+    <ClInclude Include="ChangeLog.h" />
     <ClInclude Include="UpdateModule.h" />
     <ClInclude Include="VK_Keymap.h" />
     <ClInclude Include="WindowModule.h" />
@@ -229,6 +230,7 @@
     <ClCompile Include="StringConverter.cpp" />
     <ClCompile Include="TextItem.cpp" />
     <ClCompile Include="TimeItem.cpp" />
+    <ClCompile Include="ChangeLog.cpp" />
     <ClCompile Include="WindowSnapper.cpp" />
   </ItemGroup>
   <ItemGroup>

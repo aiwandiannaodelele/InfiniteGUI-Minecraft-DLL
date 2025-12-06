@@ -234,16 +234,6 @@ namespace ImGuiStd {
 
     static bool EditColor(const char* label, ImVec4& color, ImGuiColorEditFlags flags = ImGuiColorEditFlags_AlphaPreviewHalf | ImGuiColorEditFlags_AlphaBar | ImGuiColorEditFlags_NoSidePreview | ImGuiColorEditFlags_NoLabel)
     {
-        //ImGuiStyle& style = ImGui::GetStyle();
-        //ImGui::ColorEdit4(label, (float*)&color, ImGuiColorEditFlags_AlphaBar | flags);
-        //if (memcmp(&color, &refColor, sizeof(ImVec4)) != 0)
-        //{
-        //    // Tips: in a real user application, you may want to merge and use an icon font into the main font,
-        //    // so instead of "Save"/"Revert" you'd use icons!
-        //    // Read the FAQ and docs/FONTS.md about using icon fonts. It's really easy and super convenient!
-        //    //ImGui::SameLine(0.0f, style.ItemInnerSpacing.x); if (ImGui::Button(u8"±£´æ")) { refColor = color; }
-        //    ImGui::SameLine(0.0f, style.ItemInnerSpacing.x); if (ImGui::Button(u8"»¹Ô­")) { color = refColor; }
-        //}
         bool changed = false;
         static std::map<const char*, edit_color_element> edit_color_elements;
         if (edit_color_elements.find(label) == edit_color_elements.end())
@@ -270,8 +260,6 @@ namespace ImGuiStd {
         if (ImGui::BeginPopup(label, ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse))
         {
             element.popup_size = ImLerp(element.popup_size, target_size, speed);
-            //TextShadow(label);
-            //ImGui::Spacing();
             if (ImGui::ColorPicker4(label, (float*)&color, flags))
             {
                 changed = true;

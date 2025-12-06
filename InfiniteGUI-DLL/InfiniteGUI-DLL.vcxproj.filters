@@ -286,6 +286,9 @@
     <ClInclude Include="Menu.h">
       <Filter>src\core\items\huds</Filter>
     </ClInclude>
+    <ClInclude Include="ChangeLog.h">
+      <Filter>src\app</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -401,6 +404,9 @@
     </ClCompile>
     <ClCompile Include="Menu.cpp">
       <Filter>src\core\items\huds</Filter>
+    </ClCompile>
+    <ClCompile Include="ChangeLog.cpp">
+      <Filter>src\app</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
