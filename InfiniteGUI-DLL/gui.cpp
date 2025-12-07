@@ -1,10 +1,9 @@
 ﻿#include "gui.h"
-//#include "imgui_bloom_src\opengl_imgui_bloom.h"
+
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "imgui/imgui_impl_win32.h"
-
 #include "opengl_hook.h"
 
 //#include <gl/glew.h>
@@ -17,24 +16,11 @@
 
 #include "Menu.h"
 #include "Motionblur.h"
+#include "GameStateDetector.h"
 static ImGuiContext* imGuiContext = nullptr;
 
 void Gui::init()
 {
-
-	/*GLint viewport[4];
-	glGetIntegerv(GL_VIEWPORT, viewport);
-	glViewport(0, 0, viewport[2], viewport[3]);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	glOrtho(0, viewport[2], viewport[3], 0, -1, 1);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glDisable(GL_DEPTH_TEST);*/
-
-
-
-
 	Fonts::init();
 	imGuiContext = ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
@@ -88,34 +74,22 @@ void Gui::clean()
 	if ((ImGui::GetCurrentContext() ? (void*)ImGui::GetIO().BackendPlatformUserData : nullptr))ImGui_ImplWin32_Shutdown();
 	if (imGuiContext)ImGui::DestroyContext(imGuiContext);
 }
-//#include <base/voyage.h>
-//#include <base/features/events/events.h>
+
 static std::atomic_flag clipCursor = ATOMIC_FLAG_INIT;
 static RECT originalClip;
-////定义声明imgui的bloom系统
-//static std::shared_ptr<BloomImGui::FxBloomSystem> MyGuiBloom;
 void Gui::render()
 {
 	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
-	//static std::once_flag flag{};
-	//std::call_once(flag, [&]
-	//	{
-	//		MyGuiBloom = std::make_shared<BloomImGui::FxBloomSystem>(opengl_hook::screen_size.x, opengl_hook::screen_size.y);
-	//		MyGuiBloom->GetImGuiNewFrameFUNC(ImGui_ImplWin32_NewFrame);
-	//		MyGuiBloom->SettingBloomRadius(30.f);
-	//	});
-
-	//MyGuiBloom->RenderContextCaptureBegin();
 	ImGuiContext* context = ImGui::GetCurrentContext();
 	if (context->WithinFrameScope)
 	{
 		ItemManager::Instance().RenderAll();
 	}
-	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	ImGui::EndFrame();
 	ImGui::Render();
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	if (Motionblur::Instance().isEnabled &&
 		Motionblur::Instance().applayOnMenu &&
 		Menu::Instance().isEnabled) 
