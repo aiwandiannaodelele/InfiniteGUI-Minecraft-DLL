@@ -1,5 +1,5 @@
 #pragma once
-#include "gl\glew.h"
+#include <GL/glew.h>
 #include <Windows.h>
 #include <string>
 #include "imgui\imgui.h"

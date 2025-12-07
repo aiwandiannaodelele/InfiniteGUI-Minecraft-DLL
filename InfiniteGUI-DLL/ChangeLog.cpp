@@ -17,6 +17,7 @@ void ChangeLog::Init()
     AddContent(OPTIMIZE, u8"优化ChangeLog界面");
     AddContent(OPTIMIZE, u8"优化/美化动态模糊");
     AddContent(FIXBUG, u8"修复字体彩色绑定问题");
+    AddContent(ADD, u8"添加菜单背景模糊");
 }
 
 ChangeLog::ChangeLog()

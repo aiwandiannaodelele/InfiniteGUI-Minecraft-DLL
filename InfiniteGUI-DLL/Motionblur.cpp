@@ -1,6 +1,6 @@
 #include "Motionblur.h"
-#include <gl/glew.h>
-#include <gl/GL.h>
+#include <GL/glew.h>
+#include <GL/GL.h>
 #include "opengl_hook.h"
 #include "GameStateDetector.h"
 #include "imgui\imgui_internal.h"

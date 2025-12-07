@@ -6,8 +6,8 @@
 #include "imgui/imgui_impl_win32.h"
 #include "opengl_hook.h"
 
-//#include <gl/glew.h>
-//#include <gl/GL.h>
+#include <GL/glew.h>
+#include <GL/GL.h>
 
 #include "fonts.h"
 #include "ImGuiSty.h"

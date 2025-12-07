@@ -80,7 +80,7 @@ void GameStateDetector::ProcessMouseMovement(int dx, int dy)
 		cameraMoving = true;
 	else
 		cameraMoving = false;
-	if(Menu::Instance().isEnabled)
+	if(Menu::Instance().isEnabled || !IsInGame())
 	{
 		cameraMoving = false;
 		cameraSpeed = 1.0f;

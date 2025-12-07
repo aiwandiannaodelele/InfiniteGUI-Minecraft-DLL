@@ -17,6 +17,7 @@ enum SETTING_STATE {
 
 struct panel_element {
     float state = 0.0f;
+    float blurriness = 0;
 };
 
 class Menu : public RenderModule, public WindowStyleModule , public Item, public KeybindModule {
@@ -57,4 +58,33 @@ private:
     void ShowSidePanels();
     void DrawItemList();
     void DrawItemEditor(Item* item);
+
+    void RenderMenuBlur();
+    void apply_blur(int iterations) const;
+    void draw_final_texture() const;
+    void initialize_pingpong(const int width, const int height);
+    void initialize_texture(const int width, const int height);
+    void initialize_quad();
+    void initialize_shader();
+
+    void resize_texture(int width, int height);
+    void draw_texture() const;
+    void copy_to_current() const;
+
+    uint32_t shader_program_;
+
+    uint32_t current_texture_;
+
+    uint32_t quad_vao_;
+    uint32_t quad_vbo_;
+
+    int32_t texture_width_;
+    int32_t texture_height_;
+
+    GLuint pingpongFBO[2];
+    GLuint pingpongColorBuffers[2];
+
+    bool menu_blur = true;
+    int blurriness_value = 5;
+
 };

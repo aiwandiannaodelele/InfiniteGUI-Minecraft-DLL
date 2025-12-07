@@ -13,7 +13,8 @@
 #include "CounterItem.h"
 #include "opengl_hook.h"
 #include <thread>
-
+#include <GL/glew.h>
+#include <GL/GL.h>
 #include "ChangeLog.h"
 
 void ShowFontSelection(GlobalConfig* globalConfig) {
@@ -64,7 +65,7 @@ void Menu::Render()
 {
     if(!isEnabled)
         return;
-
+    if (menu_blur) RenderMenuBlur();
     //使窗口显示在屏幕中间
     ImGui::SetNextWindowPos(ImVec2((ImGui::GetIO().DisplaySize.x - ImGui::GetIO().DisplaySize.x / 2), (ImGui::GetIO().DisplaySize.y - ImGui::GetIO().DisplaySize.y / 2)), ImGuiCond_Once, ImVec2(0.5f, 0.5f));
     ImGui::SetNextWindowSize(ImVec2((float)opengl_hook::screen_size.x + 10, (float)opengl_hook::screen_size.y + 10), ImGuiCond_Always);
@@ -94,7 +95,7 @@ void Menu::Render()
         ImGui::PushStyleColor(ImGuiCol_WindowBg, itemStyle.bgColor);
         ImGui::PushStyleColor(ImGuiCol_Border, itemStyle.borderColor);
         PushRounding(itemStyle.windowRounding);
-
+        panelAnim.blurriness = (float)blurriness_value;
         ShowSettings(&opengl_hook::gui.done);
 
         ImGui::PopStyleColor(2);
@@ -173,11 +174,13 @@ void Menu::ShowMain()
         {
             tarWindowBgColor = ImVec4(0.0f, 0.0f, 0.0f, 0.5f);
             panelAnim.state = ImLerp(panelAnim.state, 1.0f, panel_speed);
+            panelAnim.blurriness = ImLerp(panelAnim.blurriness, (float)blurriness_value, panel_speed);
         }
         else
         {
             tarWindowBgColor = ImVec4(0.0f, 0.0f, 0.0f, 0.3f);
             panelAnim.state = ImLerp(panelAnim.state, 0.0f, panel_speed);
+            panelAnim.blurriness = ImLerp(panelAnim.blurriness, 0.0f, panel_speed);
         }
     }
     ShowSidePanels();
@@ -631,6 +634,7 @@ void Menu::Toggle()
         }
         myWindowBgColor = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
         panelAnim.state = 0.0f;
+        panelAnim.blurriness = 0.0f;
     }
     else
     {
@@ -642,12 +646,16 @@ void Menu::DrawSettings()
 {
     DrawItemSettings();
     DrawKeybindSettings();
+    ImGui::Checkbox(u8"背景模糊", &menu_blur);
+    ImGui::SliderInt(u8"模糊强度", &blurriness_value, 0, 10);
     DrawStyleSettings();
 }
 
 void Menu::Load(const nlohmann::json& j)
 {
     LoadKeybind(j);
+    if(j.contains("menu_blur")) menu_blur = j["menu_blur"].get<bool>();
+    if(j.contains("blurriness_value")) blurriness_value = j["blurriness_value"].get<int>();
     LoadStyle(j);
     //LoadItem(j);
 }
@@ -655,6 +663,246 @@ void Menu::Load(const nlohmann::json& j)
 void Menu::Save(nlohmann::json& j) const
 {
     SaveKeybind(j);
+    j["menu_blur"] = menu_blur;
+    j["blurriness_value"] = blurriness_value;
     SaveStyle(j);
     j["type"] = name;
+}
+
+auto vertex_shader_code2 = R"glsl(
+#version 330 core
+layout (location = 0) in vec2 aPos;
+layout (location = 1) in vec2 aTexCoord;
+
+out vec2 TexCoord;
+
+void main()
+{
+    gl_Position = vec4(aPos, 0.0, 1.0);
+    TexCoord = aTexCoord;
+}
+)glsl";
+
+auto fragment_shader_code2 = R"glsl(
+#version 330 core
+
+out vec4 FragColor;
+in vec2 TexCoord;
+uniform sampler2D image;
+uniform vec2 resolution;
+uniform vec2 direction;
+
+void main() {
+  vec4 color = vec4(0.0);
+  vec2 off1 = vec2(1.411764705882353) * direction;
+  vec2 off2 = vec2(3.2941176470588234) * direction;
+  vec2 off3 = vec2(5.176470588235294) * direction;
+  color += texture2D(image, TexCoord) * 0.1964825501511404;
+  color += texture2D(image, TexCoord + (off1 / resolution)) * 0.2969069646728344;
+  color += texture2D(image, TexCoord - (off1 / resolution)) * 0.2969069646728344;
+  color += texture2D(image, TexCoord + (off2 / resolution)) * 0.09447039785044732;
+  color += texture2D(image, TexCoord - (off2 / resolution)) * 0.09447039785044732;
+  color += texture2D(image, TexCoord + (off3 / resolution)) * 0.010381362401148057;
+  color += texture2D(image, TexCoord - (off3 / resolution)) * 0.010381362401148057;
+  FragColor = color;
+}
+
+)glsl"; //https://github.com/Experience-Monks/glsl-fast-gaussian-blur/tree/master
+
+
+void Menu::RenderMenuBlur()
+{
+    if (!isEnabled) return;
+    static bool initialize = false;
+
+    const int width = opengl_hook::screen_size.x;
+    const int height = opengl_hook::screen_size.y;
+
+    glViewport(0, 0, width, height);
+
+    if (!initialize)
+    {
+        initialize_pingpong(width, height);
+        initialize_texture(width, height);
+        initialize_quad();
+        initialize_shader();
+        initialize = true;
+
+        texture_width_ = width;
+        texture_height_ = height;
+    }
+
+    if (texture_width_ != width || texture_height_ != height)
+    {
+        resize_texture(width, height);
+    }
+
+    copy_to_current();
+
+    apply_blur(panelAnim.blurriness);  // iteration count
+    if(panelAnim.blurriness >= 1.0f)
+        draw_final_texture();
+
+}
+
+void Menu::apply_blur(int iterations) const
+{
+    if (iterations <= 0) return;
+
+    glUseProgram(shader_program_);
+
+    glUniform2f(glGetUniformLocation(shader_program_, "resolution"),
+        texture_width_, texture_height_);
+
+    bool horizontal = true;
+    bool firstPass = true;
+
+    for (int i = 0; i < iterations * 2; i++) // 每次包含水平和垂直
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, pingpongFBO[horizontal]);
+
+        glUniform2f(glGetUniformLocation(shader_program_, "direction"),
+            horizontal ? 1.0f : 0.0f,
+            horizontal ? 0.0f : 1.0f);
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D,
+            firstPass ? current_texture_ : pingpongColorBuffers[!horizontal]);
+
+        glUniform1i(glGetUniformLocation(shader_program_, "image"), 0);
+
+        glBindVertexArray(quad_vao_);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+        horizontal = !horizontal;
+        if (firstPass) firstPass = false;
+    }
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glUseProgram(0);
+}
+
+void Menu::draw_final_texture() const
+{
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_BLEND);
+
+    glUseProgram(shader_program_);
+    glActiveTexture(GL_TEXTURE0);
+
+    // 绑定最后一轮 pingpong 输出（horizontal 的反向）
+    glBindTexture(GL_TEXTURE_2D, pingpongColorBuffers[0]);
+    glUniform1i(glGetUniformLocation(shader_program_, "image"), 0);
+
+    glBindVertexArray(quad_vao_);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+    glUseProgram(0);
+}
+
+void Menu::initialize_pingpong(const int width, const int height)
+{
+    glGenFramebuffers(2, pingpongFBO);
+    glGenTextures(2, pingpongColorBuffers);
+
+    for (unsigned int i = 0; i < 2; i++)
+    {
+        glBindFramebuffer(GL_FRAMEBUFFER, pingpongFBO[i]);
+
+        glBindTexture(GL_TEXTURE_2D, pingpongColorBuffers[i]);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0,
+            GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+        glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+            GL_TEXTURE_2D, pingpongColorBuffers[i], 0);
+    }
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void Menu::initialize_texture(const int width, const int height)
+{
+    glGenTextures(1, &current_texture_);
+    glBindTexture(GL_TEXTURE_2D, current_texture_);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+    glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void Menu::initialize_quad()
+{
+    constexpr GLfloat quad_vertices[] = {
+        -1.0f, -1.0f, 0.0f, 0.0f,
+        1.0f, -1.0f, 1.0f, 0.0f,
+        -1.0f, 1.0f, 0.0f, 1.0f,
+        1.0f, 1.0f, 1.0f, 1.0f
+    };
+
+    glGenVertexArrays(1, &quad_vao_);
+    glGenBuffers(1, &quad_vbo_);
+
+    glBindVertexArray(quad_vao_);
+    glBindBuffer(GL_ARRAY_BUFFER, quad_vbo_);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(quad_vertices), quad_vertices, GL_STATIC_DRAW);
+
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), static_cast<GLvoid*>(0));
+
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat),
+        reinterpret_cast<GLvoid*>(2 * sizeof(GLfloat)));
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+}
+
+void Menu::initialize_shader()
+{
+    shader_program_ = glCreateProgram();
+
+    const GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertex_shader, 1, &vertex_shader_code2, nullptr);
+    glCompileShader(vertex_shader);
+
+    const GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragment_shader, 1, &fragment_shader_code2, nullptr);
+    glCompileShader(fragment_shader);
+
+    glAttachShader(shader_program_, vertex_shader);
+    glAttachShader(shader_program_, fragment_shader);
+    glLinkProgram(shader_program_);
+
+    glDeleteShader(vertex_shader);
+    glDeleteShader(fragment_shader);
+}
+
+void Menu::resize_texture(int width, int height)
+{
+    glBindTexture(GL_TEXTURE_2D, current_texture_);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+    glBindTexture(GL_TEXTURE_2D, 0);
+
+    for (unsigned int i = 0; i < 2; i++)
+    {
+        glBindTexture(GL_TEXTURE_2D, pingpongColorBuffers[i]);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
+        glBindTexture(GL_TEXTURE_2D, 0);
+    }
+    texture_width_ = width;
+    texture_height_ = height;
+}
+
+void Menu::copy_to_current() const
+{
+    glBindTexture(GL_TEXTURE_2D, current_texture_);
+    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 0, 0, texture_width_, texture_height_, 0);
 }
