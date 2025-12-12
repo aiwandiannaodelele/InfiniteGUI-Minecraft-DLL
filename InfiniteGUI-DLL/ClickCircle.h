@@ -46,13 +46,17 @@ public:
 	bool Draw(ImDrawList* draw_list, const float& dt) override
 	{
 
-		if (IsEqual(curData, endData))
+		if (IsFinished())
 		{
 			return false;
 		}
 		DrawCircle(draw_list, curData);
 		LerpCircle(curData, endData, animSpeed, dt);
 		return true;
+	}
+	bool IsFinished() const override
+	{
+		return IsEqual(curData, endData);
 	}
 private:
 	CircleData startData = {};

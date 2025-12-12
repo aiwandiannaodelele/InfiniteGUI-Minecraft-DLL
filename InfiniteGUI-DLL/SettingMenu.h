@@ -25,12 +25,13 @@ public:
 		ImVec2 screenPos = ImGui::GetCursorScreenPos();
 
 		leftPanel->Draw();
-
+		int index = leftPanel->GetSelectedIndex();
 		ImDrawList* draw = ImGui::GetWindowDrawList();
 		ImVec2 pos1 = ImVec2(padding * 2 + 150.0f + screenPos.x, padding * 0.5f + screenPos.y);
 		ImVec2 pos2 = ImVec2(padding * 2 + 150.0f + screenPos.x, settingMenuSize.y - padding * 0.5f + screenPos.y);
 		draw->AddLine(pos1, pos2, ImGui::GetColorU32(ImGuiCol_Separator), 1.0f);
 		ImGui::SetCursorPos(ImVec2(padding * 2 + 150.0f, 0.0f));
+		mainPanel->SetPanelType(index);
 		mainPanel->Draw();
 		ImGui::EndChild();
 	}

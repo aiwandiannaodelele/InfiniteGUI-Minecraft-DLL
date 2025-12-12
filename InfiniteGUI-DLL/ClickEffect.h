@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include <vector>
+#include <deque>
 #include "Item.h"
 #include "RenderModule.h"
 #include "UpdateModule.h"
@@ -62,16 +62,11 @@ private:
 		for (int i = (int)clickEffects.size() - 1; i >= 0; --i)
 		{
 			ClickEffectBase* effect = clickEffects[i];
-
-			if (!effect->Draw(drawList, io.DeltaTime))
-			{
-				delete effect;
-				clickEffects.erase(clickEffects.begin() + i);
-			}
+			effect->Draw(drawList, io.DeltaTime);
 		}
 	}
 	KeyState keyStateHelper;
-	std::vector<ClickEffectBase*> clickEffects;
+	std::deque<ClickEffectBase*> clickEffects;
 	ClickCircleSettings clickCircleSettings;
 
 	bool enabledInGame = false;

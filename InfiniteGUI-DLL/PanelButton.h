@@ -15,7 +15,7 @@ struct PanelButtonStateData
 	TextAnimTarget   label;
 };
 
-constexpr float textSpacing = 3.0f; //图标与文字的间距
+constexpr float textSpacing = 4.0f; //图标与文字的间距
 
 class PanelButton : public AnimButtonBase
 {
@@ -312,7 +312,7 @@ private:
 			m_active.button,
 			opengl_hook::gui.iconFont,
 			labelText.font ? labelText.font : ImGui::GetFont(),
-			0.0f
+			1.0f
 		);
 
 	}

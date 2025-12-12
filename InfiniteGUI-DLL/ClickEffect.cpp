@@ -44,6 +44,13 @@ void ClickEffect::Update()
 		ClickCircle* clickCircle = new ClickCircle(mousePos, clickCircleSettings);
 		AddClickEffect(clickCircle);
 	}
+
+	if (clickEffects.empty()) return;
+	if(clickEffects.front()->IsFinished()) 
+	{
+		delete clickEffects.front();
+		clickEffects.pop_front();
+	}
 }
 
 void ClickEffect::Render()
