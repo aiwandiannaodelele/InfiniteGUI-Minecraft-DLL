@@ -198,16 +198,6 @@ bool detour_wgl_swap_buffers(HDC hdc)
 			opengl_hook::gui.logoTexture.id = LoadTextureFromMemory(logo, logoSize, &opengl_hook::gui.logoTexture.width, &opengl_hook::gui.logoTexture.height);
 		});
 
-	// 切换 ImGui 鼠标捕获设置
-	ImGuiIO& io = ImGui::GetIO();
-	if (Menu::Instance().isEnabled)
-	{
-		io.ConfigFlags &= ~ImGuiConfigFlags_NoMouse; // 允许 ImGui 处理鼠标
-	}
-	else
-	{
-		io.ConfigFlags |= ImGuiConfigFlags_NoMouse;  // 禁止 ImGui 捕获鼠标
-	}
 	//渲染代码
 	opengl_hook::gui.render();
 	//渲染结束

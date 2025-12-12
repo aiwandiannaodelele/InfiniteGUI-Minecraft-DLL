@@ -15,10 +15,7 @@ struct PanelButtonStateData
 	TextAnimTarget   label;
 };
 
-constexpr ImVec2 panelButtonSize = ImVec2(150, 50); //按钮大小
-constexpr float textSpacing = 0.0f; //图标与文字的间距
-constexpr float buttonSizeOffset = 5.0f; //按钮大小缩小/放大的距离
-constexpr float buttonHeightOffset = 3.0f; //按钮高度抬起/下降的距离
+constexpr float textSpacing = 3.0f; //图标与文字的间距
 
 class PanelButton : public AnimButtonBase
 {
@@ -31,7 +28,7 @@ public:
 		m_padding = padding;
 		m_normal.button.size = size;
 	}
-	~PanelButton() {};
+	~PanelButton() = default;
 
 	bool Draw(const bool& windowDragging = false) override //返回是否被点击
 	{
@@ -53,17 +50,7 @@ public:
 			SetStateData();
 			m_current = *m_target;
 		}
-
-		ImGuiIO& io = ImGui::GetIO();
-		// 获取当前按钮区域（使用 m_current 来绘制）
-		ImVec2 buttonPos = m_current.button.CalculatePos();
-		ImVec2 buttonSize = m_current.button.size;
-
-		// 创建不可见的按钮用于接受鼠标事件
-		ImGui::SetCursorScreenPos(buttonPos);
-		ImGui::PushID(this);
-		bool pressed = ImGui::InvisibleButton("##panelBtn", buttonSize, ImGuiButtonFlags_PressedOnClickRelease);
-		ImGui::PopID();
+		bool pressed = DrawInvisibleButton(m_current.button);
 		bool hovered = ImGui::IsItemHovered();
 		bool active = ImGui::IsItemActive();
 
@@ -112,6 +99,7 @@ public:
 			}
 			if (!skipAnim)
 			{
+				ImGuiIO& io = ImGui::GetIO();
 				LerpAll(m_current, *m_target, animSpeed, io.DeltaTime);
 			}
 		}
@@ -122,7 +110,7 @@ public:
 		DrawBackground(m_current.button, ImDrawFlags_RoundCornersLeft);
 		DrawBorder(m_current.button, ImDrawFlags_RoundCornersLeft);
 		DrawIcon();
-		DrawLabel();
+		DrawLabel(m_current.label, labelText);
 
 		//if (!skipAnim)
 		//{
@@ -172,18 +160,10 @@ private:
 	void DrawIcon() const
 	{
 		if (!iconText.font) return;
-		ImVec2 pos = m_current.icon.CalculatePos();
+		ImVec2 pos = m_current.icon.CalculatePos(iconText);
 		ImU32 col = ImGui::ColorConvertFloat4ToU32(m_current.icon.color);
 
 		DrawShadowText(iconText.font, m_current.icon.fontSize, pos, col, iconText.text);
-	}
-
-	void DrawLabel() const
-	{
-		ImVec2 pos = m_current.label.CalculatePos();
-		ImU32 col = ImGui::ColorConvertFloat4ToU32(m_current.label.color);
-
-		DrawShadowText(labelText.font, m_current.label.fontSize, pos, col, labelText.text);
 	}
 
 	void SetNextCursorScreenPos() const //下一个控件位置一定由初始位置 + 初始大小 + 边距决定，否则会发生偏移
@@ -313,9 +293,6 @@ private:
 		borderColor.w = 1.0f;
 		m_active.button.borderColor = borderColor;
 
-		ImVec2 buttonPos = m_active.button.CalculatePos();
-		ImVec2 textCenter = ImVec2(buttonPos.x + m_active.button.size.x / 2, buttonPos.y + m_active.button.size.y / 2);		//设置m_hovered的图标
-
 		//设置m_active的图标
 		//图标向左移动，并正常显示
 		m_active.icon.fontSize = ImGui::GetFontSize() * 1.0f;
@@ -335,7 +312,7 @@ private:
 			m_active.button,
 			opengl_hook::gui.iconFont,
 			labelText.font ? labelText.font : ImGui::GetFont(),
-			-6.0f
+			0.0f
 		);
 
 	}

@@ -67,9 +67,9 @@ public:
     int GetKeyBind();
 private:
     void ShowMain();
+    void ShowSidePanels() const;
     void ShowSettings(bool* done) const;
     void OldSettings();
-    void ShowSidePanels();
     void DrawItemList();
     void DrawItemEditor(Item* item);
     Blur * blur;

@@ -17,7 +17,7 @@ public:
     int Draw()
     {
         ImVec2 startPos = ImGui::GetCursorScreenPos();
-        bool moving = ImGui::IsWindowHovered() && ImGui::IsMouseDragging(0);
+        bool moving = ImGui::IsMouseDragging(0, 1.f);
         int clickedIndex = -1;
         for (int i = 0; i < buttons.size(); i++)
         {

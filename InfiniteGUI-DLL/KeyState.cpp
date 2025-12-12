@@ -1,11 +1,11 @@
 #include "KeyState.h"
 
 
-bool GetKeyClick(int key)
+bool KeyState::GetKeyClick(int key)
 {
 	if (key <= 0)
 		return false;
-	static bool PrevKeyState[512] = { false };
+	//static bool PrevKeyState[512] = { false };
 
 	bool CurrKeyState = GetKeyDown(key);
 	bool IsClick = false;
@@ -17,23 +17,23 @@ bool GetKeyClick(int key)
 	return IsClick;
 }
 
-bool GetKeyDown(int key)
+bool KeyState::GetKeyDown(int key)
 {
 	return GetAsyncKeyState(key) & 0x8000;
 }
 
-bool GetKeyUp(int key)
+bool KeyState::GetKeyUp(int key)
 {
 	if (key <= 0)
 		return false;
-	static bool PrevKeyState[512] = { false };
+	//static bool PrevKeyState[512] = { false };
 	bool CurrKeyState = GetKeyDown(key);
 	bool IsReleased = PrevKeyState[key] && !CurrKeyState;
 	PrevKeyState[key] = CurrKeyState;
 	return IsReleased;
 }
 
-void SetKeyDown(int key, int mode)
+void KeyState::SetKeyDown(int key, int mode)
 {
 	switch (mode)
 	{
@@ -81,7 +81,7 @@ void SetKeyDown(int key, int mode)
 	}
 }
 
-void SetKeyUp(int key, int mode)
+void KeyState::SetKeyUp(int key, int mode)
 {
 	switch (mode)
 	{
@@ -129,7 +129,7 @@ void SetKeyUp(int key, int mode)
 	}
 }
 
-void SetKeyClick(int key, int sleep, int mode)
+void KeyState::SetKeyClick(int key, int sleep, int mode)
 {
 	switch (mode)
 	{

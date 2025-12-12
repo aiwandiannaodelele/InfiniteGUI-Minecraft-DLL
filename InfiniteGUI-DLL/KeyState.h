@@ -9,12 +9,20 @@ enum SendInputMode
 	SC_POST_MESSAGE = 2
 };
 
-bool GetKeyDown(int key);
-bool GetKeyUp(int key);
-bool GetKeyClick(int key);
-void SetKeyDown(int key, int mode = SC_POST_MESSAGE);
-void SetKeyUp(int key, int mode = SC_POST_MESSAGE);
-void SetKeyClick(int key, int sleep = 20, int mode = SC_POST_MESSAGE);
+class KeyState
+{
+public:
+	static bool GetKeyDown(int key);
+	bool GetKeyUp(int key);
+	bool GetKeyClick(int key);
+	static void SetKeyDown(int key, int mode = SC_POST_MESSAGE);
+	static void SetKeyUp(int key, int mode = SC_POST_MESSAGE);
+	static void SetKeyClick(int key, int sleep = 20, int mode = SC_POST_MESSAGE);
+
+	private:
+		bool PrevKeyState[512] = { false };
+};
+
 
 enum Click
 {

@@ -6,7 +6,7 @@
 #include <vector>
 #include <deque>
 #include <chrono>
-
+#include "KeyState.h"
 //struct click_container {
 //    std::vector<int> leftContainer;
 //    std::vector<int> rightContainer;
@@ -137,7 +137,7 @@ public:
     int GetLeftCPS();
     int GetRightCPS();
 private:
-
+    KeyState keyStateHelper;
     click_container cps;
     //// 检查是否到了更新的时间
     //bool ShouldCpsUpdate();

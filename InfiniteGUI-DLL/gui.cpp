@@ -13,6 +13,7 @@
 #include "ImGuiSty.h"
 #include "ItemManager.h"
 #include "App.h"
+#include "GlobalConfig.h"
 
 #include "Menu.h"
 #include "Motionblur.h"
@@ -28,8 +29,8 @@ void Gui::init()
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;  // 可选
 
 	// 默认关闭 ImGui 捕获鼠标（只有激活 UI 时允许）
-	io.MouseDrawCursor = false;
-	io.ConfigFlags |= ImGuiConfigFlags_NoMouse; // 禁止 ImGui 捕获鼠标输入（我们在切换时会调整）
+	//io.MouseDrawCursor = false;
+	//io.ConfigFlags |= ImGuiConfigFlags_NoMouse; // 禁止 ImGui 捕获鼠标输入（我们在切换时会调整）
 	io.IniFilename = nullptr; // 禁止生成 imgui.ini
 	SetStyleGray();
 

@@ -1,3 +1,4 @@
+#include <Windows.h>
 #include "ItemManager.h"
 #include "TimeItem.h"
 #include "FpsItem.h"
@@ -10,7 +11,9 @@
 #include "TextItem.h"
 
 #include "Sprint.h"
+
 #include "Motionblur.h"
+#include "ClickEffect.h"
 
 #include "CPSDetector.h"
 #include "GameStateDetector.h"
@@ -32,7 +35,9 @@ void ItemManager::Init()
     AddSingleton(&Menu::Instance());
 
     AddSingleton(&Sprint::Instance());
+
     AddSingleton(&Motionblur::Instance());
+    AddSingleton(&ClickEffect::Instance());
 
     AddSingleton(&TimeItem::Instance());
     AddSingleton(&FpsItem::Instance());
@@ -83,7 +88,7 @@ void ItemManager::RemoveMulti(Item* target)
 }
 
 // ------------------------------------------------
-void ItemManager::UpdateAll()
+void ItemManager::UpdateAll() const
 {
     for (auto item : allItems)
     {
@@ -100,25 +105,29 @@ void ItemManager::UpdateAll()
 }
 
 // ------------------------------------------------
-void ItemManager::RenderAll()
+void ItemManager::RenderAll() const
 {
-    if (GameStateDetector::Instance().IsNeedHide() && !Menu::Instance().isEnabled)
-        return; // 隐藏所有窗口
+    bool isWindowNeedHide = false;
+    if (GameStateDetector::Instance().IsNeedHide())
+        isWindowNeedHide = true; // 隐藏所有窗口
     for (auto item : allItems)
     {
         if (!item->isEnabled) continue;
-        if (auto win = dynamic_cast<RenderModule*>(item))
+        if (auto ren = dynamic_cast<RenderModule*>(item))
         {
-            if (auto motionblur = dynamic_cast<Motionblur*>(item))
+            if (auto motionblur = dynamic_cast<Motionblur*>(ren))
                 if (motionblur->applayOnMenu && Menu::Instance().isEnabled) continue;
 
-            win->Render();
+            if (auto win = dynamic_cast<WindowModule*>(ren) && isWindowNeedHide)
+                continue;
+
+            ren->Render();
         }
     }
 }
 
 // ------------------------------------------------
-void ItemManager::ProcessKeyEvents(bool state, bool isRepeat, WPARAM key)
+void ItemManager::ProcessKeyEvents(bool state, bool isRepeat, WPARAM key) const
 {
     for (auto item : allItems)
     {

@@ -2,18 +2,20 @@
 #include <string>
 #include "imgui/imgui.h"
 #include <nlohmann/json.hpp>
-#include <Windows.h>
-#include <dwmapi.h>
 #pragma comment(lib, "dwmapi.lib")
-#include "GlobalConfig.h"
-#include "WindowSnapper.h"
-#include <chrono>
 
-enum ItemType {
+enum GameState {
+    InGameMenu,
+    InMenu,
+    InGame,
+};
+
+enum ItemType{
     Hud,
     Util,
+    Visual,
     Hidden
-};
+}; //改成可同时拥有多个类型
 
 enum MultiType {
     Singleton,
@@ -22,10 +24,8 @@ enum MultiType {
 
 class Item {
 public:
-    Item() {
-    }
-    virtual ~Item() {
-    }
+    Item() = default;
+    virtual ~Item() = default;
 
     // ---------------------------
     //   必须被子类实现的接口

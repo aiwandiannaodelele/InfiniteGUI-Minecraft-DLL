@@ -1,6 +1,5 @@
 #pragma once
 #include "Sprint.h"
-#include "KeyState.h"
 #include "AudioManager.h"
 #include "GameStateDetector.h"
 void Sprint::Toggle()
@@ -32,7 +31,7 @@ void Sprint::OnKeyEvent(bool state, bool isRepeat, WPARAM key)
 
 void Sprint::GetSneaking()
 {
-    if (GetKeyDown(keybinds.at(u8"Ç±ÐÐ¼ü£º")) && GameStateDetector::Instance().IsInGame())
+    if (keyStateHelper.GetKeyDown(keybinds.at(u8"Ç±ÐÐ¼ü£º")) && GameStateDetector::Instance().IsInGame())
     {
         color.color = ImVec4(0.5f, 0.5f, 0.5f, 1.0f); //»ÒÉ«
         state = Sneaking;
@@ -42,7 +41,7 @@ void Sprint::GetSneaking()
 
 void Sprint::GetWalking()
 {
-    if (GetKeyDown(keybinds.at(u8"Ç°½ø¼ü£º")) && GameStateDetector::Instance().IsInGame())
+    if (keyStateHelper.GetKeyDown(keybinds.at(u8"Ç°½ø¼ü£º")) && GameStateDetector::Instance().IsInGame())
     {
         state = isActivated ? Sprinting : Walking;
         lastState = state;
@@ -54,11 +53,11 @@ void Sprint::SetSprinting()
     if (state == Sprinting)
     {
         color.color = ImVec4(0.1f, 1.0f, 0.1f, 1.0f); //ÂÌÉ«
-        SetKeyDown(keybinds.at(u8"¼²ÅÜ¼ü£º"), 1);
+        keyStateHelper.SetKeyDown(keybinds.at(u8"¼²ÅÜ¼ü£º"), 1);
     }
     if (state != Sprinting && lastState == Sprinting)
     {
-        SetKeyUp(keybinds.at(u8"¼²ÅÜ¼ü£º"), 1);
+        keyStateHelper.SetKeyUp(keybinds.at(u8"¼²ÅÜ¼ü£º"), 1);
         lastState = state;
     }
 }

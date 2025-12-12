@@ -5,6 +5,14 @@
       <Configuration>Debug</Configuration>
       <Platform>Win32</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Mine|Win32">
+      <Configuration>Mine</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Mine|x64">
+      <Configuration>Mine</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="Release|Win32">
       <Configuration>Release</Configuration>
       <Platform>Win32</Platform>
@@ -51,6 +59,12 @@
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Mine|Win32'">
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Mine|x64'">
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -123,14 +137,23 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Mine|x64'">
+    <ClCompile>
+      <LanguageStandard>stdcpp17</LanguageStandard>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="AffixModule.h" />
+    <ClInclude Include="Anim.h" />
     <ClInclude Include="AnimButtonBase.h" />
     <ClInclude Include="App.h" />
     <ClInclude Include="AudioManager.h" />
     <ClInclude Include="BilibiliFansItem.h" />
     <ClInclude Include="Blur.h" />
     <ClInclude Include="CategoryBar.h" />
+    <ClInclude Include="ClickCircle.h" />
+    <ClInclude Include="ClickEffect.h" />
+    <ClInclude Include="ClickEffectBase.h" />
     <ClInclude Include="ConfigManager.h" />
     <ClInclude Include="CounterItem.h" />
     <ClInclude Include="CPSDetector.h" />
@@ -177,12 +200,14 @@
     <ClInclude Include="KeybindModule.h" />
     <ClInclude Include="KeyState.h" />
     <ClInclude Include="KeystrokesItem.h" />
+    <ClInclude Include="MainMenuButton.h" />
     <ClInclude Include="MainPanel.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="miniaudio\miniaudio.h" />
     <ClInclude Include="ModuleCard.h" />
     <ClInclude Include="ModulesScroll.h" />
     <ClInclude Include="Motionblur.h" />
+    <ClInclude Include="MyButton.h" />
     <ClInclude Include="opengl_hook.h" />
     <ClInclude Include="SelectPanel.h" />
     <ClInclude Include="PanelButton.h" />
@@ -207,6 +232,7 @@
     <ClCompile Include="AudioManager.cpp" />
     <ClCompile Include="BilibiliFansItem.cpp" />
     <ClCompile Include="Blur.cpp" />
+    <ClCompile Include="ClickEffect.cpp" />
     <ClCompile Include="ConfigManager.cpp" />
     <ClCompile Include="CounterItem.cpp" />
     <ClCompile Include="CPSDetector.cpp" />

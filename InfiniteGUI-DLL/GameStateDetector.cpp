@@ -7,7 +7,14 @@ void GameStateDetector::Toggle()
 }
 void GameStateDetector::Update()
 {
-	isInGame = !IsMouseCursorVisible();
+	
+	if (Menu::Instance().isEnabled)
+		currentState = InMenu;
+	else if (IsMouseCursorVisible())
+		currentState = InGameMenu;
+	else
+		currentState = InGame;
+
 
 }
 
@@ -28,37 +35,22 @@ void GameStateDetector::DrawSettings()
 	ImGui::Checkbox(u8"仅在游戏内显示窗口", &hideItemInGui);
 }
 
-//bool GameStateDetector::IsPaused() const
-//{
-//	return false;
-//}
-//
-//bool GameStateDetector::IsInventoryOpen() const
-//{
-//	return false;
-//}
-//
-//bool GameStateDetector::IsChatTyping() const
-//{
-//	return false;
-//}
-//
-//bool GameStateDetector::IsInGUI() const
-//{
-//	return false;
-//}
-
 bool GameStateDetector::IsNeedHide() const 
 {
-	return !isInGame && hideItemInGui;
+	return currentState == InGameMenu && hideItemInGui;
+}
+
+GameState GameStateDetector::GetCurrentState() const
+{
+	return currentState;
 }
 
 bool GameStateDetector::IsInGame() const
 {
-	return isInGame;
+	return (currentState == InGame);
 }
 
-bool GameStateDetector::IsMouseCursorVisible() const
+bool GameStateDetector::IsMouseCursorVisible()
 {
 	CURSORINFO ci;
 	ci.cbSize = sizeof(ci);

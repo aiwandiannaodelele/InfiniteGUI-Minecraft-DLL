@@ -2,7 +2,7 @@
 #include "imgui/imgui.h"
 #include "imgui/imgui_internal.h"
 #include <cmath>
-
+#include "Anim.h"
 struct ButtonText
 {
 	const char* text;
@@ -22,9 +22,16 @@ struct TextAnimTarget
 	float fontSize;
 	ImVec2 center;
 	ImVec4 color;
-	ImVec2 CalculatePos() const //pos不应当作为动画的目标变量。动画只由中心位置、大小、颜色决定
+	ImVec2 CalculatePos(const ButtonText& text) const //pos不应当作为动画的目标变量。动画只由中心位置、大小、颜色决定
 	{
-		ImVec2 pos = ImVec2(center.x - fontSize / 2, center.y - fontSize / 2);
+		ImGui::PushFont(text.font, fontSize);
+		ImVec2 textSize = ImGui::CalcTextSize(text.text);  // 获取文本实际像素宽高
+		ImGui::PopFont();
+
+		ImVec2 pos = ImVec2(
+			center.x - textSize.x * 0.5f,  // 左上角 = 中心 - 一半宽度
+			center.y - textSize.y * 0.5f   // 左上角 = 中心 - 一半高度
+		);
 		return pos;
 	}
 	void CalculateCenter(const ImVec2& pos)
@@ -50,7 +57,11 @@ struct ButtonAnimTarget
 	}
 };
 
-class AnimButtonBase
+constexpr ImVec2 panelButtonSize = ImVec2(150.0f, 50.0f); //按钮大小
+constexpr float buttonSizeOffset = 5.0f; //按钮大小缩小/放大的距离
+constexpr float buttonHeightOffset = 3.0f; //按钮高度抬起/下降的距离
+
+class AnimButtonBase : public Anim
 {
 public:
     virtual bool Draw(const bool& windowDragging = false) = 0;
@@ -70,6 +81,29 @@ protected:
     float animSpeed = 15.0f;
 
     float m_padding = 8.0f;
+
+	bool DrawInvisibleButton(const ButtonAnimTarget& current, const ImDrawFlags& flags = ImGuiButtonFlags_PressedOnClickRelease) const
+	{
+		// 获取当前按钮区域（使用 m_current 来绘制）
+		ImVec2 buttonPos = current.CalculatePos();
+		ImVec2 buttonSize = current.size;
+
+		// 创建不可见的按钮用于接受鼠标事件
+		ImGui::SetCursorScreenPos(buttonPos);
+		ImGui::PushID(this);
+		bool pressed = ImGui::InvisibleButton("##panelBtn", buttonSize, ImGuiButtonFlags_PressedOnClickRelease);
+		ImGui::PopID();
+		return pressed;
+	}
+
+
+	static void DrawLabel(const TextAnimTarget& current, const ButtonText& labelText)
+	{
+		ImVec2 pos = current.CalculatePos(labelText);
+		ImU32 col = ImGui::ColorConvertFloat4ToU32(current.color);
+
+		DrawShadowText(labelText.font, current.fontSize, pos, col, labelText.text);
+	}
 
 	static void DrawBackground(const ButtonAnimTarget &current, const ImDrawFlags& flags = ImDrawFlags_RoundCornersAll)
 	{
@@ -133,14 +167,6 @@ protected:
 		ImGui::SetCursorScreenPos(nextPos);
 	}
 
-    // 插值
-    template<typename T>
-    static void SmoothLerp(T& cur, const T& target, float damping, float dt)
-    {
-        float t = 1.f - std::exp(-damping * dt);
-        cur = ImLerp(cur, target, t);
-    }
-
 	static void LerpButton(ButtonAnimTarget& cur, const ButtonAnimTarget& target, float damping, float deltaTime)
 	{
 		SmoothLerp(cur.size, target.size, damping, deltaTime);
@@ -170,23 +196,4 @@ protected:
 			&& AlmostEqual(a.center, b.center)
 			&& AlmostEqual(a.color, b.color);
 	}
-
-	static bool AlmostEqual(float a, float b, float eps = 0.001f)
-	{
-		return fabsf(a - b) < eps;
-	}
-
-	static bool AlmostEqual(const ImVec2& a, const ImVec2& b, float eps = 0.001f)
-	{
-		return AlmostEqual(a.x, b.x, eps) && AlmostEqual(a.y, b.y, eps);
-	}
-
-	static bool AlmostEqual(const ImVec4& a, const ImVec4& b, float eps = 0.001f)
-	{
-		return AlmostEqual(a.x, b.x, eps)
-			&& AlmostEqual(a.y, b.y, eps)
-			&& AlmostEqual(a.z, b.z, eps)
-			&& AlmostEqual(a.w, b.w, eps);
-	}
-
 };

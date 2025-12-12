@@ -2,6 +2,7 @@
 #include "HttpClient.h"
 #include <nlohmann/json.hpp>
 #include <string>
+#include <Windows.h>
 
 bool App::CheckUpdate()
 {

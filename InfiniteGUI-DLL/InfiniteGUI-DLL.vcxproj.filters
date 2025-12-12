@@ -53,12 +53,6 @@
     <Filter Include="src\core\items\utils">
       <UniqueIdentifier>{e1d1df55-56ba-4134-8a37-1ec6b4a62361}</UniqueIdentifier>
     </Filter>
-    <Filter Include="src\core\items\virtual">
-      <UniqueIdentifier>{12a26c7f-666e-447c-bc2e-b234410f6384}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="src\core\items\virtual\modules">
-      <UniqueIdentifier>{63be0c0d-6b8c-430d-b76e-789482a52503}</UniqueIdentifier>
-    </Filter>
     <Filter Include="src\ui">
       <UniqueIdentifier>{019afd2a-1ccb-4710-8d5c-51617a082f32}</UniqueIdentifier>
     </Filter>
@@ -115,6 +109,18 @@
     </Filter>
     <Filter Include="src\core\items\huds\menu\widgets\virtual">
       <UniqueIdentifier>{c8036e59-2f8c-4803-b0cd-abf151745616}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\core\items\huds\menu\widgets\fx">
+      <UniqueIdentifier>{2f2b7c5f-ecb3-4db7-b52f-a0b63d58a004}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\core\items\visual">
+      <UniqueIdentifier>{db96e301-35b3-4ddd-a576-9c19919829f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\core\virtual">
+      <UniqueIdentifier>{12a26c7f-666e-447c-bc2e-b234410f6384}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\core\virtual\modules">
+      <UniqueIdentifier>{63be0c0d-6b8c-430d-b76e-789482a52503}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -230,28 +236,28 @@
       <Filter>src\core\items\utils</Filter>
     </ClInclude>
     <ClInclude Include="AffixModule.h">
-      <Filter>src\core\items\virtual\modules</Filter>
+      <Filter>src\core\virtual\modules</Filter>
     </ClInclude>
     <ClInclude Include="HttpModule.h">
-      <Filter>src\core\items\virtual\modules</Filter>
+      <Filter>src\core\virtual\modules</Filter>
     </ClInclude>
     <ClInclude Include="KeybindModule.h">
-      <Filter>src\core\items\virtual\modules</Filter>
+      <Filter>src\core\virtual\modules</Filter>
     </ClInclude>
     <ClInclude Include="SoundModule.h">
-      <Filter>src\core\items\virtual\modules</Filter>
+      <Filter>src\core\virtual\modules</Filter>
     </ClInclude>
     <ClInclude Include="UpdateModule.h">
-      <Filter>src\core\items\virtual\modules</Filter>
+      <Filter>src\core\virtual\modules</Filter>
     </ClInclude>
     <ClInclude Include="WindowModule.h">
-      <Filter>src\core\items\virtual\modules</Filter>
+      <Filter>src\core\virtual\modules</Filter>
     </ClInclude>
     <ClInclude Include="WindowStyleModule.h">
-      <Filter>src\core\items\virtual\modules</Filter>
+      <Filter>src\core\virtual\modules</Filter>
     </ClInclude>
     <ClInclude Include="Item.h">
-      <Filter>src\core\items\virtual</Filter>
+      <Filter>src\core\virtual</Filter>
     </ClInclude>
     <ClInclude Include="ItemManager.h">
       <Filter>src\core</Filter>
@@ -307,11 +313,8 @@
     <ClInclude Include="VK_Keymap.h">
       <Filter>src\ui\imGuiHelper</Filter>
     </ClInclude>
-    <ClInclude Include="Motionblur.h">
-      <Filter>src\core\items\utils</Filter>
-    </ClInclude>
     <ClInclude Include="RenderModule.h">
-      <Filter>src\core\items\virtual\modules</Filter>
+      <Filter>src\core\virtual\modules</Filter>
     </ClInclude>
     <ClInclude Include="ChangeLog.h">
       <Filter>src\app</Filter>
@@ -348,6 +351,27 @@
     </ClInclude>
     <ClInclude Include="AnimButtonBase.h">
       <Filter>src\core\items\huds\menu\widgets\virtual</Filter>
+    </ClInclude>
+    <ClInclude Include="Anim.h">
+      <Filter>src\core\items\huds\menu\widgets\virtual</Filter>
+    </ClInclude>
+    <ClInclude Include="ClickEffectBase.h">
+      <Filter>src\core\items\huds\menu\widgets\virtual</Filter>
+    </ClInclude>
+    <ClInclude Include="ClickCircle.h">
+      <Filter>src\core\items\huds\menu\widgets\fx</Filter>
+    </ClInclude>
+    <ClInclude Include="Motionblur.h">
+      <Filter>src\core\items\visual</Filter>
+    </ClInclude>
+    <ClInclude Include="ClickEffect.h">
+      <Filter>src\core\items\visual</Filter>
+    </ClInclude>
+    <ClInclude Include="MyButton.h">
+      <Filter>src\core\items\huds\menu\widgets</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenuButton.h">
+      <Filter>src\core\items\huds\menu\widgets</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -459,9 +483,6 @@
     <ClCompile Include="WindowSnapper.cpp">
       <Filter>src\utils</Filter>
     </ClCompile>
-    <ClCompile Include="Motionblur.cpp">
-      <Filter>src\core\items\utils</Filter>
-    </ClCompile>
     <ClCompile Include="ChangeLog.cpp">
       <Filter>src\app</Filter>
     </ClCompile>
@@ -470,6 +491,12 @@
     </ClCompile>
     <ClCompile Include="Menu.cpp">
       <Filter>src\core\items\huds\menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Motionblur.cpp">
+      <Filter>src\core\items\visual</Filter>
+    </ClCompile>
+    <ClCompile Include="ClickEffect.cpp">
+      <Filter>src\core\items\visual</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

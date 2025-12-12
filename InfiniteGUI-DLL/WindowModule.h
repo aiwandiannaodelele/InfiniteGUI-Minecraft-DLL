@@ -6,8 +6,6 @@
 #include "imgui/imgui.h"
 #include "ImGuiStd.h"
 #include <nlohmann/json.hpp>
-#include <dwmapi.h>
-#pragma comment(lib, "dwmapi.lib")
 #include "WindowSnapper.h"
 #include "opengl_hook.h"
 static const float SNAP_DISTANCE = 15.0f;

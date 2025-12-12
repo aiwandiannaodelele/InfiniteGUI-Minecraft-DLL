@@ -10,7 +10,7 @@
 #include "SoundModule.h"
 #include <string>
 #include <chrono>
-
+#include "KeyState.h"
 enum SprintState {
     Idle,
     Sprinting,
@@ -78,6 +78,6 @@ private:
     bool isWalking = false;
     SprintState lastState = Idle;
     SprintState state = Idle;
-
+    KeyState keyStateHelper;
     sprint_element color = { ImGui::ColorConvertU32ToFloat4(ImGui::GetColorU32(ImGuiCol_Text)) };
 };

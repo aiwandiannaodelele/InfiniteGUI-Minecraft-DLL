@@ -15,8 +15,8 @@ public:
 	bool isInit = false;
 	bool done = false;
 	void init();
-	void clean();
-	void render();
+	static void clean();
+	static void render();
 	ImFont* font;
 	ImFont* iconFont;
 	ImFont* titleFont;

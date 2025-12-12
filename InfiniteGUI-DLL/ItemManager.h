@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <memory>
+#include <minwindef.h>
 #include <nlohmann/json.hpp>
 #include "Item.h"
 
@@ -17,10 +18,10 @@ public:
     void AddSingleton(Item* item);
     void AddMulti(std::unique_ptr<Item> item);
     void RemoveMulti(Item* target);
+    void UpdateAll() const;
 
-    void UpdateAll();
-    void RenderAll();
-    void ProcessKeyEvents(bool state, bool isRepeat, WPARAM key);
+    void RenderAll() const;
+    void ProcessKeyEvents(bool state, bool isRepeat, WPARAM key) const;
 
 
     void Clear(bool resetSingletons);
