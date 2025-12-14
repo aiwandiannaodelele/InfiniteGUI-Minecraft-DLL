@@ -16,6 +16,10 @@ public:
 		delete leftPanel;
 		delete mainPanel;
 	}
+	void Init() const
+	{
+		mainPanel->Init();
+	}
 	void Draw() const
 	{
 

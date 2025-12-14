@@ -30,6 +30,7 @@ public:
         multiType = Singleton;    // 信息项是否可以多开
         name = u8"强制疾跑";
         description = u8"强制疾跑";
+        icon = "o";
         updateIntervalMs = 5;
         lastUpdateTime = std::chrono::steady_clock::now();
         Reset();

@@ -77,7 +77,7 @@ protected:
         isInit = true;
     }
 
-    void processRainbowFont()
+    static void processRainbowFont()
     {
         ImVec4 col = ImColor::HSV((float)fmod(ImGui::GetTime() * 0.2f, 1.0f), 1, 1);
         ImGui::PushStyleColor(ImGuiCol_Text, col);
@@ -96,9 +96,8 @@ protected:
     void ResetWindowStyle()
     {
         itemStyle = defaultStyle;
-        itemStyle.fontSize = 20.0f;
+        itemStyle.fontSize = 24.0f;
     }
     ItemStyle itemStyle;
     inline static ItemStyle defaultStyle;
-    //ImVec4 rainbowFontColor = ImVec4(1.0f, 1.0f, 1.0f, 1.0f);
 };

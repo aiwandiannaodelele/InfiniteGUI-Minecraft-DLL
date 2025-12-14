@@ -28,8 +28,8 @@ void ClickEffect::Update()
 		//获取窗口中心位置
 		RECT rect;
 		GetClientRect(GetForegroundWindow(), &rect);
-		point.x = rect.left + rect.right / 2;
-		point.y = rect.top + rect.bottom / 2;
+		point.x = rect.left + rect.right / 2 - 1.0f;
+		point.y = rect.top + rect.bottom / 2 + 1.0f;
 	}
 	else
 	{
@@ -61,14 +61,24 @@ void ClickEffect::Render()
 void ClickEffect::Load(const nlohmann::json& j)
 {
 	LoadItem( j );
-	if(j.contains("clickCircleSettings.animSpeed")) clickCircleSettings.animSpeed = j["m_clickCircleSettings.animSpeed"].get<float>();
-	ImGuiStd::LoadImVec4(j, "clickCircleSettings.color", clickCircleSettings.color);
-	if(j.contains("clickCircleSettings.radius")) clickCircleSettings.radius = j["m_clickCircleSettings.radius"].get<float>();
+	if(j.contains("enabledInGame")) enabledInGame = j["enabledInGame"];
+	if(j.contains("enabledInGameMenu")) enabledInGameMenu = j["enabledInGameMenu"];
+	if(j.contains("enabledInMenu")) enabledInMenu = j["enabledInMenu"];
+	if(j.contains("enableLeftClick")) enableLeftClick = j["enableLeftClick"];
+	if(j.contains("enableRightClick")) enableRightClick = j["enableRightClick"];
+	if(j.contains("clickCircleSettings.animSpeed")) clickCircleSettings.animSpeed = j["clickCircleSettings.animSpeed"];
+    ImGuiStd::LoadImVec4(j, "clickCircleSettings.color", clickCircleSettings.color);
+	if(j.contains("clickCircleSettings.radius")) clickCircleSettings.radius = j["clickCircleSettings.radius"];
 }
 
 void ClickEffect::Save(nlohmann::json& j) const
 {
 	SaveItem( j );
+	j["enabledInGame"] = enabledInGame;
+	j["enabledInGameMenu"] = enabledInGameMenu;
+	j["enabledInMenu"] = enabledInMenu;
+	j["enableLeftClick"] = enableLeftClick;
+	j["enableRightClick"] = enableRightClick;
 	j["clickCircleSettings.animSpeed"] = clickCircleSettings.animSpeed;
 	ImGuiStd::SaveImVec4(j, "clickCircleSettings.color", clickCircleSettings.color);
 	j["clickCircleSettings.radius"] = clickCircleSettings.radius;
@@ -77,6 +87,11 @@ void ClickEffect::Save(nlohmann::json& j) const
 void ClickEffect::DrawSettings()
 {
 	DrawItemSettings();
+	ImGui::Checkbox(u8"游戏内启用", &enabledInGame);
+	ImGui::Checkbox(u8"游戏内菜单启用", &enabledInGameMenu);
+	ImGui::Checkbox(u8"无限GUI菜单内启用", &enabledInMenu);
+	ImGui::Checkbox(u8"左键", &enableLeftClick);
+	ImGui::Checkbox(u8"右键", &enableRightClick);
 	ImGuiStd::TextShadow(u8"圆圈特效设置");
 	ImGui::Separator();
 	ImGui::PushItemWidth(ImGui::GetWindowWidth() * 0.3f);

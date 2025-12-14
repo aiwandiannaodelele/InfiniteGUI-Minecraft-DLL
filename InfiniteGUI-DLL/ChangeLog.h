@@ -18,6 +18,7 @@ enum ContentType
 	ADD, //新增
 	REMOVE, //移除
 	OPTIMIZE, //优化
+	CHANGE, //变更
 	INFO //信息
 };
 

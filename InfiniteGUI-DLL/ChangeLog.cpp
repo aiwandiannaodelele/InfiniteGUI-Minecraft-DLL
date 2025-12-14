@@ -23,6 +23,9 @@ void ChangeLog::Init()
     NewVersion("B0.9.3", "25.12.09");
     AddContent(OPTIMIZE, u8"动态模糊添加FPS调制");
     AddContent(ADD, u8"全新UI");
+    AddContent(ADD, u8"添加点击特效");
+    AddContent(CHANGE, u8"更改默认字体为平滑字体");
+    AddContent(CHANGE, u8"按键显示空格改为直线");
 } //我写这个真是个天才，这样就不用手敲Imgui代码了，天才天才天才天
 
 ChangeLog::ChangeLog()
@@ -91,6 +94,9 @@ void ChangeLog::DrawContent(const Content& content)
         break;
     case REMOVE:
         prefix = u8"[移除]";
+        break;
+    case CHANGE:
+        prefix = u8"[变更]";
         break;
     }
     finalStr = prefix + " " + contentStr;

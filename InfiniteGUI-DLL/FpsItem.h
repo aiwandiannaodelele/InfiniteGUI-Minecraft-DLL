@@ -15,6 +15,7 @@ public:
         multiType = Singleton;    // 信息项是否可以多开
         name = u8"帧率显示";
         description = u8"显示当前帧率";
+        icon = u8"\uE022";
         updateIntervalMs = 1000;
         lastUpdateTime = std::chrono::steady_clock::now();
         Reset();

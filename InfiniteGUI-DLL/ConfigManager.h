@@ -21,6 +21,9 @@ public:
 
     bool Save();
     bool Load();
+    bool SaveGlobal() const;
+    bool LoadGlobal();
+    bool SaveProfile() const;
     bool LoadProfile();
 
     const std::vector<std::string>& GetProfiles() const { return profiles; }

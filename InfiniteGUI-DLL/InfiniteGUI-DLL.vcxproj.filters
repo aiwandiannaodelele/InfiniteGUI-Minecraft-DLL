@@ -122,6 +122,9 @@
     <Filter Include="src\core\virtual\modules">
       <UniqueIdentifier>{63be0c0d-6b8c-430d-b76e-789482a52503}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\core\items\huds\menu\widgets\buttons">
+      <UniqueIdentifier>{8d80dcad-b7ef-4c57-ae8a-7608c887ed93}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Init.hpp">
@@ -262,9 +265,6 @@
     <ClInclude Include="ItemManager.h">
       <Filter>src\core</Filter>
     </ClInclude>
-    <ClInclude Include="fonts\harmony_sc_regular.h">
-      <Filter>src\ui\hooks\gui\resources\fonts</Filter>
-    </ClInclude>
     <ClInclude Include="fonts\IconFont.h">
       <Filter>src\ui\hooks\gui\resources\fonts</Filter>
     </ClInclude>
@@ -331,16 +331,13 @@
     <ClInclude Include="ModuleCard.h">
       <Filter>src\core\items\huds\menu\widgets\right\module</Filter>
     </ClInclude>
-    <ClInclude Include="ModulesScroll.h">
+    <ClInclude Include="ModulesPanel.h">
       <Filter>src\core\items\huds\menu\widgets\right\module</Filter>
     </ClInclude>
     <ClInclude Include="LeftPanel.h">
       <Filter>src\core\items\huds\menu\widgets\left</Filter>
     </ClInclude>
     <ClInclude Include="SelectPanel.h">
-      <Filter>src\core\items\huds\menu\widgets\left</Filter>
-    </ClInclude>
-    <ClInclude Include="PanelButton.h">
       <Filter>src\core\items\huds\menu\widgets\left</Filter>
     </ClInclude>
     <ClInclude Include="MainPanel.h">
@@ -367,10 +364,25 @@
     <ClInclude Include="ClickEffect.h">
       <Filter>src\core\items\visual</Filter>
     </ClInclude>
+    <ClInclude Include="fonts\AlibabaPuHuiTi-3-85-Bold.h">
+      <Filter>src\ui\hooks\gui\resources\fonts</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelButton.h">
+      <Filter>src\core\items\huds\menu\widgets\buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleButton.h">
+      <Filter>src\core\items\huds\menu\widgets\buttons</Filter>
+    </ClInclude>
     <ClInclude Include="MyButton.h">
-      <Filter>src\core\items\huds\menu\widgets</Filter>
+      <Filter>src\core\items\huds\menu\widgets\buttons</Filter>
     </ClInclude>
     <ClInclude Include="MainMenuButton.h">
+      <Filter>src\core\items\huds\menu\widgets\buttons</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleSettings.h">
+      <Filter>src\core\items\huds\menu\widgets\right\module</Filter>
+    </ClInclude>
+    <ClInclude Include="menuRule.h">
       <Filter>src\core\items\huds\menu\widgets</Filter>
     </ClInclude>
   </ItemGroup>

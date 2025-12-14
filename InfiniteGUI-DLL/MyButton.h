@@ -20,25 +20,35 @@ public:
 		this->labelText.text = labelText;
 		m_padding = padding;
 		m_normal.button.size = size;
+		m_target = &m_normal;
+		m_state = Normal;
+		lastState = Normal;
 	}
 	~MyButton() = default;
 
-	bool Draw(const bool& windowDragging = false) override //返回是否被点击
+	bool Draw(ImDrawFlags flags = ImDrawFlags_RoundCornersAll) override //返回是否被点击
 	{
-
 		if (!initialized)
 		{
+			screenPos = ImGui::GetCursorScreenPos(); //初始位置由ImGui自动计算
+			lastScreenPos = screenPos;
 			SetStateData();
 			//设置m_current的状态
 			m_current = m_normal;
-			m_target = &m_normal;
-			m_state = Normal;
-			lastState = Normal;
 			initialized = true;
 		}
 
-		skipAnim = windowDragging ? true : skipAnim; //是否跳过动画
-		if (windowDragging)
+		bool posChanged = false;
+
+		screenPos = ImGui::GetCursorScreenPos(); //初始位置由ImGui自动计算
+		if (IsPositionChanged(screenPos, lastScreenPos))
+		{
+			posChanged = true;
+			lastScreenPos = screenPos;
+		}
+
+		skipAnim = posChanged ? true : skipAnim; //是否跳过动画
+		if (posChanged)
 		{
 			SetStateData();
 			m_current = *m_target;
@@ -80,7 +90,7 @@ public:
 		// -------------------------------------------------
 		// 动画 Lerp（每帧插值）
 		// -------------------------------------------------
-		if (!windowDragging)
+		if (!posChanged)
 		{
 			if (lastState != m_state)
 			{
@@ -121,6 +131,12 @@ public:
 	void SetSelected(bool selected)
 	{
 		m_state = selected ? Selected : Normal;
+		m_target = m_state == Selected ? &m_selected : &m_normal;
+	}
+
+	void SetLabelText(const char* labelText)
+	{
+		this->labelText.text = labelText;
 	}
 
 	bool IsSelected() const
@@ -157,7 +173,6 @@ protected:
 	{
 		this->labelText.font = nullptr;
 
-		screenPos = ImGui::GetCursorScreenPos(); //初始位置由ImGui自动计算
 		SetNormalStateData();
 		SetSelectedStateData(m_normal);
 		SetHoveredStateData(m_normal);

@@ -167,7 +167,7 @@
     <ClInclude Include="FileCountItem.h" />
     <ClInclude Include="FileUtils.h" />
     <ClInclude Include="fonts.h" />
-    <ClInclude Include="fonts\harmony_sc_regular.h" />
+    <ClInclude Include="fonts\AlibabaPuHuiTi-3-85-Bold.h" />
     <ClInclude Include="fonts\IconFont.h" />
     <ClInclude Include="fonts\Uranus_Pixel_11Px.h" />
     <ClInclude Include="FpsItem.h" />
@@ -203,9 +203,12 @@
     <ClInclude Include="MainMenuButton.h" />
     <ClInclude Include="MainPanel.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="menuRule.h" />
     <ClInclude Include="miniaudio\miniaudio.h" />
+    <ClInclude Include="ModuleButton.h" />
     <ClInclude Include="ModuleCard.h" />
-    <ClInclude Include="ModulesScroll.h" />
+    <ClInclude Include="ModuleSettings.h" />
+    <ClInclude Include="ModulesPanel.h" />
     <ClInclude Include="Motionblur.h" />
     <ClInclude Include="MyButton.h" />
     <ClInclude Include="opengl_hook.h" />

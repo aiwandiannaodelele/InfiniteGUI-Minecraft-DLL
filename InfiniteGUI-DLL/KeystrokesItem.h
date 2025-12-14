@@ -75,6 +75,7 @@ public:
         multiType = Singleton;    // 信息项是否可以多开
         name = u8"按键显示";
         description = u8"显示按键状态";
+        icon = u8"\uE05D";
         updateIntervalMs = 5;
         lastUpdateTime = std::chrono::steady_clock::now();
 
@@ -99,7 +100,7 @@ public:
         key_boxes.push_back(key_box(normal, "A", min_box_size, padding, false, 'A'));
         key_boxes.push_back(key_box(normal, "S", min_box_size, padding, false, 'S'));
         key_boxes.push_back(key_box(normal, "D", min_box_size, padding, true, 'D'));
-        key_boxes.push_back(key_box(space, "----", min_box_size, padding, true, VK_SPACE));
+        key_boxes.push_back(key_box(space, "-----", min_box_size, padding, true, VK_SPACE));
         key_boxes.push_back(key_box(mouse, "LMB", min_box_size, padding, false, VK_LBUTTON));
         key_boxes.push_back(key_box(mouse, "RMB", min_box_size, padding, true, VK_RBUTTON));
         showSpace = true;
@@ -115,6 +116,7 @@ public:
     void Save(nlohmann::json& j) const override;
 
 private:
+    static void DrawSpaceLine(const char* text, const ImVec2& key_box_size);
     bool showSpace = true;
     bool showMouse = true;
     bool showCps = false;

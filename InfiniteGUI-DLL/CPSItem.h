@@ -19,6 +19,7 @@ public:
         multiType = Singleton;    // 信息项是否可以多开
         name = u8"CPS显示";
         description = u8"显示左右键CPS";
+        icon = "!";
         Reset();
     }
     ~CPSItem() {}

@@ -15,7 +15,7 @@ struct PanelButtonStateData
 	TextAnimTarget   label;
 };
 
-constexpr float textSpacing = 4.0f; //图标与文字的间距
+constexpr float textSpacing = 5.0f; //图标与文字的间距
 
 class PanelButton : public AnimButtonBase
 {
@@ -30,11 +30,13 @@ public:
 	}
 	~PanelButton() = default;
 
-	bool Draw(const bool& windowDragging = false) override //返回是否被点击
+	bool Draw(ImDrawFlags flags = ImDrawFlags_RoundCornersAll) override //返回是否被点击
 	{
 
 		if (!initialized)
 		{
+			screenPos = ImGui::GetCursorScreenPos(); //初始位置由ImGui自动计算
+			lastScreenPos = screenPos;
 			SetStateData();
 			//设置m_current的状态
 			m_current = m_normal;
@@ -44,8 +46,17 @@ public:
 			initialized = true;
 		}
 
-		skipAnim = windowDragging ? true : skipAnim; //是否跳过动画
-		if (windowDragging)
+		bool posChanged = false;
+
+		screenPos = ImGui::GetCursorScreenPos(); //初始位置由ImGui自动计算
+		if (IsPositionChanged(screenPos, lastScreenPos))
+		{
+			posChanged = true;
+			lastScreenPos = screenPos;
+		}
+
+		skipAnim = posChanged ? true : skipAnim; //是否跳过动画
+		if (posChanged)
 		{
 			SetStateData();
 			m_current = *m_target;
@@ -86,7 +97,7 @@ public:
 		// -------------------------------------------------
 		// 动画 Lerp（每帧插值）
 		// -------------------------------------------------
-		if(!windowDragging)
+		if(!posChanged)
 		{
 			if (lastState != m_state)
 			{
@@ -107,9 +118,9 @@ public:
 		// 绘制
 		// -------------------------------------------------
 
-		DrawBackground(m_current.button, ImDrawFlags_RoundCornersLeft);
-		DrawBorder(m_current.button, ImDrawFlags_RoundCornersLeft);
-		DrawIcon();
+		DrawBackground(m_current.button, flags);
+		DrawBorder(m_current.button, flags);
+		DrawLabel(m_current.icon, iconText);
 		DrawLabel(m_current.label, labelText);
 
 		//if (!skipAnim)
@@ -146,7 +157,7 @@ private:
 
 	//图标
 	ButtonText iconText;
-
+	float iconFontSize = 24.0f;
 	//文字
 	ButtonText labelText;
 
@@ -156,15 +167,6 @@ private:
 	PanelButtonStateData m_active; //鼠标按住状态
 	PanelButtonStateData m_current; //当前状态
 	PanelButtonStateData* m_target; //用这个指针设置目标状态
-
-	void DrawIcon() const
-	{
-		if (!iconText.font) return;
-		ImVec2 pos = m_current.icon.CalculatePos(iconText);
-		ImU32 col = ImGui::ColorConvertFloat4ToU32(m_current.icon.color);
-
-		DrawShadowText(iconText.font, m_current.icon.fontSize, pos, col, iconText.text);
-	}
 
 	void SetNextCursorScreenPos() const //下一个控件位置一定由初始位置 + 初始大小 + 边距决定，否则会发生偏移
 	{
@@ -178,7 +180,6 @@ private:
 		this->iconText.font = opengl_hook::gui.iconFont;
 		this->labelText.font = nullptr;
 
-		screenPos = ImGui::GetCursorScreenPos(); //初始位置由ImGui自动计算
 		SetNormalStateData();
 		SetSelectedStateData(m_normal);
 		SetHoveredStateData(m_normal);
@@ -201,7 +202,7 @@ private:
 
 		//设置m_normal的图标
 		//图标居中显示，灰色
-		m_normal.icon.fontSize = ImGui::GetFontSize();
+		m_normal.icon.fontSize = iconFontSize;
 		//位置在按钮中心对齐
 		m_normal.icon.center = ImVec2(screenPos.x + m_normal.button.size.x / 2, screenPos.y + m_normal.button.size.y / 2);
 		//m_normal.icon.CalculatePos();
@@ -209,7 +210,7 @@ private:
 
 		//设置m_normal的文字
 		//文字居中显示，透明度为0
-		m_normal.label.fontSize = ImGui::GetFontSize() * 0.75f;
+		m_normal.label.fontSize = ImGui::GetFontSize() * 1.0f;
 		m_normal.label.center = ImVec2(screenPos.x + m_normal.button.size.x / 2, screenPos.y + m_normal.button.size.y / 2);
 		//m_normal.label.CalculatePos();
 		ImVec4 labelColor = ImGui::ColorConvertU32ToFloat4(ImGui::GetColorU32(ImGuiCol_TextDisabled));
@@ -228,7 +229,7 @@ private:
 
 		//设置m_selected的图标
 		//图标向左移动，并正常显示
-		m_selected.icon.fontSize = ImGui::GetFontSize() * 1.1f;
+		m_selected.icon.fontSize = iconFontSize * 1.1f;
 
 		m_selected.icon.color = ImGui::ColorConvertU32ToFloat4(ImGui::GetColorU32(ImGuiCol_Text));
 
@@ -263,7 +264,7 @@ private:
 		m_hovered.button.borderColor = borderColor;
 
 		//图标向左移动，并正常显示
-		m_hovered.icon.fontSize = ImGui::GetFontSize() * 1.1f;
+		m_hovered.icon.fontSize = iconFontSize * 1.1f;
 		m_hovered.icon.color = ImGui::ColorConvertU32ToFloat4(ImGui::GetColorU32(ImGuiCol_Text));
 
 		//设置m_hovered的文字
@@ -295,12 +296,12 @@ private:
 
 		//设置m_active的图标
 		//图标向左移动，并正常显示
-		m_active.icon.fontSize = ImGui::GetFontSize() * 1.0f;
+		m_active.icon.fontSize = iconFontSize * 0.9f;
 		m_active.icon.color = ImGui::ColorConvertU32ToFloat4(ImGui::GetColorU32(ImGuiCol_Text));
 
 		//设置m_active的文字
 		//文字向右移动，并正常显示
-		m_active.label.fontSize = ImGui::GetFontSize() * 1.0f;
+		m_active.label.fontSize = ImGui::GetFontSize() * 0.9f;
 		if (isExitButton)
 			m_active.label.color = ImVec4(1.0f, 0.1f, 0.1f, 1.0f);
 		else
@@ -312,7 +313,7 @@ private:
 			m_active.button,
 			opengl_hook::gui.iconFont,
 			labelText.font ? labelText.font : ImGui::GetFont(),
-			1.0f
+			2.0f
 		);
 
 	}

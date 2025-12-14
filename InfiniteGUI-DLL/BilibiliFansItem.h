@@ -19,13 +19,14 @@ public:
         multiType = MultiInstance;    // 信息项是否可以多开
         name = u8"粉丝数显示";
         description = u8"显示B站用户的粉丝数";
+        icon = u8"\uE045";
         httpUpdateIntervalMs = 3000;
         updateIntervalMs = 50;
         lastUpdateTime = std::chrono::steady_clock::now();
         Reset();
     }
 
-    ~BilibiliFansItem() {
+    ~BilibiliFansItem() override {
         if (httpTaskId != -1)
         {
             HttpRemoveTask();

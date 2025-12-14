@@ -1,11 +1,11 @@
 ﻿#include "fonts.h"
-#include "fonts\harmony_sc_regular.h"
+#include "fonts\AlibabaPuHuiTi-3-85-Bold.h"
 #include "fonts\IconFont.h"
 #include "fonts\Uranus_Pixel_11Px.h"
 
 void Fonts::init()
 {
-	harmony = { harmony_sc_regular , harmony_sc_regular_size };
-	icons = { iconfont, iconfontsize };
+	alibaba = { alibaba_data , alibaba_size };
+	icons = { iconFont, iconFontsize };
 	ur = { Ur_data, Ur_size };
 }

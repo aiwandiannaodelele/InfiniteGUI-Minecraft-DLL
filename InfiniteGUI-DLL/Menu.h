@@ -29,6 +29,7 @@ public:
         multiType = Singleton;    // 信息项是否可以多开
         name = u8"菜单";
         description = u8"显示菜单";
+        icon = "J";
         isEnabled = false;
         settingMenu = new SettingMenu();
         blur = new Blur();
@@ -57,8 +58,9 @@ public:
         ResetWindowStyle();
 
         keybinds.insert(std::make_pair(u8"菜单快捷键：", VK_OEM_5));
-        itemStyle.fontSize = 20.0f;
-        itemStyle.bgColor = ImVec4(0.0f, 0.0f, 0.0f, 0.1f);
+        itemStyle.fontSize = 24.0f;
+        itemStyle.bgColor = ImVec4(0.0f, 0.0f, 0.0f, 0.15f);
+        initialized = false;
     }
     void DrawSettings() override;
     void Load(const nlohmann::json& j) override;
@@ -68,10 +70,11 @@ public:
 private:
     void ShowMain();
     void ShowSidePanels() const;
-    void ShowSettings(bool* done) const;
+    void ShowSettings(bool* done);
     void OldSettings();
-    void DrawItemList();
-    void DrawItemEditor(Item* item);
+    void DrawItemList() const;
+    void DrawItemEditor(Item* item) const;
     Blur * blur;
     SettingMenu * settingMenu;
+    bool initialized = false;
 };

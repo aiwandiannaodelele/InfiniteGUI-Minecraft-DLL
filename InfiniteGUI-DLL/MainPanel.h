@@ -1,4 +1,6 @@
 ﻿#pragma once
+#include "menuRule.h"
+#include "ModulesPanel.h"
 
 enum PanelType
 {
@@ -8,16 +10,21 @@ enum PanelType
 	AboutPanel,
 };
 
-constexpr ImVec2 mainPanelSize = ImVec2(900.0f - 190.0f, 556.0f);
-constexpr float padding = 20.0f;
 class MainPanel
 {
 public:
+	MainPanel()
+	{
+		m_modulesPanel = new ModulesPanel();
+	}
+	~MainPanel()
+	{
+		delete m_modulesPanel;
+	}
 	void Draw()
 	{
-
+		ImGuiStyle& style = ImGui::GetStyle();
 		ImVec2 screenPos = ImGui::GetCursorScreenPos();
-
 		ImDrawList* draw = ImGui::GetWindowDrawList();
 
 		ImVec2 pos1 = ImVec2(screenPos.x + padding * 0.5f, screenPos.y + 60);
@@ -25,17 +32,16 @@ public:
 
 		draw->AddLine(pos1, pos2, ImGui::GetColorU32(ImGuiCol_Separator), 1.0f);
 
-		ImGui::SetCursorScreenPos(ImVec2(screenPos.x + padding, screenPos.y + 60 + padding));
-		ImGui::Dummy(ImVec2(150.0f, 0.0f));
-		ImGui::PushFont(NULL, ImGui::GetFontSize() * 1.5f);
+		ImGui::PushFont(NULL, style.FontSizeBase * 1.5f);
 		ImVec2 titleSize = ImGui::CalcTextSize(u8"模组");
-		ImGui::SetCursorScreenPos(ImVec2(screenPos.x + padding, screenPos.y + 60 - titleSize.y - padding * 0.5f));
+		ImGui::SetCursorScreenPos(ImVec2(screenPos.x + padding, screenPos.y + 60 - titleSize.y - padding * (1 - 0.618f)));
 		switch (m_panelType)
 		{
 		case ModulePanel:
-
 			ImGuiStd::TextShadow(u8"模组");
 			ImGui::PopFont();
+			ImGui::SetCursorScreenPos(ImVec2(screenPos.x + padding, screenPos.y + 60 + padding * 0.625f));
+			m_modulesPanel->Draw();
 			// Draw Module Panel
 			break;
 		case SettingsPanel:
@@ -54,6 +60,12 @@ public:
 			// Draw About Panel
 			break;
 		}
+		//draw category bar
+	}
+
+	void Init() const
+	{
+		m_modulesPanel->Init();
 	}
 
 	void SetPanelType(const int& index)
@@ -78,4 +90,5 @@ public:
 
 private:
 	PanelType m_panelType;
+	ModulesPanel *m_modulesPanel;
 };

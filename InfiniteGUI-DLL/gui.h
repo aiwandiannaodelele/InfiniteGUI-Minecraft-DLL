@@ -19,7 +19,6 @@ public:
 	static void render();
 	ImFont* font;
 	ImFont* iconFont;
-	ImFont* titleFont;
 	Texture logoTexture;
 };
 

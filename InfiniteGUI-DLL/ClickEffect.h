@@ -14,11 +14,12 @@ public:
         multiType = Singleton;    // 信息项是否可以多开
         name = u8"点击特效";
         description = u8"点点鼠标，看看会发生什么？";
+		icon = "&";
 		updateIntervalMs = 5;
 		lastUpdateTime = std::chrono::steady_clock::now();
         Reset();
     }
-    ~ClickEffect() {
+    ~ClickEffect() override {
 		ClearClickEffects();
 	}
 
@@ -54,7 +55,7 @@ private:
 	{
 		clickEffects.push_back(clickEffect);
 	}
-	void Draw()
+	void Draw() const
 	{
 		ImGuiIO& io = ImGui::GetIO();
 		ImDrawList* drawList = ImGui::GetForegroundDrawList();

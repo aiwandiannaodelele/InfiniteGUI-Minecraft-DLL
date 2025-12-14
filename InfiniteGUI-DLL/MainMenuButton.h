@@ -10,11 +10,13 @@ public:
 
 	~MainMenuButton() = default;
 
-	bool Draw(const bool& windowDragging = false) override //返回是否被点击
+	bool Draw(ImDrawFlags flags = ImDrawFlags_RoundCornersAll) override //返回是否被点击
 	{
 
 		if (!initialized)
 		{
+			screenPos = ImGui::GetCursorScreenPos(); //初始位置由ImGui自动计算
+			lastScreenPos = screenPos;
 			SetStateData();
 			//设置m_current的状态
 			m_current = m_normal;
@@ -24,12 +26,22 @@ public:
 			initialized = true;
 		}
 
-		skipAnim = windowDragging ? true : skipAnim; //是否跳过动画
-		if (windowDragging)
+		bool posChanged = false;
+
+		screenPos = ImGui::GetCursorScreenPos(); //初始位置由ImGui自动计算
+		if (IsPositionChanged(screenPos, lastScreenPos))
+		{
+			posChanged = true;
+			lastScreenPos = screenPos;
+		}
+
+		skipAnim = posChanged ? true : skipAnim; //是否跳过动画
+		if (posChanged)
 		{
 			SetStateData();
 			m_current = *m_target;
 		}
+
 
 		bool pressed = DrawInvisibleButton(m_current.button);
 		bool hovered = ImGui::IsItemHovered();
@@ -67,23 +79,8 @@ public:
 		// -------------------------------------------------
 		// 动画 Lerp（每帧插值）
 		// -------------------------------------------------
-		if (!windowDragging)
-		{
-			if (lastState != m_state)
-			{
-				skipAnim = false;
-				lastState = m_state;
-			}
-			if (!IsAnimating())
-			{
-				skipAnim = true;
-			}
-			if (!skipAnim)
-			{
-				ImGuiIO& io = ImGui::GetIO();
-				LerpAll(m_current, *m_target, animSpeed, io.DeltaTime);
-			}
-		}
+		ImGuiIO& io = ImGui::GetIO();
+		LerpAll(m_current, *m_target, animSpeed, io.DeltaTime);
 		// -------------------------------------------------
 		// 绘制
 		// -------------------------------------------------
@@ -91,12 +88,6 @@ public:
 		DrawBackground(m_current.button);
 		DrawBorder(m_current.button);
 		DrawLabel(m_current.label, labelText);
-
-		//if (!skipAnim)
-		//{
-		//	ImGui::SameLine();
-		//	ImGui::Text(u8"Animation");
-		//}
 
 		// 为下一个控件设置 Cursor ScreenPos（按钮垂直堆叠）
 		SetNextCursorScreenPos();

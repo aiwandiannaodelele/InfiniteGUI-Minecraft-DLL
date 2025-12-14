@@ -12,6 +12,8 @@ public:
         ImGui::Checkbox(u8"Ã· æ“Ù", &isPlaySound);
         ImGui::SliderFloat(u8"“Ù¡ø", &soundVolume, 0.0f, 1.0f, "%.2f");
     }
+    bool IsPlaySound() const { return isPlaySound; }
+    void SetPlaySound(bool playSound) { isPlaySound = playSound; }
 protected:
     void LoadSound(const nlohmann::json& j)
     {

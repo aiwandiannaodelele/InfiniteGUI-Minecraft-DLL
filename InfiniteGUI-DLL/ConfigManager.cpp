@@ -51,7 +51,6 @@ void ConfigManager::Init()
     {
         CreateProfile("profile");
     }
-    Load(); // Load global + current profile
 }
 
 
@@ -137,22 +136,12 @@ bool ConfigManager::Save()
 
     // ---- Save Global ----
     {
-        GlobalConfig::Instance().currentProfile = currentProfile;
-        nlohmann::json j;
-        GlobalConfig::Instance().Save(j);
-        std::ofstream f(Paths::global);
-        if (!f.is_open()) return false;
-        f << j.dump(4);
+        SaveGlobal();
     }
 
     // ---- Save Items ----
     {
-        nlohmann::json j;
-        ItemManager::Instance().Save(j);
-
-        std::ofstream f(GetProfilePath(currentProfile));
-        if (!f.is_open()) return false;
-        f << j.dump(4);
+        SaveProfile();
     }
 
     return true;
@@ -162,6 +151,26 @@ bool ConfigManager::Save()
 bool ConfigManager::Load()
 {
     // ---- Load Global config ----
+    LoadGlobal();
+    LoadProfile();
+    return true;
+}
+
+bool ConfigManager::SaveGlobal() const
+{
+    // ---- Save Global config ----
+    GlobalConfig::Instance().currentProfile = currentProfile;
+    nlohmann::json j;
+    GlobalConfig::Instance().Save(j);
+    std::ofstream f(Paths::global);
+    if (!f.is_open()) return false;
+    f << j.dump(4);
+    return true;
+}
+
+bool ConfigManager::LoadGlobal()
+{
+    // ---- Load Global config ----
     if (std::filesystem::exists(Paths::global))
     {
         std::ifstream f(Paths::global);
@@ -169,8 +178,20 @@ bool ConfigManager::Load()
         f >> j;
         GlobalConfig::Instance().Load(j);
         currentProfile = GlobalConfig::Instance().currentProfile;
+        return true;
     }
-    LoadProfile();
+    return false;
+}
+
+bool ConfigManager::SaveProfile() const
+{
+    // ---- Save Item Profile ----
+    nlohmann::json j;
+    ItemManager::Instance().Save(j);
+
+    std::ofstream f(GetProfilePath(currentProfile));
+    if (!f.is_open()) return false;
+    f << j.dump(4);
     return true;
 }
 
@@ -181,7 +202,7 @@ bool ConfigManager::LoadProfile()
 
     if (!std::filesystem::exists(profilePath))
     {
-        Save();
+        SaveProfile();
         RefreshProfileList();
         return true;
     }

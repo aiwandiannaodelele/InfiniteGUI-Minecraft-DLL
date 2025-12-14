@@ -64,6 +64,7 @@ void Sprint::SetSprinting()
 
 void Sprint::Update()
 {
+    if(opengl_hook::handle_window != GetForegroundWindow()) return;
     state = Idle;
     GetWalking();
     GetSneaking();

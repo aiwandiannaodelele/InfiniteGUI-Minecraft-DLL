@@ -17,6 +17,7 @@ public:
         multiType = MultiInstance;    // 信息项是否可以多开
         name = u8"文本显示";
         description = u8"显示一段文本";
+        icon = "(";
         Reset();
     }
 

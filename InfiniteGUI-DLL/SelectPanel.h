@@ -27,8 +27,10 @@ public:
             btn.SetSelected(i == selectedButtonIndex);
 
             // 绘制按钮
-            bool clicked = btn.Draw(moving);
 
+            ImGui::PushFont(NULL, ImGui::GetFontSize() * 1.20f);
+            bool clicked = btn.Draw(moving);
+            ImGui::PopFont();
             if (clicked)
             {
                 selectedButtonIndex = i;

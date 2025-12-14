@@ -284,7 +284,7 @@ namespace ImGuiStd {
     static void LoadImVec4(const nlohmann::json& j, const char* key, ImVec4& v)
     {
         if (!j.is_object()) return;
-
+        if(!j.contains(key)) return;
         const auto& arr = j[key];
         if (!arr.is_array() || arr.size() != 4) return;
             v.x = j[key][0].get<float>();

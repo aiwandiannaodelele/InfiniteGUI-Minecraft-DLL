@@ -8,6 +8,7 @@ public:
         multiType = Singleton;    // 信息项是否可以多开
         name = u8"动态模糊";
         description = u8"采用帧混合技术实现的动态模糊";
+        icon = u8"\uE059";
         Reset();
     }
     ~Motionblur() {}

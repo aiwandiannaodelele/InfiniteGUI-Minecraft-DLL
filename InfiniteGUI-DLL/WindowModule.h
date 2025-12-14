@@ -253,6 +253,14 @@ public:
         ImGui::PopStyleVar(7);
         ImGui::PopStyleColor(3);
     }
+
+    bool IsClickThrough() const {
+        return clickThrough;
+    }
+
+    void SetClickThrough(bool value) {
+        clickThrough = value;
+    }
 private:
         std::string GetActualWindowName() const {
             return "##" + std::to_string((uintptr_t)this);

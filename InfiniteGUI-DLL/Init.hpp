@@ -41,13 +41,16 @@ void StopThreads() {
 DWORD WINAPI InitApp(LPVOID)
 {
     FileUtils::InitPaths(g_hModule);
+	//加载配置文件
+	ConfigManager::Instance().Init();
+
+	ConfigManager::Instance().LoadGlobal();
     opengl_hook::init();
 	while (!opengl_hook::gui.isInit)
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
-	//加载配置文件
-	ConfigManager::Instance().Init();
+	ConfigManager::Instance().LoadProfile();
 	//初始化音频管理器
 	AudioManager::Instance().Init();
 	HttpUpdateWorker::Instance().Start();

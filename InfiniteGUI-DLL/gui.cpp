@@ -47,11 +47,14 @@ void Gui::init()
 	font_cfg.PixelSnapH = true;
 
 	if (GlobalConfig::Instance().fontPath == "default")
-		font = io.Fonts->AddFontFromMemoryCompressedTTF(Fonts::ur.data, Fonts::ur.size, 20.0f, &font_cfg, io.Fonts->GetGlyphRangesChineseFull());
+		font = io.Fonts->AddFontFromMemoryTTF(Fonts::alibaba.data, Fonts::alibaba.size, 20.0f, &font_cfg, io.Fonts->GetGlyphRangesChineseFull());
 	else
 		font = io.Fonts->AddFontFromFileTTF(GlobalConfig::Instance().fontPath.c_str(), 20.0f, &font_cfg, io.Fonts->GetGlyphRangesChineseFull());
 	if (font == nullptr) {
-		font = io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\msyh.ttc", 20.0f, &font_cfg, io.Fonts->GetGlyphRangesChineseFull());
+		{
+			MessageBox(NULL, L"字体加载失败", L"提示", MB_OK);
+			font = io.Fonts->AddFontFromFileTTF("C:\\Windows\\Fonts\\msyh.ttc", 20.0f, &font_cfg, io.Fonts->GetGlyphRangesChineseFull());
+		}
 	}
 	iconFont = io.Fonts->AddFontFromMemoryTTF(Fonts::icons.data, Fonts::icons.size, 20.0f, &font_cfg);
 

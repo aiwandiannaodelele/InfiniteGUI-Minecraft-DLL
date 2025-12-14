@@ -60,5 +60,6 @@ public:
     MultiType multiType = MultiType::Singleton; // 信息项是否可以多开
     std::string name = "Item"; // 信息项名称
     std::string description = "No description"; // 信息项描述
+    std::string icon = "R"; // 信息项图标路径
     //std::string icon; // 信息项图标路径
 };

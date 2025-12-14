@@ -12,6 +12,7 @@ public:
         multiType = Singleton;    // 信息项是否可以多开
         name = u8"游戏状态检测";
         description = u8"检测游戏当前状态";
+        icon = u8"\uE039";
         updateIntervalMs = 10;
         lastUpdateTime = std::chrono::steady_clock::now();
         Reset();

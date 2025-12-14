@@ -50,13 +50,18 @@ void KeystrokesItem::DrawContent()
         //设置child的背景颜色
         ImGui::PushStyleColor(ImGuiCol_ChildBg, key_box.color.backgroundColor);
         ImGui::BeginChild(key_box.label.c_str(), ImVec2(key_box.width, key_box.height), true, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse);
-        ImVec2 text_size = ImGui::CalcTextSize(key_box.label.c_str());
-        ImVec2 text_pos = ImVec2(
-            (key_box.width - text_size.x) * 0.5f,
-            (key_box.height - text_size.y) * 0.5f
-        );
-        ImGui::SetCursorPos(text_pos);
-        ImGuiStd::TextColoredShadow(key_box.color.fontColor, key_box.label.c_str());
+        if (key_box.label == "-----")
+            DrawSpaceLine(key_box.label.c_str(), ImVec2(key_box.width, key_box.height));
+        else
+        {
+            ImVec2 text_size = ImGui::CalcTextSize(key_box.label.c_str());
+            ImVec2 text_pos = ImVec2(
+                (key_box.width - text_size.x) * 0.5f,
+                (key_box.height - text_size.y) * 0.5f
+            );
+            ImGui::SetCursorPos(text_pos);
+            ImGuiStd::TextColoredShadow(key_box.color.fontColor, key_box.label.c_str());
+        }
         ImGui::EndChild();
         ImGui::PopStyleColor();         //设置child的背景颜色
         if (key_box.needReturn)
@@ -129,4 +134,25 @@ void KeystrokesItem::Save(nlohmann::json& j) const
     j["showCps"] = showCps;
     j["min_box_size"] = min_box_size;
     j["padding"] = padding;
+}
+
+void KeystrokesItem::DrawSpaceLine(const char* text, const ImVec2& key_box_size)
+{
+    ImDrawList* draw_list = ImGui::GetWindowDrawList();
+    ImVec2 spaceFontSize = ImGui::CalcTextSize(text);
+    ImVec2 text_pos = ImVec2(
+        (key_box_size.x - spaceFontSize.x) * 0.5f,
+        key_box_size.y * 0.5f
+    );
+    ImGui::SetCursorPos(text_pos);
+    ImVec2 linePos1 = ImGui::GetCursorScreenPos();
+    ImVec2 linePos2 = ImVec2(linePos1.x + spaceFontSize.x, linePos1.y);
+    //shadow
+    ImVec2 linePos3 = ImVec2(linePos1.x + 1.0f, linePos1.y + 1.0f);
+    ImVec2 linePos4 = ImVec2(linePos2.x + 1.0f, linePos2.y + 1.0f);
+    //shadow
+    ImU32 shadowColor = ImGui::ColorConvertFloat4ToU32(ImVec4(0, 0, 0, 0.6f));
+    draw_list->AddLine(linePos3, linePos4, shadowColor, spaceFontSize.y * 0.1f);
+    draw_list->AddLine(linePos1, linePos2, ImGui::GetColorU32(ImGuiCol_Text), spaceFontSize.y * 0.1f);
+    ImGui::Dummy(ImVec2(0, 0));
 }

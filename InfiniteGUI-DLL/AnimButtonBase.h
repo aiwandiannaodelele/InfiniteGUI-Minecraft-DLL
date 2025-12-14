@@ -34,9 +34,13 @@ struct TextAnimTarget
 		);
 		return pos;
 	}
-	void CalculateCenter(const ImVec2& pos)
+	void CalculateCenter(const ImVec2& pos, const ButtonText& text)
 	{
-		center = ImVec2(pos.x + fontSize / 2, pos.y + fontSize / 2);
+		ImGui::PushFont(text.font, fontSize);
+		ImVec2 textSize = ImGui::CalcTextSize(text.text);  // 获取文本实际像素宽高
+		ImGui::PopFont();
+
+		center = ImVec2(pos.x + textSize.x * 0.5f, pos.y + fontSize / 2);
 	}
 };
 
@@ -64,13 +68,14 @@ constexpr float buttonHeightOffset = 3.0f; //按钮高度抬起/下降的距离
 class AnimButtonBase : public Anim
 {
 public:
-    virtual bool Draw(const bool& windowDragging = false) = 0;
+    virtual bool Draw(ImDrawFlags flags = ImDrawFlags_RoundCornersAll) = 0;
 
 protected:
     // 必须由子类实现
     virtual void SetStateData() = 0;
 
 	ImVec2 screenPos;
+	ImVec2 lastScreenPos;
 
     ButtonState m_state = Normal;
     ButtonState lastState = Normal;
@@ -99,6 +104,7 @@ protected:
 
 	static void DrawLabel(const TextAnimTarget& current, const ButtonText& labelText)
 	{
+		if (labelText.text == nullptr) return;
 		ImVec2 pos = current.CalculatePos(labelText);
 		ImU32 col = ImGui::ColorConvertFloat4ToU32(current.color);
 
@@ -121,7 +127,7 @@ protected:
 		);
 	}
 
-	static void DrawBorder(const ButtonAnimTarget& current, const ImDrawFlags& flags = ImDrawFlags_RoundCornersAll)
+	static void DrawBorder(const ButtonAnimTarget& current, const ImDrawFlags& flags = ImDrawFlags_RoundCornersAll, const float borderSize = 1.0f)
 	{
 		ImDrawList* draw = ImGui::GetWindowDrawList();
 
@@ -134,7 +140,7 @@ protected:
 			ImGui::ColorConvertFloat4ToU32(current.borderColor),
 			ImGui::GetStyle().FrameRounding, // 圆角
 			flags,
-			1.0f // 线宽
+			borderSize // 线宽
 		);
 	}
 
@@ -165,6 +171,11 @@ protected:
 		ImVec2 nextPos = screenPos;
 		nextPos.y = screenPos.y + normal.size.y + padding;
 		ImGui::SetCursorScreenPos(nextPos);
+	}
+
+	static bool IsPositionChanged(const ImVec2& pos, const ImVec2& lastPos)
+	{
+		return pos.x!= lastPos.x || pos.y!= lastPos.y;
 	}
 
 	static void LerpButton(ButtonAnimTarget& cur, const ButtonAnimTarget& target, float damping, float deltaTime)
