@@ -69,7 +69,10 @@ class AnimButtonBase : public Anim
 {
 public:
     virtual bool Draw(ImDrawFlags flags = ImDrawFlags_RoundCornersAll) = 0;
-
+	bool IsRightClicked() const
+	{
+		return rightClicked; //右键单击
+	}
 protected:
     // 必须由子类实现
     virtual void SetStateData() = 0;
@@ -81,11 +84,15 @@ protected:
     ButtonState lastState = Normal;
 
     bool initialized = false;
+
+	bool rightClicked = false; //右键单击
+
     bool skipAnim = false;
 
     float animSpeed = 15.0f;
 
     float m_padding = 8.0f;
+
 
 	bool DrawInvisibleButton(const ButtonAnimTarget& current, const ImDrawFlags& flags = ImGuiButtonFlags_PressedOnClickRelease) const
 	{

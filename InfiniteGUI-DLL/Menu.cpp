@@ -888,7 +888,7 @@ void Menu::Toggle()
 
 void Menu::DrawSettings()
 {
-    DrawItemSettings();
+    //DrawItemSettings();
     DrawKeybindSettings();
     ImGui::Checkbox(u8"背景模糊", &blur->menu_blur);
     ImGui::SliderInt(u8"模糊强度", &blur->blurriness_value, 0, 10);

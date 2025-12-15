@@ -77,7 +77,7 @@ void BilibiliFansItem::DrawContent()
 
 void BilibiliFansItem::DrawSettings()
 {
-    DrawItemSettings();
+    //DrawItemSettings();
     static std::string uidStr = std::to_string(uid);
     ImGuiStd::InputTextStd(u8"Bվ UID", uidStr);
     ImGui::SameLine();

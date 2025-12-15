@@ -310,7 +310,7 @@ void Motionblur::Save(nlohmann::json& j) const
 
 void Motionblur::DrawSettings()
 {
-	DrawItemSettings();
+	//DrawItemSettings();
 	ImGui::SliderFloat(u8"模糊强度", &blurriness_value, 0.0f, 40.0f, "%.1f");
 	ImGui::Checkbox(u8"菜单动态模糊", &applayOnMenu);
 	ImGui::Checkbox(u8"帧率调制", &FpsModulate);

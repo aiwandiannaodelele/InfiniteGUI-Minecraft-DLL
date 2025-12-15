@@ -86,7 +86,7 @@ void ClickEffect::Save(nlohmann::json& j) const
 
 void ClickEffect::DrawSettings()
 {
-	DrawItemSettings();
+	//DrawItemSettings();
 	ImGui::Checkbox(u8"游戏内启用", &enabledInGame);
 	ImGui::Checkbox(u8"游戏内菜单启用", &enabledInGameMenu);
 	ImGui::Checkbox(u8"无限GUI菜单内启用", &enabledInMenu);

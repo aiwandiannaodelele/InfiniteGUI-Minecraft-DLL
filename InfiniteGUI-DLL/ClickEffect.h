@@ -32,7 +32,7 @@ public:
     void Toggle() override;
     void Reset() override
     {
-        isEnabled = true;
+        isEnabled = false;
         enableRightClick = false;
         enableLeftClick = true;
         clickCircleSettings.Reset();

@@ -12,6 +12,11 @@ public:
 	virtual void OnKeyEvent(bool state, bool isRepeat, WPARAM key) = 0;
     void DrawKeybindSettings()
     {
+        ImGui::PushFont(NULL, ImGui::GetFontSize() * 0.8f);
+        ImGui::BeginDisabled();
+        ImGuiStd::TextShadow(u8"∞¥º¸∞Û∂®…Ë÷√");
+        ImGui::EndDisabled();
+        ImGui::PopFont();
         for (auto& [name, key] : keybinds)
         {
             ImGuiStd::Keybind(name.c_str(), key);

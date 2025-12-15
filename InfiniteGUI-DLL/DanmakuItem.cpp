@@ -356,7 +356,7 @@ void DanmakuItem::DrawContent()
 
 void DanmakuItem::DrawSettings()
 {
-    DrawItemSettings();
+    //DrawItemSettings();
     ImGuiStd::InputTextStd(u8"弹幕日志文件路径", logPath);
     ImGui::InputInt(u8"最大弹幕数", &maxDanmakuCount);
     if (ImGui::CollapsingHeader(u8"通用设置"))

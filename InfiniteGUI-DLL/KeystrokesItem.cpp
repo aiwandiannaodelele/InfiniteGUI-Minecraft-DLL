@@ -49,7 +49,7 @@ void KeystrokesItem::DrawContent()
 
         //设置child的背景颜色
         ImGui::PushStyleColor(ImGuiCol_ChildBg, key_box.color.backgroundColor);
-        ImGui::BeginChild(key_box.label.c_str(), ImVec2(key_box.width, key_box.height), true, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse);
+        ImGui::BeginChild(key_box.label.c_str(), ImVec2(key_box.width, key_box.height), true, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoCollapse);
         if (key_box.label == "-----")
             DrawSpaceLine(key_box.label.c_str(), ImVec2(key_box.width, key_box.height));
         else
@@ -78,7 +78,7 @@ void KeystrokesItem::DrawContent()
 
 void KeystrokesItem::DrawSettings()
 {
-    DrawItemSettings();
+    //DrawItemSettings();
     ImGui::Checkbox(u8"显示空格", &showSpace);
 
     ImGui::Checkbox(u8"显示鼠标", &showMouse);

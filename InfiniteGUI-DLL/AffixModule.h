@@ -9,6 +9,11 @@ public:
 
     void DrawAffixSettings()
     {
+        ImGui::PushFont(NULL, ImGui::GetFontSize() * 0.8f);
+        ImGui::BeginDisabled();
+        ImGuiStd::TextShadow(u8"前后缀设置");
+        ImGui::EndDisabled();
+        ImGui::PopFont();
         ImGuiStd::InputTextStd(u8"前缀", prefix);
         ImGuiStd::InputTextStd(u8"后缀", suffix);
     }

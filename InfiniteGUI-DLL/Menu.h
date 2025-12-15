@@ -60,7 +60,6 @@ public:
         keybinds.insert(std::make_pair(u8"²Ëµ¥¿ì½Ý¼ü£º", VK_OEM_5));
         itemStyle.fontSize = 24.0f;
         itemStyle.bgColor = ImVec4(0.0f, 0.0f, 0.0f, 0.15f);
-        initialized = false;
     }
     void DrawSettings() override;
     void Load(const nlohmann::json& j) override;

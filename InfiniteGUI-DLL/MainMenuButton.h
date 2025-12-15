@@ -44,6 +44,7 @@ public:
 
 
 		bool pressed = DrawInvisibleButton(m_current.button);
+		rightClicked = ImGui::IsItemClicked(1); //ÓÒ¼üµ¥»÷
 		bool hovered = ImGui::IsItemHovered();
 		bool active = ImGui::IsItemActive();
 

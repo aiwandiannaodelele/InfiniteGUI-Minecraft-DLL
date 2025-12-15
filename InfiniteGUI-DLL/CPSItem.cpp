@@ -23,7 +23,7 @@ void CPSItem::DrawContent()
 
 void CPSItem::DrawSettings()
 {
-    DrawItemSettings();
+    //DrawItemSettings();
     ImGui::Checkbox(u8"×ó¼ü", &showLeft);
     ImGui::Checkbox(u8"ÓÒ¼ü", &showRight);
 

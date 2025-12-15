@@ -81,6 +81,7 @@ public:
 
 	bool Draw()
 	{
+		bool joinSetting = false;
 		ImVec2 Pos = ImGui::GetCursorPos();
 		startPos = Pos;
 		m_moduleButton->SetSelected(m_item->isEnabled);
@@ -89,6 +90,10 @@ public:
 			m_item->isEnabled = !m_item->isEnabled;
 			m_item->Toggle();
 		}
+		if (m_moduleButton->IsRightClicked())
+		{
+			joinSetting = true;
+		}
 		ImGui::PushFont(opengl_hook::gui.iconFont, 24.0f);
 		for (auto& b : m_Buttons) 
 		{
@@ -96,7 +101,7 @@ public:
 			if (b.button->Draw())
 			{
 				if(b.type == Button_Setting)
-					return true;
+					joinSetting = true;
 				else if(b.type == Button_Lock)
 				{
 					auto win = dynamic_cast<WindowModule*>(m_item);
@@ -137,10 +142,10 @@ public:
 
 		ImGui::PopFont();
 		ImGui::SetCursorPos(ImVec2(startPos.x, startPos.y + moduleButtonSize.y + padding));
-		return false;
-
+		return joinSetting;
 	} //返回是否进入设置界面
 
+	Item* GetItem() const { return m_item; }
 private:
 	ImVec2 startPos = ImVec2(0.0f, 0.0f);
 	float moduleButtonWidth = 0.0f;

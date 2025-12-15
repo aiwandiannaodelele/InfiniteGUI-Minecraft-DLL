@@ -3,17 +3,21 @@
 #include "ItemManager.h"
 #include "ModuleButton.h"
 #include "ModuleCard.h"
+#include "ModuleSettings.h"
+
 class ModulesPanel
 {
 public:
 	ModulesPanel()
 	{
 		m_categoryBar = new CategoryBar();
+		m_moduleSettings = new ModuleSettings();
 		//m_moduleButton = new ModuleButton("1", "TestModule", "TestModuleDesc", ImVec2(548, 60));
 	}
 	~ModulesPanel()
 	{
 		delete m_categoryBar;
+		delete m_moduleSettings;
 		for (auto moduleCard : m_moduleCard)
 		{
 			delete moduleCard;
@@ -42,8 +46,29 @@ public:
 					m_moduleCard.push_back(new ModuleCard(item));
 		}
 	}
-	void Draw() const
+	void Draw()
 	{
+		if (!isInModuleSettings)
+		{
+			if (DrawModuleList())
+			{
+				isInModuleSettings = true;
+			}
+		}
+		else
+		{
+			if (DrawModuleSettings())
+			{
+				isInModuleSettings = false;
+			}
+		}
+	}
+
+private:
+
+	bool DrawModuleList()
+	{
+		bool joinModuleSettings = false;
 		//获取窗口是否在scroll
 		ImVec2 startPos = ImGui::GetCursorPos();
 		int typeIndex = m_categoryBar->Draw();
@@ -54,13 +79,25 @@ public:
 		ImGui::SetCursorPos(ImVec2(padding, padding));
 		for (auto moduleCard : m_moduleCard)
 		{
-			moduleCard->Draw();
+			if (moduleCard->Draw())
+			{
+				joinModuleSettings = true;
+				selectedItem = moduleCard->GetItem();
+			}
 		}
 		ImGui::Dummy(ImVec2(0, 10));
 		ImGui::EndChild();
+		return joinModuleSettings;
 	}
 
-private:
+	bool DrawModuleSettings() const
+	{
+		bool exit = false;
+		if(m_moduleSettings->Draw(selectedItem))
+			exit = true;
+		return exit;
+	}
+
 	static bool IsWindowScrollingY()
 	{
 		ImGuiWindow* window = ImGui::GetCurrentWindow();
@@ -78,8 +115,10 @@ private:
 	{
 		return ImGui::GetIO().MouseWheel != 0.0f;
 	}
+	bool isInModuleSettings = false;
+	Item *selectedItem = nullptr;
 	CategoryBar* m_categoryBar;
+	ModuleSettings* m_moduleSettings; //二级设置 
 	std::vector<ModuleCard*> m_moduleCard;
-	//ModuleButton* m_moduleButton;
 	std::vector<ModuleButton*> m_moduleButtons;
 };

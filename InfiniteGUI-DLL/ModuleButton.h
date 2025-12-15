@@ -55,8 +55,8 @@ public:
 			SetStateData();
 			m_current = *m_target;
 		}
-
 		bool pressed = DrawInvisibleButton(m_current.button);
+		rightClicked = ImGui::IsItemClicked(1); //右键单击
 		bool hovered = ImGui::IsItemHovered();
 		bool active = ImGui::IsItemActive();
 
@@ -149,6 +149,7 @@ public:
 	void SetSize(const ImVec2 size);
 	void SetPosition(const ImVec2 pos);
 private:
+
 	//文字
 	ButtonText iconText;
 	float iconFontSize = 24.0f;

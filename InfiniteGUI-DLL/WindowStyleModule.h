@@ -21,6 +21,12 @@ public:
     }
     void DrawStyleSettings()
     {
+        ImGui::PushFont(NULL, ImGui::GetFontSize() * 0.8f);
+        ImGui::BeginDisabled();
+        ImGuiStd::TextShadow(u8"窗口样式设置"); 
+        ImGui::EndDisabled();
+        ImGui::PopFont();
+
         ImGui::SliderFloat(u8"窗口圆角", &itemStyle.windowRounding, 0.0f, 10.0f, "%.1f");
         //字体大小设置
         ImGui::InputFloat(u8"字体大小", &itemStyle.fontSize, 1.0f, 1.0f, "%.1f");

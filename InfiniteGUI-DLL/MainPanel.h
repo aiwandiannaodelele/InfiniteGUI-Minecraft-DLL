@@ -21,7 +21,7 @@ public:
 	{
 		delete m_modulesPanel;
 	}
-	void Draw()
+	void Draw() const
 	{
 		ImGuiStyle& style = ImGui::GetStyle();
 		ImVec2 screenPos = ImGui::GetCursorScreenPos();

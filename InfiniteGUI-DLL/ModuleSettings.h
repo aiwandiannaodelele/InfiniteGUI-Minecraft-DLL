@@ -6,15 +6,70 @@
 class ModuleSettings
 {
 	public:
-		ModuleSettings();
-		~ModuleSettings();
 		static bool Draw(Item *item)
 		{
-			ImGuiWindowFlags flags = 0;
+			bool exit = false;
+			ImGuiWindowFlags flags = ImGuiWindowFlags_NoScrollbar | ImGuiWindowFlags_NoScrollWithMouse | ImGuiWindowFlags_NoSavedSettings;
+			ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(12.0f, 8.0f));
+			ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(12.0f, 8.0f));
 			ImGui::BeginChild("Settings", ImVec2(-padding + ImGui::GetStyle().WindowPadding.x, -padding + ImGui::GetStyle().WindowPadding.y), true, flags);
+			//修改imgui控件与窗口边缘的间距
+			ImGui::PushFont(opengl_hook::gui.iconFont);
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 20.0f);
+			if(ImGui::Button("i", ImVec2(35.0f, 35.0f)))
+				exit = true;
+			ImGui::PopStyleVar();
+			ImGui::PopFont();
+			ImVec2 separatorPos = ImGui::GetCursorPos();
+
+			ImGui::SameLine();
+
+			float buttonHeight = ImGui::GetCursorPosY();
+			float titleHeight = ImGui::GetFontSize() * 1.2f;
+			ImGui::PushFont(NULL, titleHeight);
+	
+			ImGui::SetCursorPosY((separatorPos.y - titleHeight) * 0.5f);
+
+			ImGuiStd::TextShadow(item->name.c_str());
+			ImGui::PopFont();
+
+			ImGui::SameLine();
+
+			ImGui::PushFont(opengl_hook::gui.iconFont);
+			ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 20.0f);
+			float right = ImGui::GetWindowWidth();
+			float buttonWidth =
+				ImGui::GetStyle().ItemSpacing.x +
+				35.0f;
+			ImGui::SetCursorPos(ImVec2(right - buttonWidth, buttonHeight));
+			if (ImGui::Button(u8"\uE050", ImVec2(35.0f, 35.0f)))
+				item->Reset();
+			ImGui::PopStyleVar();
+			ImGui::PopFont();
+			ImGui::SetCursorPos(separatorPos);
+
+			ImGui::Separator();
+
+			ImGui::BeginDisabled();
+			ImGui::PushFont(NULL, ImGui::GetFontSize() * 0.8f);
+			ImGuiStd::TextShadow(item->description.c_str());
+			ImGui::PopFont();
+			ImGui::EndDisabled();
+
+			ImGui::Separator();
+			ImVec2 childPos = ImGui::GetCursorPos();
+			ImGui::SetCursorPos(ImVec2(0.0f, childPos.y));
+			//透明背景child
+			ImGui::BeginChild("InnerSettings", ImVec2(ImGui::GetWindowWidth(),ImGui::GetWindowHeight() - childPos.y - ImGui::GetStyle().WindowPadding.y), true, ImGuiWindowFlags_NoBackground);
+
+
+
 			item->DrawSettings();
+
 			ImGui::EndChild();
-			return false;
+			ImGui::EndChild();
+			ImGui::PopStyleVar(2);
+			return exit;
 		}//返回true退出设置界面，返回false继续运行
 	private:
 

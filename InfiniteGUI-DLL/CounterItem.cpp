@@ -60,7 +60,7 @@ void CounterItem::DrawContent()
 
 void CounterItem::DrawSettings()
 {
-    DrawItemSettings();
+    //DrawItemSettings();
     ImGui::InputInt(u8"计数值", &count);
     DrawKeybindSettings();
     if (ImGui::CollapsingHeader(u8"通用设置"))

@@ -101,6 +101,12 @@ public:
 
     void DrawWindowSettings()
     {
+        ImGui::PushFont(NULL, ImGui::GetFontSize() * 0.8f);
+        ImGui::BeginDisabled();
+        ImGuiStd::TextShadow(u8"窗口设置");
+        ImGui::EndDisabled();
+        ImGui::PopFont();
+
         ImGui::Checkbox(u8"固定", &clickThrough);
 
         ImGui::Checkbox(u8"自定义窗口大小", &isCustomSize);

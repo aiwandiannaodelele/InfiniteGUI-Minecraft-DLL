@@ -9,6 +9,11 @@ public:
 
     void DrawSoundSettings()
     {
+        ImGui::PushFont(NULL, ImGui::GetFontSize() * 0.8f);
+        ImGui::BeginDisabled();
+        ImGuiStd::TextShadow(u8"声音设置");
+        ImGui::EndDisabled();
+        ImGui::PopFont();
         ImGui::Checkbox(u8"提示音", &isPlaySound);
         ImGui::SliderFloat(u8"音量", &soundVolume, 0.0f, 1.0f, "%.2f");
     }

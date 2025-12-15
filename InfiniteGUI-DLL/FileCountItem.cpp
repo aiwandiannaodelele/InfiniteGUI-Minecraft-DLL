@@ -102,7 +102,7 @@ void FileCountItem::DrawContent()
 
 void FileCountItem::DrawSettings()
 {
-    DrawItemSettings();
+    //DrawItemSettings();
     ImGuiStd::InputTextStd(u8"文件夹路径", folderPath);
     ImGui::Checkbox(u8"递归扫描(包括子文件夹)", &recursive);
     ImGuiStd::InputTextStd(u8"扩展名过滤 (.txt)", extensionFilter);

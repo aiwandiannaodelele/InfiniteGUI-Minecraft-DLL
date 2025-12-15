@@ -108,7 +108,7 @@ void Sprint::DrawContent()
 
 void Sprint::DrawSettings()
 {
-    DrawItemSettings();
+    //DrawItemSettings();
     ImGui::Checkbox(u8"¼¤»î", &isActivated);
     ImGui::Checkbox(u8"ÏÔÊ¾´°¿Ú", &isWindowShow);
 
