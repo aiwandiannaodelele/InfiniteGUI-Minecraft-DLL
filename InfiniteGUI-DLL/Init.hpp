@@ -4,8 +4,11 @@
 #include "AudioManager.h"
 #include <thread>
 #include <atomic>
+
+#include "App.h"
 #include "HttpUpdateWorker.h"
 #include "ItemManager.h"
+#include "GuiFrameLimiter.h"
 HMODULE g_hModule = NULL;
 std::thread g_updateThread;
 static std::atomic_bool g_running = ATOMIC_VAR_INIT(true);
@@ -52,6 +55,8 @@ DWORD WINAPI InitApp(LPVOID)
 	ConfigManager::Instance().Init();
 
 	ConfigManager::Instance().LoadGlobal();
+
+	GuiFrameLimiter::Instance().Init();
     opengl_hook::init();
 	while (!opengl_hook::gui.isInit)
 	{
@@ -63,11 +68,19 @@ DWORD WINAPI InitApp(LPVOID)
 	HttpUpdateWorker::Instance().Start();
 	StartThreads();
 
+	static std::thread announcementThread;
+	// 启动后台线程
+	announcementThread = std::thread([]()
+		{
+			App::Instance().GetAnnouncement();
+		});
+	announcementThread.detach();
+
 	while (!opengl_hook::gui.done)
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(100));
 	}
-	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+	std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	Uninit();
 
     return 0;

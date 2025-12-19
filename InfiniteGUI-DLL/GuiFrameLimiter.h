@@ -5,6 +5,13 @@
 class GuiFrameLimiter
 {
 public:
+    static GuiFrameLimiter& Instance()
+    {
+        static GuiFrameLimiter instance;
+        return instance;
+    }
+
+
     void SetMaxFps(double maxFps)
     {
         interval = std::chrono::duration<double>(1.0 / maxFps);

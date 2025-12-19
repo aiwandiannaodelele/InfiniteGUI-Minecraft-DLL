@@ -18,14 +18,17 @@
 //#include <mutex>
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 static bool detour_wgl_swap_buffers(HDC hdc);
-
-static void windowResizeHandler(LPARAM lParam) {
-
-	int width = LOWORD(lParam);
-	int height = HIWORD(lParam);
+bool needRehook = false;
+static LRESULT CALLBACK wndproc_hook(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+static void windowResizeHandler(int width, int height) {
 	opengl_hook::screen_size = { width, height };
-
-
+	//opengl_hook::remove_hook();
+	//opengl_hook::clean();
+	//opengl_hook::init();
+	//opengl_hook::o_wndproc = (WNDPROC)SetWindowLongPtrW(opengl_hook::handle_window, GWLP_WNDPROC, (LONG_PTR)wndproc_hook);
+	//opengl_hook::handle_window = WindowFromDC(opengl_hook::handle_device_ctx);
+	//opengl_hook::custom_gl_ctx = wglCreateContext(opengl_hook::handle_device_ctx);
+	//opengl_hook::gui.logoTexture.id = NULL;
 }
 
 static LRESULT CALLBACK wndproc_hook(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -73,7 +76,9 @@ static LRESULT CALLBACK wndproc_hook(HWND hWnd, UINT message, WPARAM wParam, LPA
 	break;
 	case WM_SIZE:
 	{
-		windowResizeHandler(lParam);
+		int width = LOWORD(lParam);
+		int height = HIWORD(lParam);
+		windowResizeHandler(width, height);
 		break;
 	}
 	default:
@@ -172,7 +177,8 @@ bool detour_wgl_swap_buffers(HDC hdc)
 	{
 		return wgl_swap_buffers_hook.GetOrignalFunc()(hdc);
 	} //detach
-	//glPushMatrix();
+	glPushMatrix();
+
 	opengl_hook::o_gl_ctx = wglGetCurrentContext();
 	opengl_hook::handle_device_ctx = hdc;
 	static std::once_flag flag;
@@ -181,44 +187,34 @@ bool detour_wgl_swap_buffers(HDC hdc)
 			// 只执行一次
 			opengl_hook::handle_window = WindowFromDC(opengl_hook::handle_device_ctx);
 			opengl_hook::custom_gl_ctx = wglCreateContext(opengl_hook::handle_device_ctx);
-			//imgui的初始化
-			opengl_hook::o_wndproc = (WNDPROC)SetWindowLongPtrW(opengl_hook::handle_window, GWLP_WNDPROC, (LONG_PTR)wndproc_hook);
+
 			RECT area;
 			GetClientRect(opengl_hook::handle_window, &area);
 
 			opengl_hook::screen_size.x = area.right - area.left;
 			opengl_hook::screen_size.y = area.bottom - area.top;
 
+			opengl_hook::o_wndproc = (WNDPROC)SetWindowLongPtrW(opengl_hook::handle_window, GWLP_WNDPROC, (LONG_PTR)wndproc_hook);
 			RAWINPUTDEVICE rid;
 			rid.usUsagePage = 0x01;
 			rid.usUsage = 0x02; // Mouse
 			rid.dwFlags = RIDEV_INPUTSINK;
 			rid.hwndTarget = opengl_hook::handle_window;
 			RegisterRawInputDevices(&rid, 1, sizeof(rid));
+			Fonts::init();
 
-			opengl_hook::gui.init();
 		});
 	if (WindowFromDC(hdc) != opengl_hook::handle_window) return wgl_swap_buffers_hook.GetOrignalFunc()(hdc);
 
+	//渲染代码
+	if (!opengl_hook::gui.isInit)
+		opengl_hook::gui.init();
+
 	wglMakeCurrent(hdc, opengl_hook::custom_gl_ctx);
 
-	static std::once_flag flag2;
-	std::call_once(flag2, [&]
-		{
-			static std::thread announcementThread;
-			// 启动后台线程
-			announcementThread = std::thread([]()
-				{
-					App::Instance().GetAnnouncement();
-				});
-			announcementThread.detach();
-			opengl_hook::gui.logoTexture.id = LoadTextureFromMemory(logo, logoSize, &opengl_hook::gui.logoTexture.width, &opengl_hook::gui.logoTexture.height);
-		});
-
-	//渲染代码
-	if(opengl_hook::gui.isInit)
-		opengl_hook::gui.render();
+	if (!opengl_hook::gui.logoTexture.id) opengl_hook::gui.logoTexture.id = LoadTextureFromMemory(logo, logoSize, &opengl_hook::gui.logoTexture.width, &opengl_hook::gui.logoTexture.height);
+	opengl_hook::gui.render();
 	wglMakeCurrent(hdc, opengl_hook::o_gl_ctx);
-	//glPopMatrix();
+	glPopMatrix();
 	return wgl_swap_buffers_hook.GetOrignalFunc()(hdc);
 }

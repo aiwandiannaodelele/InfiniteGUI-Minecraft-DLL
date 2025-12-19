@@ -319,9 +319,6 @@
     <ClInclude Include="Blur.h">
       <Filter>src\core\shaders</Filter>
     </ClInclude>
-    <ClInclude Include="Menu.h">
-      <Filter>src\core\items\huds\menu</Filter>
-    </ClInclude>
     <ClInclude Include="SettingMenu.h">
       <Filter>src\core\items\huds\menu\widgets</Filter>
     </ClInclude>
@@ -402,6 +399,9 @@
     </ClInclude>
     <ClInclude Include="TextItem.h">
       <Filter>src\core\items\huds\text</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>src\core\items\huds\menu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

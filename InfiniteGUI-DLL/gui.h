@@ -4,12 +4,11 @@
 #include "imgui/imgui.h"
 #include <GL/glew.h>
 #include <GL/GL.h>
-#include "GuiFrameLimiter.h"
 #include "imgui/imgui_impl_opengl3.h"
 
 struct Texture
 {
-	GLuint id;
+	GLuint id = NULL;
 	int width;
 	int height;
 };
@@ -34,7 +33,7 @@ public:
 	bool done = false;
 	void init();
 	void clean();
-	void render();
+	static void render();
 	ImFont* font;
 	ImFont* iconFont;
 	Texture logoTexture;

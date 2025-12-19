@@ -21,11 +21,11 @@ struct panel_element {
     float blurriness = 0;
 };
 
-class Menu : public RenderModule, public WindowStyleModule , public Item, public KeybindModule {
+class Menu : public RenderModule, public WindowStyleModule, public Item, public KeybindModule {
 public:
 
     Menu() {
-        type = Hud; // 信息项类型
+        type = Hud;
         name = u8"菜单";
         description = u8"显示菜单";
         icon = "J";
@@ -71,7 +71,7 @@ private:
     void ShowMain();
     void ShowSidePanels() const;
     void ShowSettings(bool* done);
-    Blur * blur;
-    SettingMenu * settingMenu;
+    Blur* blur;
+    SettingMenu* settingMenu;
     bool initialized = false;
 };

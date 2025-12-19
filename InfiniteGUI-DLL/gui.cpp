@@ -13,16 +13,15 @@
 #include "ImGuiSty.h"
 #include "ItemManager.h"
 #include "GlobalConfig.h"
+#include "GuiFrameLimiter.h"
 
 #include "Menu.h"
 
 
 static ImGuiContext* imGuiContext = nullptr;
-static GuiFrameLimiter uiTick;
 static CachedDrawData g_Cache;
 void Gui::init()
 {
-	Fonts::init();
 	imGuiContext = ImGui::CreateContext();
 	ImGuiIO& io = ImGui::GetIO();
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard; // 可选
@@ -67,7 +66,6 @@ void Gui::init()
 		fprintf(stderr, "Error: %s\n", glewGetErrorString(err));
 	}
 	isInit = true;
-	uiTick.Init();
 }
 void Gui::clean()
 {
@@ -84,7 +82,7 @@ static RECT originalClip;
 void Gui::render()
 {
 	ItemManager::Instance().RenderAllBeforeGui();
-	if (uiTick.ShouldUpdate() && ItemManager::Instance().IsDirty())
+	if (GuiFrameLimiter::Instance().ShouldUpdate() && ItemManager::Instance().IsDirty())
 	{
 		ImGui_ImplOpenGL3_NewFrame();
 		ImGui_ImplWin32_NewFrame();
