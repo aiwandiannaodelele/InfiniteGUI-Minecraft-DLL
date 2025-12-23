@@ -4,7 +4,7 @@
 
 void NotificationItem::AddNotification(NotificationType type, const std::string& message)
 {
-	int index = notifications.size();
+	int index = (int)notifications.size();
 	Notification notification(type, message, index, itemStyle);
 	notifications.push_back(notification);
 	dirtyState.animating = true;

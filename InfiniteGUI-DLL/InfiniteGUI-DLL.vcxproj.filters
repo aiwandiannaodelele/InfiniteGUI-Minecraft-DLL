@@ -558,4 +558,8 @@
       <Filter>ext\detours</Filter>
     </Library>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="TODO.md" />
+    <None Include="..\README.md" />
+  </ItemGroup>
 </Project>

@@ -37,7 +37,7 @@ public:
         SetTitleByType(type);
         this->placeIndex = placeIndex;
         size = ImVec2(300, 100.0f);
-        ImVec2 maxScreenSize = ImVec2(opengl_hook::screen_size.x, opengl_hook::screen_size.y);
+        ImVec2 maxScreenSize = ImVec2((float)opengl_hook::screen_size.x, (float)opengl_hook::screen_size.y);
         startElement.pos = ImVec2(maxScreenSize.x + windowPadding, maxScreenSize.y - (placeIndex + 1.5f) * (size.y + windowPadding));
         curElement = startElement;
         targetElement.pos = ImVec2(maxScreenSize.x - size.x - windowPadding, startElement.pos.y);

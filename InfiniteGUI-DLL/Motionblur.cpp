@@ -77,6 +77,8 @@ void main()
 
 void Motionblur::Toggle()
 {
+	if(!isEnabled)
+		Destroy();
 }
 
 void Motionblur::RenderGui()

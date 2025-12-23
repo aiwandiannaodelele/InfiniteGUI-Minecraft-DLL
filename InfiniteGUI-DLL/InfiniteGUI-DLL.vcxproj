@@ -289,6 +289,10 @@
   <ItemGroup>
     <Library Include="detours\detours.lib" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\README.md" />
+    <None Include="TODO.md" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

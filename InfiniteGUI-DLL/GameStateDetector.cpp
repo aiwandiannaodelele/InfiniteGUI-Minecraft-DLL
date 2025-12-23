@@ -117,7 +117,7 @@ bool GameStateDetector::IsMouseCursorVisible()
 void GameStateDetector::ProcessMouseMovement(int dx, int dy)
 {
 	// 鼠标移动速度 = 模长
-	cameraSpeed = sqrtf(dx * dx + dy * dy);
+	cameraSpeed = sqrtf((float)dx * (float)dx + (float)dy * (float)dy);
 
 	// 视角是否移动（为了给你逻辑判断）
 	if (cameraSpeed > movementThreshold)
