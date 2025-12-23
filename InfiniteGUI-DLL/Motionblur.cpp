@@ -97,7 +97,6 @@ void Motionblur::RenderAfterGui()
 void Motionblur::Render()
 {
 	if (!isEnabled) return;
-	static bool initialize = false;
 	static bool first = true;
 
 	const int width = opengl_hook::screen_size.x;
@@ -110,12 +109,12 @@ void Motionblur::Render()
 
 	glViewport(0, 0, width, height);
 
-	if (!initialize)
+	if (!initialized_)
 	{
 		initialize_texture(width, height);
 		initialize_quad();
 		initialize_shader();
-		initialize = true;
+		initialized_ = true;
 
 		texture_width_ = width;
 		texture_height_ = height;
@@ -152,6 +151,37 @@ void Motionblur::Render()
 
 	glBindFramebuffer(GL_FRAMEBUFFER, prev_framebuffer);
 	glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
+}
+
+void Motionblur::Destroy()
+{
+	if(!initialized_) return;
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	glUseProgram(0);
+	glBindVertexArray(0);
+
+	if (shader_program_)
+		glDeleteProgram(shader_program_);
+
+	if (current_texture_)
+		glDeleteTextures(1, &current_texture_);
+
+	if (history_texture_)
+		glDeleteTextures(1, &history_texture_);
+
+	if (quad_vao_)
+		glDeleteVertexArrays(1, &quad_vao_);
+
+	if (quad_vbo_)
+		glDeleteBuffers(1, &quad_vbo_);
+
+	shader_program_ = 0;
+	current_texture_ = 0;
+	history_texture_ = 0;
+	quad_vao_ = 0;
+	quad_vbo_ = 0;
+
+	initialized_ = false;
 }
 
 void Motionblur::initialize_texture(const int width, const int height)
@@ -240,6 +270,9 @@ void Motionblur::draw_texture() const
 {
 	if (current_texture_ == 0)
 		return;
+	GLboolean depth, blend;
+	glGetBooleanv(GL_DEPTH_TEST, &depth);
+	glGetBooleanv(GL_BLEND, &blend);
 
 	glDisable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
@@ -265,18 +298,37 @@ void Motionblur::draw_texture() const
 
 	glBindVertexArray(0);
 	glUseProgram(0);
+
+	if (depth) glEnable(GL_DEPTH_TEST);
+	if (blend) glEnable(GL_BLEND);
 }
 
 void Motionblur::copy_to_history() const
 {
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
 	glBindTexture(GL_TEXTURE_2D, history_texture_);
-	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 0, 0, texture_width_, texture_height_, 0);
+	glCopyTexSubImage2D(
+		GL_TEXTURE_2D,
+		0,
+		0, 0,
+		0, 0,
+		texture_width_,
+		texture_height_
+	);
 }
 
 void Motionblur::copy_to_current() const
 {
+	glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
 	glBindTexture(GL_TEXTURE_2D, current_texture_);
-	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 0, 0, texture_width_, texture_height_, 0);
+	glCopyTexSubImage2D(
+		GL_TEXTURE_2D,
+		0,
+		0, 0,
+		0, 0,
+		texture_width_,
+		texture_height_
+	);
 }
 
 void Motionblur::velocity_adaptive_blur(bool cameraMoving, float cameraSpeed, float* velocity_factor)

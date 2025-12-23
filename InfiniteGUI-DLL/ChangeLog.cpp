@@ -36,9 +36,11 @@ void ChangeLog::Init()
     AddContent(ADD, u8"新增UI音效");
     AddContent(CHANGE, u8"改进UI配色，现在更柔和");
 
-    NewVersion("B0.9.5", "25.12.20");
+    NewVersion("B0.9.5", "25.12.23");
+    AddContent(FIXBUG, u8"兼容旧版mc(lwjgl2)");
     AddContent(FIXBUG, u8"修复强制疾跑卡键Bug");
     AddContent(FIXBUG, u8"修复帧率调制失效Bug");
+    AddContent(FIXBUG, u8"解决菜单鼠标被困窗口内的问题");
     AddContent(ADD, u8"完善弹窗显示");
     
 } //我写这个真是个天才，这样就不用手敲Imgui代码了，天才天才天才天

@@ -13,7 +13,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
         DisableThreadLibraryCalls(hModule);
         // 等待线程初始化完成
         //CreateThread(NULL, 0, InitThread, NULL, 0, NULL);
-        CreateThread(NULL, 0, InitApp, NULL, 0, NULL);
+        CreateThread(NULL, 0, MainApp, NULL, 0, NULL);
 
         break;
 

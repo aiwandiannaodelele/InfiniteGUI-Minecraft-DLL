@@ -45,9 +45,8 @@ public:
         static std::atomic<bool> checkingUpdate = false;   // 是否在检查
         static std::atomic<bool> updateFinished = false;   // 检查是否完成
         static bool updateHasNew = false;                  // 是否发现新版本
-        static std::thread updateThread;                   // 工作线程
         // 点击按钮：开始异步检查
-        if (ImGui::Button(u8"检查更新"))
+        if (ImGui::Button(u8"检查更新") && !checkingUpdate)
         {
             // 打开“正在检查”窗口
             ImGui::OpenPopup(u8"-->检查更新...");
@@ -55,16 +54,12 @@ public:
             checkingUpdate = true;
             updateFinished = false;
 
-            // 启动后台线程
-            updateThread = std::thread([]()
-                {
-                    bool result = App::Instance().CheckUpdate();
-                    updateHasNew = !result;   // result=false => 有新版本
-                    updateFinished = true;
-                    checkingUpdate = false;
-                });
-
-            updateThread.detach();
+            std::thread([] {
+                bool result = App::Instance().CheckUpdate();
+                updateHasNew = !result;   // result=false => 有新版本
+                updateFinished = true;
+                checkingUpdate = false;
+                }).detach();
         }
         if (ImGui::BeginPopupModal(u8"-->检查更新...", NULL, ImGuiWindowFlags_AlwaysAutoResize))
         {
@@ -122,7 +117,7 @@ public:
 
         float startY = ImGui::GetCursorPosY();
 
-        ImGui::PushFont(NULL, ImGui::GetFontSize() * 0.8f);
+        ImGui::PushFont(ImGui::GetFont(), ImGui::GetFontSize() * 0.8f);
         ImGui::BeginDisabled();
         ImGuiStd::TextShadow(u8"公告");
         ImGui::EndDisabled();
@@ -135,7 +130,7 @@ public:
 		ImGui::EndChild();
 
         ImGui::SetCursorPos(ImVec2(basePadding + centerX, startY));
-        ImGui::PushFont(NULL, ImGui::GetFontSize() * 0.8f);
+        ImGui::PushFont(ImGui::GetFont(), ImGui::GetFontSize() * 0.8f);
         ImGui::BeginDisabled();
         ImGuiStd::TextShadow(u8"更新记录");
         ImGui::EndDisabled();

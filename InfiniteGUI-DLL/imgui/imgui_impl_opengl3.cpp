@@ -443,7 +443,8 @@ void    ImGui_ImplOpenGL3_NewFrame()
     IM_ASSERT(bd != nullptr && "Context or backend not initialized! Did you call ImGui_ImplOpenGL3_Init()?");
 
     ImGui_ImplOpenGL3_InitLoader(); // Lazily init loader if not already done for e.g. DLL boundaries.
-
+    if (!bd)
+        __debugbreak(); // ← 你以后会感谢这个断点
     if (!bd->ShaderHandle)
         if (!ImGui_ImplOpenGL3_CreateDeviceObjects())
             IM_ASSERT(0 && "ImGui_ImplOpenGL3_CreateDeviceObjects() failed!");

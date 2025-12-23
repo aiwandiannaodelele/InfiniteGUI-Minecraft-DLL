@@ -25,6 +25,7 @@ public:
 
 	bool Draw(ImDrawFlags flags = ImDrawFlags_RoundCornersAll) override //返回是否被点击
 	{
+		labelText.font = ImGui::GetFont(); //每帧获取，以免指针偏移
 		if (!initialized)
 		{
 			screenPos = ImGui::GetCursorScreenPos(); //初始位置由ImGui自动计算
@@ -108,10 +109,12 @@ public:
 		// -------------------------------------------------
 		// 绘制
 		// -------------------------------------------------
-
-		DrawBackground(m_current.button);
-		DrawBorder(m_current.button);
-		DrawLabel(m_current.label, labelText);
+		if (ImGui::GetCurrentContext())
+		{
+			DrawBackground(m_current.button);
+			DrawBorder(m_current.button);
+			DrawLabel(m_current.label, labelText);
+		}
 
 		//if (!skipAnim)
 		//{
@@ -185,8 +188,6 @@ protected:
 
 	void SetStateData() override //设置状态数据
 	{
-		this->labelText.font = nullptr;
-
 		SetNormalStateData();
 		SetSelectedStateData(m_normal);
 		SetHoveredStateData(m_normal);

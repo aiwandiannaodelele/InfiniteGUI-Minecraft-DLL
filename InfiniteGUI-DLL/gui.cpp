@@ -67,6 +67,7 @@ void Gui::init()
 void Gui::clean()
 {
 	if(!isInit) return;
+	isInit = false;
 	while (opengl_hook::rendering)
 	{
 
@@ -76,7 +77,7 @@ void Gui::clean()
 	if ((ImGui::GetCurrentContext() ? (void*)ImGui::GetIO().BackendRendererUserData : nullptr))ImGui_ImplOpenGL3_Shutdown();
 	if ((ImGui::GetCurrentContext() ? (void*)ImGui::GetIO().BackendPlatformUserData : nullptr))ImGui_ImplWin32_Shutdown();
 	if (imGuiContext)ImGui::DestroyContext(imGuiContext);
-	isInit = false;
+
 }
 
 static std::atomic_flag clipCursor = ATOMIC_FLAG_INIT;

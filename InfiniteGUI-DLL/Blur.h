@@ -1,13 +1,14 @@
 ﻿#pragma once
 #include <cstdint>
 #include <GL/glew.h>
+
 class Blur
 {
 public:
-
     bool menu_blur = true;
     int blurriness_value = 5;
     void RenderBlur(float cur_blurriness);
+    void Destory();
 private:
     void apply_blur(int iterations) const;
     void draw_final_texture() const;
@@ -33,4 +34,6 @@ private:
     GLuint pingpongFBO[2];
     GLuint pingpongColorBuffers[2];
 	
+    bool initialized_ = false;
+
 };

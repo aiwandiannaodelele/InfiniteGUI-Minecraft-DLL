@@ -13,7 +13,8 @@
 #include "pics\MCInjector-small.h"
 #include <thread>
 
-#include "App.h"
+#include "Motionblur.h"
+
 //#include <base/voyage.h>
 //#include <mutex>
 extern LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -43,7 +44,7 @@ static LRESULT CALLBACK wndproc_hook(HWND hWnd, UINT message, WPARAM wParam, LPA
 	{
 		if (wParam == Menu::Instance().GetKeyBind() && !isRepeat)
 		{
-			Menu::Instance().isEnabled =!Menu::Instance().isEnabled;
+			Menu::Instance().isEnabled = !Menu::Instance().isEnabled;
 			Menu::Instance().Toggle();
 		}
 		break;
@@ -65,18 +66,12 @@ static LRESULT CALLBACK wndproc_hook(HWND hWnd, UINT message, WPARAM wParam, LPA
 			GameStateDetector::Instance().ProcessMouseMovement(dx, dy);
 		}
 		delete[] buffer;
-	}
-
-	break;
-	case WM_RBUTTONDOWN:
-	case WM_MBUTTONDOWN:
-	{
 		break;
 	}
+	case WM_RBUTTONDOWN:
+	case WM_MBUTTONDOWN:
 	case WM_XBUTTONDOWN:
-	{
-	}
-	break;
+		break;
 	case WM_SIZE:
 	{
 		int width = LOWORD(lParam);
@@ -166,7 +161,8 @@ void opengl_hook::remove_hook()
 
 bool opengl_hook::clean()
 {
-
+	Menu::Instance().DestoryMenuBlur();
+	Motionblur::Instance().Destroy();
 	wglMakeCurrent(handle_device_ctx, opengl_hook::o_gl_ctx);
 	wglDeleteContext(custom_gl_ctx);
 	gui.clean();
@@ -209,14 +205,16 @@ bool detour_wgl_swap_buffers(HDC hdc)
 		});
 	if (WindowFromDC(hdc) != opengl_hook::handle_window) return wgl_swap_buffers_hook.GetOrignalFunc()(hdc);
 	//渲染代码
-	if (!opengl_hook::gui.isInit)
-	{
-		opengl_hook::gui.init();
-	}
-
 	wglMakeCurrent(hdc, opengl_hook::custom_gl_ctx);
-	if (!opengl_hook::gui.logoTexture.id) opengl_hook::gui.logoTexture.id = LoadTextureFromMemory(logo, logoSize, &opengl_hook::gui.logoTexture.width, &opengl_hook::gui.logoTexture.height);
-	opengl_hook::gui.render();
+	if(wglGetCurrentContext())
+	{
+		if (!opengl_hook::gui.isInit)
+		{
+				opengl_hook::gui.init();
+		}
+		if (!opengl_hook::gui.logoTexture.id) opengl_hook::gui.logoTexture.id = LoadTextureFromMemory(logo, logoSize, &opengl_hook::gui.logoTexture.width, &opengl_hook::gui.logoTexture.height);
+		opengl_hook::gui.render();
+	}
 	wglMakeCurrent(hdc, opengl_hook::o_gl_ctx);
 	//glPopMatrix();
 	opengl_hook::rendering = false;

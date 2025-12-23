@@ -31,13 +31,13 @@ void main() {
   vec2 off1 = vec2(1.411764705882353) * direction;
   vec2 off2 = vec2(3.2941176470588234) * direction;
   vec2 off3 = vec2(5.176470588235294) * direction;
-  color += texture2D(image, TexCoord) * 0.1964825501511404;
-  color += texture2D(image, TexCoord + (off1 / resolution)) * 0.2969069646728344;
-  color += texture2D(image, TexCoord - (off1 / resolution)) * 0.2969069646728344;
-  color += texture2D(image, TexCoord + (off2 / resolution)) * 0.09447039785044732;
-  color += texture2D(image, TexCoord - (off2 / resolution)) * 0.09447039785044732;
-  color += texture2D(image, TexCoord + (off3 / resolution)) * 0.010381362401148057;
-  color += texture2D(image, TexCoord - (off3 / resolution)) * 0.010381362401148057;
+  color += texture(image, TexCoord) * 0.1964825501511404;
+  color += texture(image, TexCoord + (off1 / resolution)) * 0.2969069646728344;
+  color += texture(image, TexCoord - (off1 / resolution)) * 0.2969069646728344;
+  color += texture(image, TexCoord + (off2 / resolution)) * 0.09447039785044732;
+  color += texture(image, TexCoord - (off2 / resolution)) * 0.09447039785044732;
+  color += texture(image, TexCoord + (off3 / resolution)) * 0.010381362401148057;
+  color += texture(image, TexCoord - (off3 / resolution)) * 0.010381362401148057;
   FragColor = color;
 }
 
@@ -46,20 +46,19 @@ void main() {
 
 void Blur::RenderBlur(float cur_blurriness)
 {
-    static bool initialize = false;
 
     const int width = opengl_hook::screen_size.x;
     const int height = opengl_hook::screen_size.y;
 
     glViewport(0, 0, width, height);
 
-    if (!initialize)
+    if (!initialized_)
     {
         initialize_pingpong(width, height);
         initialize_texture(width, height);
         initialize_quad();
         initialize_shader();
-        initialize = true;
+        initialized_ = true;
 
         texture_width_ = width;
         texture_height_ = height;
@@ -117,6 +116,10 @@ void Blur::apply_blur(int iterations) const
 
 void Blur::draw_final_texture() const
 {
+    GLboolean depth, blend;
+    glGetBooleanv(GL_DEPTH_TEST, &depth);
+    glGetBooleanv(GL_BLEND, &blend);
+
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_BLEND);
 
@@ -131,6 +134,33 @@ void Blur::draw_final_texture() const
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
     glUseProgram(0);
+
+    // restore
+    if (depth) glEnable(GL_DEPTH_TEST);
+    if (blend) glEnable(GL_BLEND);
+}
+
+void Blur::Destory()
+{
+    if(!initialized_) return;
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+    // 删除旧资源
+    glDeleteFramebuffers(2, pingpongFBO);
+    glDeleteTextures(2, pingpongColorBuffers);
+    glDeleteTextures(1, &current_texture_);
+    glDeleteVertexArrays(1, &quad_vao_);
+    glDeleteBuffers(1, &quad_vbo_);
+    if (shader_program_) glDeleteProgram(shader_program_);
+
+    // 清零
+    pingpongFBO[0] = pingpongFBO[1] = 0;
+    pingpongColorBuffers[0] = pingpongColorBuffers[1] = 0;
+    current_texture_ = 0;
+    quad_vao_ = 0;
+    quad_vbo_ = 0;
+    shader_program_ = 0;
+    initialized_ = false;
 }
 
 void Blur::initialize_pingpong(const int width, const int height)
@@ -236,6 +266,14 @@ void Blur::resize_texture(int width, int height)
 
 void Blur::copy_to_current() const
 {
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
     glBindTexture(GL_TEXTURE_2D, current_texture_);
-    glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, 0, 0, texture_width_, texture_height_, 0);
+    glCopyTexSubImage2D(
+        GL_TEXTURE_2D,
+        0,
+        0, 0,
+        0, 0,
+        texture_width_,
+        texture_height_
+    );
 }

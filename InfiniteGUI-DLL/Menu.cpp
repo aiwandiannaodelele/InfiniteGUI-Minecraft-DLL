@@ -23,7 +23,6 @@ void Menu::RenderGui()
     {
         return;
     }
-
     //使窗口显示在屏幕中间
     ImGui::SetNextWindowPos(ImVec2((ImGui::GetIO().DisplaySize.x - ImGui::GetIO().DisplaySize.x / 2), (ImGui::GetIO().DisplaySize.y - ImGui::GetIO().DisplaySize.y / 2)), ImGuiCond_Once, ImVec2(0.5f, 0.5f));
     ImGui::SetNextWindowSize(ImVec2((float)opengl_hook::screen_size.x + 10, (float)opengl_hook::screen_size.y + 10), ImGuiCond_Always);
@@ -218,7 +217,7 @@ void Menu::ShowSidePanels() const
         ImGui::PopStyleVar();
     }
 
-    //======================
+    //====================== 
     // 右侧 更新日志 面板动画
     //======================
     {
@@ -360,7 +359,7 @@ void Menu::ShowSettings(bool* done)
 
 void Menu::Toggle()
 {
-    static std::thread updateThread;                   // 工作线程
+    static RECT gameWindowRect;
     if (!isEnabled)
     {
         RECT rect;
@@ -373,27 +372,17 @@ void Menu::Toggle()
             // 设置鼠标位置
             SetCursorPos(centerX, centerY);
         }
+        ClipCursor(&gameWindowRect);
         myWindowBgColor = ImVec4(0.0f, 0.0f, 0.0f, 0.0f);
         panelAnim.state = 0.0f;
         panelAnim.blurriness = 0.0f;
-
-        //// 启动后台线程
-        //updateThread = std::thread([&]()
-        //    {
-        //        for(int i = 0; i < 10; i++)
-        //        {
-        //            std::this_thread::sleep_for(std::chrono::milliseconds(50));
-        //            if(!isEnabled) dirtyState.animating = false;
-        //        }
-        //    });
-        //updateThread.detach();
         dirtyState.animating = false;
         dirtyState.contentDirty = true; //下一次更新
     }
     else
     {
-        if (updateThread.joinable())
-            updateThread.join();
+        GetClipCursor(&gameWindowRect); //保存当前裁剪矩形
+        ClipCursor(NULL); // 移除当前的鼠标裁剪矩形，让鼠标恢复为全屏自由移动
         dirtyState.animating = true;
         state = MENU_STATE_MAIN;
     }

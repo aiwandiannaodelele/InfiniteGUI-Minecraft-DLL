@@ -12,7 +12,7 @@ public:
 
 	bool Draw(ImDrawFlags flags = ImDrawFlags_RoundCornersAll) override //返回是否被点击
 	{
-
+		labelText.font = ImGui::GetFont(); //每帧获取，以免指针偏移
 		if (!initialized)
 		{
 			screenPos = ImGui::GetCursorScreenPos(); //初始位置由ImGui自动计算

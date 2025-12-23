@@ -70,6 +70,10 @@ public:
     void Save(nlohmann::json& j) const override;
     void OnKeyEvent(bool state, bool isRepeat, WPARAM key) override;
     int GetKeyBind();
+    void DestoryMenuBlur() const
+    {
+        blur->Destory();
+    }
 private:
     void ShowMain();
     void ShowSidePanels() const;

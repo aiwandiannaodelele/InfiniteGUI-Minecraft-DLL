@@ -19,28 +19,37 @@ enum ButtonState
 
 struct TextAnimTarget
 {
-	float fontSize;
+	float  fontSize;
 	ImVec2 center;
 	ImVec4 color;
-	ImVec2 CalculatePos(const ButtonText& text) const //pos不应当作为动画的目标变量。动画只由中心位置、大小、颜色决定
-	{
-		ImGui::PushFont(text.font, fontSize);
-		ImVec2 textSize = ImGui::CalcTextSize(text.text);  // 获取文本实际像素宽高
-		ImGui::PopFont();
 
-		ImVec2 pos = ImVec2(
-			center.x - textSize.x * 0.5f,  // 左上角 = 中心 - 一半宽度
-			center.y - textSize.y * 0.5f   // 左上角 = 中心 - 一半高度
+	ImVec2 GetTextSize(const ButtonText& text) const
+	{
+		IM_ASSERT(text.font != nullptr);
+		return text.font->CalcTextSizeA(
+			fontSize,
+			FLT_MAX,
+			0.0f,
+			text.text
 		);
-		return pos;
 	}
+
+	ImVec2 CalculatePos(const ButtonText& text) const
+	{
+		ImVec2 textSize = GetTextSize(text);
+		return ImVec2(
+			center.x - textSize.x * 0.5f,
+			center.y - textSize.y * 0.5f
+		);
+	}
+
 	void CalculateCenter(const ImVec2& pos, const ButtonText& text)
 	{
-		ImGui::PushFont(text.font, fontSize);
-		ImVec2 textSize = ImGui::CalcTextSize(text.text);  // 获取文本实际像素宽高
-		ImGui::PopFont();
-
-		center = ImVec2(pos.x + textSize.x * 0.5f, pos.y + fontSize / 2);
+		ImVec2 textSize = GetTextSize(text);
+		center = ImVec2(
+			pos.x + textSize.x * 0.5f,
+			pos.y + textSize.y * 0.5f
+		);
 	}
 };
 

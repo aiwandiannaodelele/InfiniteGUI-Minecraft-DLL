@@ -33,6 +33,7 @@ public:
     void RenderBeforeGui() override;
     void RenderAfterGui() override;
     void Render();
+    void Destroy();
     void Load(const nlohmann::json& j) override;
     void Save(nlohmann::json& j) const override;
     void DrawSettings(const float& bigPadding, const float& centerX, const float& itemWidth) override;
@@ -65,6 +66,9 @@ private:
             renderTask.before = true;
         }
     }
+
+    bool initialized_ = false;
+
     uint32_t shader_program_;
 
     uint32_t current_texture_;

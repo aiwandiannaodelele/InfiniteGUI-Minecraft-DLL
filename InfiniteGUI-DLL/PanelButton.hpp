@@ -33,7 +33,8 @@ public:
 
 	bool Draw(ImDrawFlags flags = ImDrawFlags_RoundCornersAll) override //返回是否被点击
 	{
-
+		labelText.font = ImGui::GetFont(); //每帧获取，以免指针偏移
+		iconText.font = opengl_hook::gui.iconFont;
 		if (!initialized)
 		{
 			screenPos = ImGui::GetCursorScreenPos(); //初始位置由ImGui自动计算
@@ -189,8 +190,6 @@ private:
 
 	void SetStateData() override //设置状态数据
 	{
-		this->iconText.font = opengl_hook::gui.iconFont;
-		this->labelText.font = nullptr;
 
 		SetNormalStateData();
 		SetSelectedStateData(m_normal);

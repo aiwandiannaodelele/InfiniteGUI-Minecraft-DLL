@@ -46,7 +46,8 @@ void GameStateDetector::DrawSettings(const float& bigPadding, const float& cente
 	ImGui::PopFont();
 	ImGui::SetCursorPosX(bigPadding);
 	ImGui::PushItemWidth(itemWidth);
-	ImGui::Checkbox(u8"仅在游戏内显示窗口", &hideItemInGui);
+	ImGui::Checkbox(u8"仅在游戏内显示Gui", &hideItemInGui);
+	ImGui::SameLine(); ImGuiStd::HelpMarker(u8"对于mc1.12及以下版本全屏时此功能将失效，请关闭，否则Gui无法正常显示。");
 }
 
 bool GameStateDetector::IsNeedHide() const 
@@ -69,6 +70,38 @@ bool GameStateDetector::IsInGame() const
 	return (currentState == InGame);
 }
 
+bool IsClipCursorSmallerThanScreen(int margin = 8)
+{
+	RECT clip;
+	if (!GetClipCursor(&clip))
+		return true;
+
+	const int screenW = GetSystemMetrics(SM_CXSCREEN);
+	const int screenH = GetSystemMetrics(SM_CYSCREEN);
+
+	const int clipW = clip.right - clip.left;
+	const int clipH = clip.bottom - clip.top;
+
+	// 1. 尺寸明显小于屏幕
+	if (clipW < screenW - margin * 2 ||
+		clipH < screenH - margin * 2)
+	{
+		return true;
+	}
+
+	// 2. 边界有明显内缩
+	if (clip.left > margin ||
+		clip.top > margin ||
+		clip.right < screenW - margin ||
+		clip.bottom < screenH - margin)
+	{
+		return true;
+	}
+
+	return false;
+}
+
+
 bool GameStateDetector::IsMouseCursorVisible()
 {
 	CURSORINFO ci;
@@ -76,9 +109,9 @@ bool GameStateDetector::IsMouseCursorVisible()
 
 	if (GetCursorInfo(&ci))
 	{
-		return (ci.flags & CURSOR_SHOWING) != 0;
+		if (!(ci.flags & CURSOR_SHOWING)) return false;
 	}
-	return false;
+	return !IsClipCursorSmallerThanScreen(0);
 }
 
 void GameStateDetector::ProcessMouseMovement(int dx, int dy)

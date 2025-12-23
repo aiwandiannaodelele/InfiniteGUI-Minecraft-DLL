@@ -14,7 +14,7 @@ HMODULE g_hModule = NULL;
 std::thread g_updateThread;
 static std::atomic_bool g_running = ATOMIC_VAR_INIT(true);
 // 线程函数：更新所有 item 状态
-void UpdateThread() {
+inline void UpdateThread() {
 	while (g_running.load()) {
 		if(opengl_hook::gui.isInit) ItemManager::Instance().UpdateAll();  // 调用UpdateAll()来更新所有item
 		std::this_thread::sleep_for(std::chrono::milliseconds(1));  // 休眠1ms，可以根据实际需求调整
@@ -22,19 +22,19 @@ void UpdateThread() {
 }
 
 // 启动更新线程
-void StartThreads() {
+inline void StartThreads() {
 	g_updateThread = std::thread(UpdateThread);
 	g_updateThread.detach();  // 将线程设为后台线程
 }
 
 // 停止更新线程
-void StopThreads() {
+inline void StopThreads() {
 	if (g_updateThread.joinable()) {
 		g_updateThread.join();
 	}
 }
 
-void Uninit() {
+inline void Uninit() {
 	opengl_hook::remove_hook();
 	opengl_hook::clean();
 	while(opengl_hook::gui.isInit) //等hook退出
@@ -49,7 +49,7 @@ void Uninit() {
 }
 
 
-DWORD WINAPI InitApp(LPVOID)
+inline DWORD WINAPI MainApp(LPVOID)
 {
     FileUtils::InitPaths(g_hModule);
 	//加载配置文件
@@ -70,13 +70,7 @@ DWORD WINAPI InitApp(LPVOID)
 	HttpUpdateWorker::Instance().Start();
 	StartThreads();
 
-	static std::thread announcementThread;
-	// 启动后台线程
-	announcementThread = std::thread([]()
-		{
-			App::Instance().GetAnnouncement();
-		});
-	announcementThread.detach();
+	App::Instance().GetAnnouncement();
 
 	while (!opengl_hook::gui.done)
 	{
