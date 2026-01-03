@@ -118,6 +118,14 @@ opengl32.lib
 编译模式：Release | x64  
 C++ 标准：C++17 或更高  
 
+### ⚠️ 注入教程
+编译后会生成以下文件：
+- InfiniteGUI-DLL.dll
+- glew32.dll  
+
+请将生成**glew32.dll**放入**C:\Windows\System32**中。
+使用注入程序，如[CheatEngine](https://www.cheatengine.org/ "CheatEngine官方网站")，将**InfiniteGUI-DLL.dll**注入到Minecraft中即可使用。
+
 ---
 
 
@@ -134,3 +142,4 @@ InfoOverlay 仅用于绘制独立的叠加界面（Overlay），与游戏逻辑�
 如果用户在网易版 Minecraft 中注入本程序并导致账号封禁，作者概不负责。  
 
 本项目使用了《**阿里巴巴普惠体**》，是一款由中国企业首次发布的可面向全场景使用的免费商用正文字体。
+
