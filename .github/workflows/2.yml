@@ -1,0 +1,24 @@
+name: Build Minecraft DLL
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: windows-2022
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Build
+        run: |
+          msbuild InfiniteGUI-DLL.sln /p:Configuration=Release /p:Platform=x64 /p:VcpkgEnableManifest=true
+
+      - name: Upload Finished DLL
+        uses: actions/upload-artifact@v4
+        with:
+          name: InfiniteGUI-Compiled-DLL
+          path: x64/Release/*.dll
