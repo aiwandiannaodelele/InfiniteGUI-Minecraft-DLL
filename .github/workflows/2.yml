@@ -13,25 +13,24 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
-      # 解决之前报的 C1083 错误：安装 json, glew, stb
-      - name: Install Dependencies (vcpkg)
+      # 1. 安装依赖
+      - name: Install Dependencies
         run: |
           vcpkg install nlohmann-json:x64-windows glew:x64-windows stb:x64-windows
           vcpkg integrate install
 
-      # 执行编译：核心在于 AdditionalOptions="/utf-8"
-      - name: Build Project
+      # 2. 强制设置环境为 UTF-8 并编译
+      - name: Build with UTF-8 Force
+        shell: pwsh
         run: |
+          # 强制当前 PowerShell 窗口使用 UTF-8 编码，防止中文路径或日志乱码
+          [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
+          
           msbuild InfiniteGUI-DLL.sln `
             /p:Configuration=Release `
             /p:Platform=x64 `
             /p:PlatformToolset=v143 `
             /p:VcpkgEnableManifest=false `
             /p:CL_MPcount=4 `
-            /p:AdditionalOptions="/utf-8"
-
-      - name: Upload Finished DLL
-        uses: actions/upload-artifact@v4
-        with:
-          name: InfiniteGUI-Compiled-DLL
-          path: x64/Release/*.dll
+            /p:AdditionalOptions="/utf-8" `
+            /p:CharacterSet=Unicode
