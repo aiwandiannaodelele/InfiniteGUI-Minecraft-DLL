@@ -13,17 +13,25 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
-      # 第一步：让 vcpkg 自动安装项目依赖
+      # 1. 安装库依赖（解决之前报的 c1083 错误）
       - name: Install Dependencies (vcpkg)
         run: |
           vcpkg install nlohmann-json:x64-windows glew:x64-windows stb:x64-windows
           vcpkg integrate install
 
-      # 第二步：执行编译（现在它能找到头文件了）
+      # 2. 执行编译
+      # 加入了 /utf-8 参数，强制编译器正确处理中文
       - name: Build Project
         run: |
-          msbuild InfiniteGUI-DLL.sln /p:Configuration=Release /p:Platform=x64 /p:VcpkgEnableManifest=false
+          msbuild InfiniteGUI-DLL.sln `
+            /p:Configuration=Release `
+            /p:Platform=x64 `
+            /p:PlatformToolset=v143 `
+            /p:VcpkgEnableManifest=false `
+            /p:CL_MPcount=4 `
+            /p:AdditionalOptions="/utf-8"
 
+      # 3. 上传成品
       - name: Upload Finished DLL
         uses: actions/upload-artifact@v4
         with:
